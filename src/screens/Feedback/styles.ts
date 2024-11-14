@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Wrapper = styled(View)`
@@ -15,7 +15,7 @@ export const Content = styled(View)`
     background: ${({ theme }) => theme.colors.background };
     padding: 16px;
     width: 100%;
-    gap: 8px;
+    gap: 16px;
 `;
 
 export const Title = styled(Text)`
@@ -23,6 +23,12 @@ export const Title = styled(Text)`
     font-family: 'Poppins_600SemiBold';
     font-size: 18px;
     width: 100%;
+`
+
+export const Number = styled(Text)`
+    color: #000;
+    font-family: 'Poppins_600SemiBold';
+    font-size: 14px;
 `
 
 export const Description = styled(Text)<{ width?: number, size?: number }>`
@@ -44,4 +50,10 @@ export const Line = styled(View)`
     border: 0.3px;
     border-color: lightblue;
     margin-bottom: 20px;
+`
+
+export const Button = styled(TouchableOpacity)`
+    background-color: ${({theme}) => theme.colors.header};
+    border-radius: 100px;
+    padding: 5px;
 `

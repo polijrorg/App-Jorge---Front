@@ -18,6 +18,13 @@ export const theme = {
 
       surface: '#FFFFFF',
       divider: '#E6EAED',
-      background: '#FAFAFA'
+      background: '#FAFAFA',
+
+      loginBg: '#DEDFDF',
+      highlight: '#4893B7',
+      header: '#3A789A',
+      ambientCard: '#95DDFF',
+      textHighlight: '#4D91B6',
+      cinza: '#E6E6E6'
   }
 };
