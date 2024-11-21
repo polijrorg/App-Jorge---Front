@@ -1,51 +1,59 @@
-import { View, Text } from "react-native";
-import styled from "styled-components/native";
+import { Text, TouchableOpacity, View } from 'react-native';
+import styled from 'styled-components/native';
 
 export const Wrapper = styled(View)`
     flex: 1;
-    flex-direction: column;
-    justify-content: top;
-    gap: 16px;
     align-items: center;
-    background-color: ${({ theme }) => theme.colors.background};
-    min-height: 100%;
-    padding: 24px;
-    padding-top: 30%;
+    justify-content: top;
+    background: ${({ theme }) => theme.colors.background };
 `;
 
-export const Logo = styled.Image`
-    width: 80px;
-    height: 80px;
-    margin-bottom: 10%;
+export const Content = styled(View)`
+    flex: 1;
+    align-items: center;
+    justify-content: top;
+    background: ${({ theme }) => theme.colors.background };
+    padding: 16px;
+    width: 100%;
+    gap: 16px;
+`;
+
+export const Title = styled(Text)`
+    color: #000;
+    font-family: 'Poppins_600SemiBold';
+    font-size: 18px;
+    width: 100%;
 `
 
-export const BlueText = styled(Text)`
-    color: #4E92B7;
-    font-feature-settings: 'liga' off, 'clig' off;
-    font-size: 12px;
-    line-height: 24px; /* 200% */
-    letter-spacing: 0.5px;
-    font-family: "Poppins_600SemiBold";
+export const Number = styled(Text)`
+    color: #000;
+    font-family: 'Poppins_600SemiBold';
+    font-size: 14px;
 `
 
-export const BlackText = styled(Text)`
-    font-feature-settings: 'liga' off, 'clig' off;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 24px; /* 200% */
-    letter-spacing: 0.5px;
-    font-family: "Poppins_600SemiBold";
+export const Description = styled(Text)<{ width?: number, size?: number }>`
+    color: #000;
+    font-family: 'PoppinsRegular';
+    font-size: ${({size}) => size || 14}px;
+    width: ${({width}) => (width) ? '' : '100%'};
+`
+
+export const BlueText = styled(Text)<{ size?: number }>`
+    color: ${({ theme }) => theme.colors.textHighlight };
+    font-family: 'PoppinsRegular';
+    font-size: ${({size}) => size || 14}px;
 `
 
 export const Line = styled(View)`
     height: 0px;
     width: 100%;
-    border: 0.7px;
-    border-color: black;
+    border: 0.3px;
+    border-color: lightblue;
+    margin-bottom: 20px;
 `
 
-export const Password = styled(View)`
-    width: 100%;
-
+export const Button = styled(TouchableOpacity)`
+    background-color: ${({theme}) => theme.colors.header};
+    border-radius: 100px;
+    padding: 5px;
 `

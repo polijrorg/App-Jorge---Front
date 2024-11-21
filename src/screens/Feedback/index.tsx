@@ -42,11 +42,7 @@ const FeedbackScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     ))}
                 </View>
-                
             </S.Content>
-
-
-            
         </S.Wrapper>
     )
 

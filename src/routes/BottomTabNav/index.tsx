@@ -50,6 +50,7 @@ const BottomTabNav = () => {
     return (
         <Tab.Navigator
             id={undefined}
+            backBehavior={'history'}
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
