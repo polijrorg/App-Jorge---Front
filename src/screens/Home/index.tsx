@@ -10,6 +10,7 @@ import Seringa from '@assets/icons/Seringa.png';
 import Graph from '@assets/icons/Graph.png';
 import Trophy from '@assets/icons/Trophy.png';
 import Mamadeira from '@assets/icons/Mamadeira.png';
+import ReminderCard from '@components/ReminderCard';
 
 const HomeScreen = () => {
 
@@ -33,7 +34,6 @@ const HomeScreen = () => {
     return (
         <S.Wrapper>
             <DefaultHeader />
-
             <S.Content>
                 <S.Title>Bem vindo de volta {userName}!</S.Title>
                 <S.Description>{formatNames(children)} </S.Description>
@@ -47,12 +47,13 @@ const HomeScreen = () => {
                     <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => 1} />
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => 1} />
                     <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => 1} />
-                    <AmbientCard image={Trophy} title={'Marcos de\nDesenvolvimento'} onPress={() => 1} />
+                    <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => 1} />
                     <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => 1} />
                 </View>
                 <S.Line />
 
                 <S.Title>Lembretes</S.Title>
+                <ReminderCard />
                 
                 <View style={{ flexDirection: 'row' }}>
                     <S.Description width={1} size={12} >Dúvidas, críticas ou sugestões? </S.Description>
@@ -60,12 +61,7 @@ const HomeScreen = () => {
                         <S.BlueText size={12}>Nos ajude também!</S.BlueText>
                     </TouchableOpacity>
                 </View>
-                
-                
             </S.Content>
-
-
-            
         </S.Wrapper>
     )
 

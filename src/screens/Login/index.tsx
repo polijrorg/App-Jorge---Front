@@ -7,28 +7,32 @@ import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import ForgotMyPasswordModal from '@components/ForgotMyPasswordModal';
 import DefaultHeader from '@components/DefaultHeader';
+import UserService from '@services/UserService';
 
 const LoginScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [modal, setModal] = useState(false);
+    const [error, setError] = useState<string>(null);
 
-    // const loginUser = async () => {    
-    //     try {
-    //         const user = await UserService.login({
-    //             email: email,
-    //             password: password,
-    //         });
-    //         navigation.navigate("App");
-    //         setEmail('');
-    //         setPassword('');
-    //         console.log(user);
-    //         alert("Login Realizado");
-    //     } catch (error) {
-    //         alert("Email ou senha inválidos.");
-    //     }
-    // };
+    const loginUser = async () => {    
+        // try {
+        //     const user = await UserService.login({
+        //         email: email,
+        //         password: password,
+        //     });
+        //     navigation.navigate('Main', { screen: 'Home' });
+        //     setEmail('');
+        //     setPassword('');
+        //     console.log(user);
+        //     alert("Login Realizado");
+        // } catch (error) {
+        //     alert("Email ou senha inválidos.");
+        //     setError("Email ou senha inválidos!")
+        // }
+        navigation.navigate('Main', { screen: 'Home' })
+    };
 
     return (
         <S.Wrapper>
@@ -42,8 +46,11 @@ const LoginScreen = ({ navigation }) => {
                     <S.BlueText>Esqueci minha senha</S.BlueText>
                 </TouchableOpacity>
             </S.Password>
+            {error && (
+                    <S.BlueText style={{ color: 'red', width: '100%' }}>{error}</S.BlueText>
+            )}
 
-            <Button title={'Entrar'} onPress={() => console.log('implementar handleLogin depois')} />
+            <Button title={'Entrar'} onPress={loginUser} />
             <S.Line />
 
             <View style={{ flexDirection: 'row' }}>

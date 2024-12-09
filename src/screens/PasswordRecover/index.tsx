@@ -9,8 +9,15 @@ import { ReadAndAgree } from '@components/ReadAndAgree';
 import PrivacyPolicyModal from '@components/PrivacyPolicyModal';
 import TermsAndConditionsModal from '@components/TermsAndConditionsModal';
 import UserService from '@services/UserService';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParamList } from '@routes/app.routes';
 
-const PasswordRecover = ({ navigation }) => {
+type PasswordRecoverRouteProps = RouteProp<RootStackParamList, 'PasswordRecover'>;
+
+const RegisterScreen = ({ navigation }) => {
+
+    const route = useRoute<PasswordRecoverRouteProps>();
+    const code = route.params?.code;
 
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -28,29 +35,17 @@ const PasswordRecover = ({ navigation }) => {
     };
 
     const handleRegister = () => {
-        
-        if (!(isChecked1 && isChecked2)) {
-            setError('Aceite as condições abaixo para continuar!')
-        }
-        else if (name === '') {
-            setError('Forneça um nome válido!')
-        }
-        else if (!isValidEmail(email)) {
+        if (!isValidEmail(email)) {
             setError('Forneça um email válido para continuar!')
         }
         else if (password != password2) {
             setError('As senhas fornecidas são diferentes!');
             setPassword2('');
         }
-        else if (password.length < 6) {
-            setError('A senha deve conter pelo menos 6 caracteres!')
-            setPassword2('');
-            setPassword('');
-        }
         else {
-            UserService.create({ email, name, password });
-            navigation.navigate('Main', { screen: 'Home' });
-            alert("Cadastro Realizado");
+            UserService.redefinePassword({ email, token: code, newPassword: password });
+            navigation.navigate('Login');
+            alert("Atualização de Senha Realizada");
         }
     }
 
@@ -63,7 +58,7 @@ const PasswordRecover = ({ navigation }) => {
             </View>
 
             <View style={{ width: '100%' }} >
-                <S.TitleText>Cadastre-se </S.TitleText>
+                <S.TitleText>Cadastrar-se</S.TitleText>
             </View>
             
             <View style={{ gap: 16, width: '100%' }}>
@@ -84,7 +79,6 @@ const PasswordRecover = ({ navigation }) => {
             </View>
 
             <Button title={'Cadastrar'} onPress={handleRegister} />
-
             <S.Line />
 
             <View style={{ flexDirection: 'row' }}>
@@ -101,4 +95,4 @@ const PasswordRecover = ({ navigation }) => {
     )
 }
 
-export default PasswordRecover;
+export default RegisterScreen;

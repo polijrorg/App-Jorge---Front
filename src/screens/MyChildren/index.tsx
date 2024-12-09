@@ -22,7 +22,7 @@ const MyChildrenScreen = ({ navigation }) => {
                 </View>
                 <S.Line />
                 <ChildCard name={'Carlos'} age={'12 meses'} weight={'10kg'} height={'180cm'} developmentPercentage={80} vaccinePercentage={50} avatar={Bebe} />
-                <AddChildButton onPress={() => console.log()}/>
+                <AddChildButton onPress={() => navigation.navigate('RegisterChildren')}/>
             </S.Content>
         </S.Wrapper>
     )

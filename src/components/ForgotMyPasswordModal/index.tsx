@@ -4,25 +4,48 @@ import * as S from './styles';
 import { Input } from '@components/Input';
 import { LongButton } from '@components/LongButton';
 import VerificationInput from '@components/VerificationInput';
+import UserService from '@services/UserService';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@routes/app.routes';
 
 type Props = {
     visible: boolean;
     onClose: () => void;
 };
 
+type NavigationProps = NativeStackNavigationProp<RootStackParamList>;
+
 const ForgotPasswordModal: React.FC<Props> = ({ visible, onClose }) => {
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
     const [isCodeModalVisible, setIsCodeModalVisible] = useState(false);
+    const [error, setError] = useState<string>(null);
+
+    const navigation = useNavigation<NavigationProps>();
 
     const handleEmailSubmit = () => {
-        setIsCodeModalVisible(true);
+        if (!isValidEmail(email)) {
+            setError('Insira um email válido!');
+            setEmail('');
+        }
+        else {
+            UserService.restorePassword(email);
+            setIsCodeModalVisible(true);
+        }
+    };
+
+    const isValidEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
     };
 
     const handleCodeSubmit = () => {
+        UserService.restorePassword(email);
         setIsCodeModalVisible(false);
         setEmail('');
         onClose();
+        navigation.navigate('PasswordRecover', { code });
     };
 
     return (
@@ -41,6 +64,9 @@ const ForgotPasswordModal: React.FC<Props> = ({ visible, onClose }) => {
                             <S.Line />
                             <S.Description>Se seu email estiver cadastrado te enviaremos um código de recuperação de senha.</S.Description>
                             <Input title={'Insira seu Email'} value={email} onChangeText={(a) => setEmail(a)} />
+                            {error && (
+                                <S.RedText style={{ color: 'red', width: '100%' }}>{error}</S.RedText>
+                            )}
                             <View style={{ height: 24 }} />
                             <LongButton title={'Solicitar Código de Recuperação'} onPress={() => handleEmailSubmit()} />
                         </S.ModalContent>

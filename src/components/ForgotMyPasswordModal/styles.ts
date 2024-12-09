@@ -1,4 +1,4 @@
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Container = styled(TouchableOpacity)`
@@ -19,6 +19,16 @@ export const ModalContent = styled.View`
     elevation: 5;
     justify-content: center;
 `;
+
+export const RedText = styled(Text)`
+    color: red;
+    width: 100%;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-size: 12px;
+    line-height: 24px; /* 200% */
+    letter-spacing: 0.5px;
+    font-family: "Poppins_600SemiBold";
+`
 
 export const Title = styled.Text`
     font-size: 20px;

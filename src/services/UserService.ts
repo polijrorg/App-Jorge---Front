@@ -21,8 +21,20 @@ interface ICreateRequest {
 }
 
 interface ICreateResponse {
-    user: User;
-    token: string;
+    id: string;
+    password: string;
+    name: string;
+    email: string;
+	created_at: Date;
+    updated_at: Date;
+}
+
+interface IUpdateResponse {
+    id: string;
+    name: string;
+    email: string;
+	created_at: Date;
+    updated_at: Date;
 }
 
 interface IRedefinePasswordRequest {
@@ -74,7 +86,7 @@ export default class UserService {
         }
     }
 
-    static async update(data: ICreateRequest): Promise<ICreateResponse | string> {
+    static async update(data: ICreateRequest): Promise<IUpdateResponse | string> {
         try {
             const id = await AsyncStorage.getItem('@jorge:userId');
             const response: AxiosResponse<ICreateResponse> = await api.patch(
@@ -92,22 +104,18 @@ export default class UserService {
         }
     }
 
-    static async restorePassword(email: string): Promise<ICreateResponse | string> {
+    static async restorePassword(email: string): Promise<void | string> {
         try {
-            const response: AxiosResponse<ICreateResponse> = await api.post(
-                `/users/restore-password`,
-                email
-            );
-            if (response.status >= 200 && response.status < 300) {
-                return response.data;
-            } else {
-                throw new Error('There was a problem with the restoring the password');
+            const response: AxiosResponse = await api.post(`/users/restore-password`, { email });
+            if (!(response.status >= 200 && response.status < 300)) {
+                throw new Error('There was a problem with restoring the password');
             }
         } catch (error) {
-            console.error('Erro ao editar dados do usuário', error.response.data.message);
-            throw new Error(error);
+            console.error('Erro ao enviar o email para restaurar a senha:', error.response?.data?.message || error.message);
+            throw new Error('Failed to send restore password email');
         }
     }
+    
 
     static async redefinePassword(data: IRedefinePasswordRequest): Promise<ICreateResponse | string> {
         try {
