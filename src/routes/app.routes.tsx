@@ -5,6 +5,7 @@ import RegisterScreen from '@screens/Register';
 import BottomTabNav from './BottomTabNav/index';
 import PasswordRecover from '@screens/Register';
 import RegisterChildrenScreen from '@screens/RegisterChildren';
+import MarcosScreen from '@screens/MarcosDeDesenvolvimento';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -22,6 +23,8 @@ const AppRoutes = () => {
         <Screen name="Register" component={RegisterScreen} />
         <Screen name="PasswordRecover" component={PasswordRecover} />
         <Screen name="RegisterChildren" component={RegisterChildrenScreen} />
+        <Screen name="Marcos" component={MarcosScreen} />
+
         <Screen
             name="Main"
             component={BottomTabNav}

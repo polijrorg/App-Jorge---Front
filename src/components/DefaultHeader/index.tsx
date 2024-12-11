@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import * as S from './styles';
+import React from 'react';
 
 export default function DefaultHeader() {
     return (

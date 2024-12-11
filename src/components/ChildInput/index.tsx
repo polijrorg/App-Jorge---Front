@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as S from './styles';
-import { Platform, TouchableOpacity } from 'react-native';
+import { Platform, TouchableOpacity, Text } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useState } from "react";
 
@@ -12,9 +12,11 @@ interface Props {
     isDate?: boolean;
     isSelection?: boolean;
     options?: string[];
+    isNumber?: boolean;
+    unit?: string;
 }
 
-export function ChildInput({ isEditable = false, title, value, onChange, isDate = false, isSelection = false, options }: Props) {
+export function ChildInput({ isEditable = false, title, value, onChange, isDate = false, isSelection = false, options, isNumber = false }: Props) {
     const [showPicker, setShowPicker] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +33,9 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
             {!isDate && !isSelection ? (
                 <S.Container
                     placeholderTextColor="lightgray"
+                    placeholder={`digite um ${title.toLowerCase()}`}
                     value={value}
+                    keyboardType={isNumber ? 'numeric' : 'default'}
                     onChangeText={onChange}
                 />
             ) : !isSelection ? (
@@ -40,14 +44,18 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
                         editable={false}
                         value={value instanceof Date ? value.toLocaleDateString('pt-BR') : value}
                         pointerEvents="none"
+                        placeholderTextColor="lightgray"
+                        placeholder="Selecione uma data"
                     />
                 </TouchableOpacity>
             ) : (
                 <TouchableOpacity onPress={() => setIsOpen(!isOpen)}>
                     <S.Container
                         editable={false}
-                        value={value || 'Selecione uma opção'}
+                        value={value}
                         pointerEvents="none"
+                        placeholderTextColor="lightgray"
+                        placeholder="Selecione uma opção"
                     />
                 </TouchableOpacity>
             )}

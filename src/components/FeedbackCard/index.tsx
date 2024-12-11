@@ -3,6 +3,7 @@ import * as S from './styles';
 import Dropdown from '@components/Dropdown';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from 'react';
+import React from 'react';
 
 export default function FeedbackCard() {
     const [selectedOption, setSelectedOption] = useState<string>();

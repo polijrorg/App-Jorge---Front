@@ -1,4 +1,5 @@
 import * as S from './styles';
+import React from 'react';
 
 export default function AmbientCard({ image, title, onPress }) {
     return (

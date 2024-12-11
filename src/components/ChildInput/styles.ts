@@ -5,7 +5,7 @@ export const Container = styled(TextInput)`
     min-height: 42px;
     max-height: 42px;
     background-color: white;
-    padding: 0 10px; /* Ajustado */
+    padding: 0 10px;
     border-radius: 100px;
     width: 100%;
     border: solid 1px lightgray;

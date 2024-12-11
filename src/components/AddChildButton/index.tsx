@@ -1,6 +1,7 @@
 import { View } from 'react-native';
 import * as S from './styles'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import React from 'react';
 
 export default function AddChildButton({ onPress }) {
     return (
@@ -11,4 +12,4 @@ export default function AddChildButton({ onPress }) {
             </View>
         </S.Button>
     );
-}
+} 

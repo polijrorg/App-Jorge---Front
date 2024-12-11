@@ -12,7 +12,7 @@ import Trophy from '@assets/icons/Trophy.png';
 import Mamadeira from '@assets/icons/Mamadeira.png';
 import ReminderCard from '@components/ReminderCard';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
 
     const userName = 'Vinícius';
 
@@ -47,7 +47,7 @@ const HomeScreen = () => {
                     <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => 1} />
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => 1} />
                     <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => 1} />
-                    <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => 1} />
+                    <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
                     <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => 1} />
                 </View>
                 <S.Line />
