@@ -19,7 +19,9 @@ export const Card = styled(TouchableOpacity)`
 export const Logo = styled(Image)`
     height: 24px;
     width: 24px;
-    colorTint: black;
+    tintColor: black;
+    background-color: ${({ theme }) => theme.colors.ambientCard };
+    background-blend-mode: color-burn;
 `
 
 export const Title = styled(Text)`

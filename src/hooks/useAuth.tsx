@@ -14,6 +14,7 @@ interface ILoginRequest {
 
 interface AuthContextData {
     user: User;
+    setUser: (data: User) => void;
     login: (data: ILoginRequest) => void;
     logout: () => void;
 }
@@ -43,10 +44,10 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode | undefined }> 
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, setUser, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
 };
 
-export default () => useContext(AuthContext);
+export const useAuthContext = () => useContext(AuthContext);

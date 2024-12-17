@@ -1,15 +1,28 @@
 import DefaultHeader from '@components/DefaultHeader';
 import * as S from './styles';
-import React, { useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import FeedbackCard from '@components/FeedbackCard';
 import ChildCard from '@components/ChildCard';
 import Bebe from '@assets/icons/Bebe.png'
 import AddChildButton from '@components/AddChildButton';
+import Child from '@interfaces/Child';
+import { useChildContext } from '@hooks/useChild';
 
 const MyChildrenScreen = ({ navigation }) => {
 
+    const { childList: children, setActiveChild } = useChildContext();
+
+    async function handlePress(data: Child) {
+        setActiveChild(data);
+        navigation.navigate('EditChildren');
+    }
+
+    async function handlePressMain(data: Child) {
+        setActiveChild(data);
+        navigation.navigate('FollowUp');
+    }
+    
     return (
         <S.Wrapper>
             <DefaultHeader />
@@ -21,8 +34,25 @@ const MyChildrenScreen = ({ navigation }) => {
                     <S.Title>Suas Crianças</S.Title>
                 </View>
                 <S.Line />
-                <ChildCard name={'Carlos'} age={'12 meses'} weight={'10kg'} height={'180cm'} developmentPercentage={80} vaccinePercentage={50} avatar={Bebe} />
+                
+                {children.map((c) => (
+                    <ChildCard
+                        key={c.idchildren}
+                        onPress={() => handlePress(c)}
+                        onPressMain={() => handlePressMain(c)}
+                        name={c.name.split(' ')[0]}
+                        birthDate={c.nascimento}
+                        weight={`${c.peso}kg`}
+                        height={`${c.altura}cm`}
+                        developmentPercentage={80}
+                        vaccinePercentage={50}
+                        avatar={Bebe}
+                    />
+                ))}
+
                 <AddChildButton onPress={() => navigation.navigate('RegisterChildren')}/>
+
+                <View style={{ marginTop: 130 }}/>
             </S.Content>
         </S.Wrapper>
     )

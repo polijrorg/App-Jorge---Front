@@ -20,6 +20,7 @@ import {
     Poppins_900Black as PoppinsBlack,
     Poppins_900Black
 } from "@expo-google-fonts/poppins"
+import { ChildProvider } from '@hooks/useChild';
 
 export default function App() {
     let [fontsLoaded] = useFonts({
@@ -44,9 +45,11 @@ export default function App() {
         return (
             <NavigationContainer>   
                 <AuthProvider>
-                    <AppProvider>
-                        <Routes />
-                    </AppProvider>        
+                    <ChildProvider>
+                        <AppProvider>
+                            <Routes />
+                        </AppProvider>
+                    </ChildProvider>
                 </AuthProvider>   
             </NavigationContainer>
         );

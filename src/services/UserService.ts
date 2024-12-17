@@ -43,6 +43,11 @@ interface IRedefinePasswordRequest {
     newPassword: string;
 }
 
+interface ILogoutRequest {
+    userId: string;
+    refreshToken: string;
+}
+
 export default class UserService {
     static async login(data: ILoginRequest): Promise<ILoginResponse> {
         try {
@@ -54,6 +59,9 @@ export default class UserService {
             if (response.status >= 200 && response.status < 300) {
                 await AsyncStorage.setItem('@jorge:token', response.data.token);
                 await AsyncStorage.setItem('@jorge:userId', response.data.user.id);
+                api.defaults.headers.common = {
+                    Authorization: `Bearer ${response.data.token}`,
+                  }; 
                 return response.data;
             } else {
                 throw new Error('There was a problem with the login');
@@ -64,9 +72,18 @@ export default class UserService {
         }
     }
 
-    static async logout() {
-        await AsyncStorage.removeItem('@jorge:token');
-        await AsyncStorage.removeItem('@jorge.userId');
+    static async delete(token: string) {        
+        try {
+            const response: AxiosResponse<ILoginResponse> = await api.delete(`/users/delete/${token}`);
+            if (response.status >= 200 && response.status < 300) {
+                return response.data;
+            } else {
+                throw new Error('There was a problem with deleting the user');
+            }
+        } catch (error) {
+            console.error('Erro ao fazer deletar o usuário', error.response.data.message);
+            throw new Error(error);
+        }
     }
 
     static async create(data: ICreateRequest): Promise<ICreateResponse | string> {
@@ -76,7 +93,9 @@ export default class UserService {
                 data
             );
             if (response.status >= 200 && response.status < 300) {
-                return response.data;
+                const temp = response.data;
+                UserService.login({email: temp.email, password: temp.password});
+                return temp;
             } else {
                 throw new Error('There was a problem with the registration');
             }
@@ -100,6 +119,23 @@ export default class UserService {
             }
         } catch (error) {
             console.error('Erro ao editar dados do usuário', error.response.data.message);
+            throw new Error(error);
+        }
+    }
+
+    static async readFromId(id: string): Promise<User> {
+        try {
+            const response: AxiosResponse<User> = await api.get(
+                `/users/read/${id}`
+            );
+
+            if (response.status >= 200 && response.status < 300) {
+                return response.data;
+            } else {
+                throw new Error('There was a problem with parsing child data');
+            }
+        } catch (error) {
+            console.error('Erro ao buscar dados da criança', error.response.data.message);
             throw new Error(error);
         }
     }

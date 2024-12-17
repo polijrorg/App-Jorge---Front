@@ -8,6 +8,9 @@ import { Button } from '@components/Button';
 import ForgotMyPasswordModal from '@components/ForgotMyPasswordModal';
 import DefaultHeader from '@components/DefaultHeader';
 import UserService from '@services/UserService';
+import { useAuthContext } from '@hooks/useAuth';
+import { useChildContext } from '@hooks/useChild';
+import ChildrenService from '@services/ChildrenService';
 
 const LoginScreen = ({ navigation }) => {
 
@@ -16,22 +19,33 @@ const LoginScreen = ({ navigation }) => {
     const [modal, setModal] = useState(false);
     const [error, setError] = useState<string>(null);
 
+    const { setUser, user } = useAuthContext();
+    const { setChildList } = useChildContext();
+
+    async function fetchChildren() {
+        const response = await ChildrenService.readAll();
+        setChildList(response);
+    }
+
     const loginUser = async () => {    
-        // try {
-        //     const user = await UserService.login({
-        //         email: email,
-        //         password: password,
-        //     });
-        //     navigation.navigate('Main', { screen: 'Home' });
-        //     setEmail('');
-        //     setPassword('');
-        //     console.log(user);
-        //     alert("Login Realizado");
-        // } catch (error) {
-        //     alert("Email ou senha inválidos.");
-        //     setError("Email ou senha inválidos!")
-        // }
-        navigation.navigate('Main', { screen: 'Home' })
+        try {
+            const temp = await UserService.login({
+                email: email,
+                password: password,
+            });
+            await fetchChildren();
+            setUser(temp.user);
+            console.log(user);
+            navigation.navigate('Main', { screen: 'Home' });
+            setEmail('');
+            setPassword('');
+            console.log(user);
+            alert("Login Realizado");
+        } catch (error) {
+            alert("Email ou senha inválidos.");
+            setError("Email ou senha inválidos!")
+        }
+        // navigation.navigate('Main', { screen: 'Home' })
     };
 
     return (
@@ -41,7 +55,7 @@ const LoginScreen = ({ navigation }) => {
             
             <Input title={'Login'} value={email} onChangeText={(email) => setEmail(email)} />
             <S.Password>
-                <Input title={'Senha'} value={password} onChangeText={(password) => setPassword(password)} />
+                <Input title={'Senha'} value={password} onChangeText={(password) => setPassword(password)} hideOption={true} />
                 <TouchableOpacity onPress={() => setModal(true)} >
                     <S.BlueText>Esqueci minha senha</S.BlueText>
                 </TouchableOpacity>

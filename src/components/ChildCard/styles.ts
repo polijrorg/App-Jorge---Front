@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 
-export const Card = styled(View)`
+export const Card = styled(TouchableOpacity)`
     flex-direction: row;
     align-items: center;
     padding: 16px;
