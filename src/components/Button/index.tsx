@@ -1,4 +1,3 @@
-import { TextInputProps, TouchableOpacity } from "react-native";
 import * as S from './styles';
 import React from 'react';
 

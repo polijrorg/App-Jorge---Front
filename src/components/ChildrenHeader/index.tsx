@@ -20,7 +20,7 @@ export default function DefaultHeader() {
             <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', width: '100%' }}>
                 <S.Logo source={require('@assets/images/WhiteLogo.png')}/>
                 <TouchableOpacity onPress={() => setModal(true)}  style={{ flexDirection: 'row', gap: 8 }}>
-                    <S.Title>{child.name}</S.Title>
+                    <S.Title>{child?.name || '――'}</S.Title>
                     <Ionicons name='chevron-down-circle-outline' size={20} color='#FFF'/>
                 </TouchableOpacity>
                 <View style={{ width: 32 }} />

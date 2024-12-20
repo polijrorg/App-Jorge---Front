@@ -11,18 +11,32 @@ export const Wrapper = styled(View)`
 export const Content = styled(View)`
     flex: 1;
     align-items: center;
-    justify-content: top;
+    justify-content: flex-start;
     background: ${({ theme }) => theme.colors.background };
     padding: 16px;
     width: 100%;
-    gap: 16px;
+    height: 100%;
+    gap: 8px;
 `;
 
-export const Title = styled(Text)`
+export const ScaleContainer = styled(View)`
+    align-items: center;
+    gap: 8px;
+    flex-direction: row;
+`
+
+export const Color = styled(View)<{ color?: string }>`
+    height: 24px;
+    width: 24px;
+    border-radius: 100px;
+    background-color: ${({color}) => color || ''};
+`
+
+export const Title = styled(Text)<{ width?: number, size?: number }>`
     color: #000;
     font-family: 'Poppins_600SemiBold';
-    font-size: 18px;
-    width: 100%;
+    font-size: ${({size}) => size || 18}px;
+    width: ${({width}) => (width) ? '' : '100%'};
 `
 
 export const Number = styled(Text)`
@@ -49,7 +63,8 @@ export const Line = styled(View)`
     width: 100%;
     border: 0.3px;
     border-color: lightblue;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 `
 
 export const Button = styled(TouchableOpacity)`

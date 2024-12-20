@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, TouchableWithoutFeedback, View } from 'react-native';
 import * as S from './styles';
 import { Input } from '@components/Input';
 import { LongButton } from '@components/LongButton';

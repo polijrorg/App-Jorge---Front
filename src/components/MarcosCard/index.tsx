@@ -18,7 +18,7 @@ export default function MarcosCard(p: Props) {
             </S.Container>
             <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 16, marginTop: -20, width: '100%' }}>
                 <MarcosButton onPress={() => 1} title={'Sim'} />
-                <MarcosButton onPress={() => 1} title={'Talvez'} />
+                <MarcosButton onPress={() => 1} title={'Não sei'} />
                 <MarcosButton onPress={() => 1} title={'Ainda Não'} />
             </View>
         </View>

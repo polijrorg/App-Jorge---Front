@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
                 <S.Title>Seus Ambientes</S.Title>
                 <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
                     <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => 1} />
-                    <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => 1} />
+                    <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
                     <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => 1} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
                     <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => 1} />

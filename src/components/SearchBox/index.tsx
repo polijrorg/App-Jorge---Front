@@ -1,55 +1,79 @@
-import React, { useState } from 'react';
-import { FlatList } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { FlatList, Keyboard } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as S from './styles';
 
-const data = [
-  { id: '1', name: 'Carlos' },
-  { id: '2', name: 'Ana' },
-  { id: '3', name: 'Bianca' },
-  { id: '4', name: 'Daniel' },
-  { id: '5', name: 'Fernanda' },
-  // Adicione mais itens conforme necessário
-];
+interface SearchItem {
+    id: string;
+    name: string;
+}
 
-const SearchScreen = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData, setFilteredData] = useState(data);
+interface SearchBoxProps {
+    data: SearchItem[];
+    onSelectItem?: (item: SearchItem) => void;
+    placeholder?: string;
+}
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    if (query) {
-      const filtered = data.filter((item) =>
-        item.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredData(filtered);
-    } else {
-      setFilteredData([]); // Limpa os resultados quando a busca está vazia
-    }
-  };
+const SearchBox: React.FC<SearchBoxProps> = ({ 
+    data, 
+    onSelectItem, 
+    placeholder = "Dúvidas, remédios, alergias..." 
+}) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredData, setFilteredData] = useState<SearchItem[]>([]);
+    const [showDropdown, setShowDropdown] = useState(false);
 
-  return (
-    <S.Container>
-      <S.SearchBar>
-        <S.TextInput
-          placeholder="Dúvidas, remédios, alergias..."
-          value={searchQuery}
-          onChangeText={handleSearch}
-        />
-        <Ionicons name="search" size={20} color="#808080" />
-      </S.SearchBar>
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+        if (query) {
+            const filtered = data.filter((item) =>
+                item.name.toLowerCase().includes(query.toLowerCase())
+            );
+            setFilteredData(filtered);
+            setShowDropdown(true);
+        } else {
+            setFilteredData([]);
+            setShowDropdown(false);
+        }
+    };
 
-      {/* Exibe a lista apenas se houver uma busca e resultados */}
-      {searchQuery && filteredData.length > 0 && (
-        <FlatList
-          data={filteredData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <S.ItemText>{item.name}</S.ItemText>}
-          ListEmptyComponent={<S.EmptyText>Nenhum resultado encontrado</S.EmptyText>}
-        />
-      )}
-    </S.Container>
-  );
+    const handleSelectItem = (item: SearchItem) => {
+        if (onSelectItem) {
+            onSelectItem(item);
+        }
+        setSearchQuery(item.name);
+        setShowDropdown(false);
+    };
+
+    return (
+        <S.SearchBarWrapper>
+            <S.SearchBar>
+                <S.TextInput
+                    placeholder={placeholder}
+                    value={searchQuery}
+                    onChangeText={handleSearch}
+                    multiline={false}
+                />
+                <Ionicons name="search" size={20} color="#808080" />
+            </S.SearchBar>
+
+            {showDropdown && filteredData.length > 0 && (
+                <S.DropdownContainer>
+                    <FlatList
+                        data={filteredData}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => (
+                            <S.DropdownItem onPress={() => handleSelectItem(item)}>
+                                <S.ItemText>{item.name}</S.ItemText>
+                            </S.DropdownItem>
+                        )}
+                        // ListEmptyComponent={<S.EmptyText>Nenhum resultado encontrado</S.EmptyText>}
+                    />
+                </S.DropdownContainer>
+            )}
+        </S.SearchBarWrapper>
+    );
 };
 
-export default SearchScreen;
+export default SearchBox;
+

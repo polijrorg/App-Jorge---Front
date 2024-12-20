@@ -15,7 +15,7 @@ interface Props {
 export default function ChildModal(p: Props) {
 
     function handleSelected(buttonChild: string) {
-        return activeChild.name === buttonChild;
+        return activeChild?.idchildren == buttonChild;
     }
 
     const { setActiveChild, childList: children, activeChild } = useChildContext();

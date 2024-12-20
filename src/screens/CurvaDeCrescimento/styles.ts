@@ -18,6 +18,7 @@ export const Content = styled(ScrollView).attrs(() => ({
     flex: 1;
     background: ${({ theme }) => theme.colors.background };
     width: 100%;
+    gap: 8px;
 `;
 
 export const Button = styled(TouchableOpacity)`

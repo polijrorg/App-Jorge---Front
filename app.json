@@ -10,9 +10,14 @@
       [
         "expo-font",
         {
-          "fonts": ["@assets/fonts/Poppins-Regular.ttf"]
+          "fonts": [
+            "@assets/fonts/Poppins-Regular.ttf"
+          ]
         }
       ]
-    ]
+    ],
+    "android": {
+      "package": "com.anonymous.myapp5"
+    }
   }
 }

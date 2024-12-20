@@ -52,7 +52,7 @@ const MyChildrenScreen = ({ navigation }) => {
 
                 <AddChildButton onPress={() => navigation.navigate('RegisterChildren')}/>
 
-                <View style={{ marginTop: 130 }}/>
+                <View style={{ marginTop: 50 }}/>
             </S.Content>
         </S.Wrapper>
     )

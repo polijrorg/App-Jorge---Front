@@ -99,8 +99,8 @@ const EditChildrenScreen = ({ navigation }) => {
                     isEditable={false}
                     name={name || 'name'}
                     birthDate={birthDate ? formatDate(birthDate) : '-'}
-                    weight={weight || 'weight'}
-                    height={height || 'height'}
+                    weight={`${weight}kg` || 'weight'}
+                    height={`${height}cm` || 'height'}
                     developmentPercentage={80}
                     vaccinePercentage={80}
                     avatar={Bebe}
