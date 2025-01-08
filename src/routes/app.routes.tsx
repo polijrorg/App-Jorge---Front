@@ -9,15 +9,23 @@ import MarcosScreen from '@screens/MarcosDeDesenvolvimento';
 import EditChildren from '@screens/EditChildren';
 import FollowUpScreen from '@screens/ChildFollowUp';
 import GrowthCurveScreen from '@screens/CurvaDeCrescimento';
+import EditCurveScreen from '@screens/EditCurve';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
 export type RootStackParamList = {
     Register: undefined;
     Login: undefined;
-    PasswordRecover: { code? : string };
+    PasswordRecover: { code?: string };
     Main: undefined;
+    RegisterChildren: undefined;
+    EditChildren: undefined;
+    FollowUp: undefined;
+    Marcos: undefined;
+    Curva: undefined;
+    EditCurve: undefined;
 };
+
 
 const AppRoutes = () => {
   return (
@@ -30,6 +38,7 @@ const AppRoutes = () => {
         <Screen name="FollowUp" component={FollowUpScreen} />
         <Screen name="Marcos" component={MarcosScreen} />
         <Screen name="Curva" component={GrowthCurveScreen} />
+        <Screen name="EditCurve" component={EditCurveScreen} />
 
         <Screen
             name="Main"

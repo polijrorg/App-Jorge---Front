@@ -84,7 +84,7 @@ const BottomTabNav = () => {
                     tabBarIcon: ({ focused }) =>
                       renderIcon(
                         require('@assets/icons/Bebe.png'),
-                        'Meus Filhos',
+                        'Filhos',
                         focused
                       ),
                 }}

@@ -1,36 +1,26 @@
 import DefaultHeader from '@components/DefaultHeader';
 import * as S from './styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import SearchBox from '@components/SearchBox';
+import MedicineDetails from '@components/MedicineDetails';
+import Medicine from '@interfaces/Medicine';
+import MedicinesService from '@services/MedicinesService';
 
 const MyChildrenScreen = ({ navigation }) => {
+    const [medicines, setMedicines] = useState<Medicine[]>([]);
+    const [selection, setSelection] = useState<Medicine>(undefined);
 
-    const medicationData = [
-        { id: '1', name: 'Paracetamol' },
-        { id: '2', name: 'Ibuprofeno' },
-        { id: '3', name: 'Dipirona' },
-        { id: '4', name: 'Amoxicilina' },
-        { id: '5', name: 'Omeprazol' },
-        { id: '6', name: 'Loratadina' },
-        { id: '7', name: 'Atenolol' },
-        { id: '8', name: 'Metformina' },
-        { id: '9', name: 'Fluoxetina' },
-        { id: '10', name: 'Sinvastatina' },
-      ];
-
-    const [selection, setSelection] = useState<string>('');
-
-    function determineColor(safety: string) {
+    function determineColor(safety: number) {
         switch (safety) {
-            case 'Seguro':
+            case 1:
                 return '#50D76E';
-            case 'Parcialmente Seguro':
+            case 2:
                 return '#DB9E27';
-            case 'Inseguro':
+            case 3:
                 return '#D07327';
-            case 'Muito Inseguro':
+            case 4:
                 return '#B94A48';
         }
     }
@@ -45,7 +35,7 @@ const MyChildrenScreen = ({ navigation }) => {
                     </S.Button >
                     <S.Title>MedMama</S.Title>
                 </View>
-                <SearchBox data={medicationData} onSelectItem={(item) => console.log(item)}/>
+                <SearchBox data={medicines} onSelectItem={(item) => setSelection(item)}/>
 
 
                 {/* <S.Title size={16}>Como funciona?</S.Title>
@@ -57,37 +47,40 @@ const MyChildrenScreen = ({ navigation }) => {
                 <View style={{ width: '100%', padding: 16, gap: 4 }}>
                     <S.ScaleContainer>
                         <S.Color color='#50D76E'/>
-                        <View style={{ width: '100%' }}>
+                        <View style={{ flex: 1 }}>
                             <S.Title size={14}>Seguro</S.Title>
                             <S.Description size={12}>Dê preferencia e pode utilizar sem maiores problemas.</S.Description>
                         </View>
                     </S.ScaleContainer>
                     <S.ScaleContainer>
                         <S.Color color='#DB9E27'/>
-                        <View style={{ width: '100%' }}>
+                        <View style={{ flex: 1 }}>
                             <S.Title size={14}>Parcialmente seguro</S.Title>
-                            <S.Description size={12}>Dê preferencia a outros medicamentos, potencialmente cause de problemas.</S.Description>
+                            <S.Description size={12}>Dê preferencia a outros medicamentos, potencialmente causa de problemas.</S.Description>
                         </View>
                     </S.ScaleContainer>
                     <S.ScaleContainer>
                         <S.Color color='#D07327'/>
-                        <View style={{ width: '100%' }}>
+                        <View style={{ flex: 1 }}>
                             <S.Title size={14}>Inseguro</S.Title>
-                            <S.Description size={12}>Não utilize esses medicamentos nas condições dispostas, de preferencia total para alternativas.</S.Description>
+                            <S.Description size={12}>Não utilize esses medicamentos nas condições dispostas, dê preferência total para alternativas.</S.Description>
                         </View>
                     </S.ScaleContainer>
                     <S.ScaleContainer>
                         <S.Color color='#B94A48'/>
-                        <View style={{ width: '100%' }}>
+                        <View style={{ flex: 1 }}>
                             <S.Title size={14}>Muito inseguro</S.Title>
-                            <S.Description size={12}>Medicamento potencialmente toxico e perigoso no contexto, evite totalmente o consumo.</S.Description>
+                            <S.Description size={12}>Medicamento potencialmente tóxico e perigoso no contexto, evite totalmente o consumo.</S.Description>
                         </View>
                     </S.ScaleContainer>
                 </View> */}
 
                 <S.Line />
-                <S.Title>Tylenol</S.Title>
-
+                <MedicineDetails 
+                  name='Tylenol'
+                  safety='parcialmente seguro'
+                  comment='Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque esse nemo aliquam, nobis quasi beatae. Assumenda delectus optio dolor unde voluptatibus blanditiis odio itaque repellat veritatis in. Omnis, asperiores aliquid.'
+                />
             </S.Content>
         </S.Wrapper>
     )

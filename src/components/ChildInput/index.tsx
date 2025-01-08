@@ -27,22 +27,6 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
         setIsOpen(false);
     };
 
-    function HealthPlan(value: string) {
-        return value
-            .replace(/\D/g, '')
-            .replace(/(\d{3})(\d{4})(\d{5})(\d{2})(\d{1})/, '$1.$2.$3.$4-$5')
-            .substring(0, 19);
-    }
-
-    const handleInputChange = (text: string) => {
-        if (title === 'Plano de Saúde') {
-            onChange(HealthPlan(text));
-        }
-        else {
-            onChange(text);
-        }
-    };
-
     return (
         <S.Wrapper>
             <S.Title>{title}</S.Title>
@@ -52,7 +36,7 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
                     placeholder={`digite um ${title.toLowerCase()}`}
                     value={value}
                     keyboardType={isNumber ? 'numeric' : 'default'}
-                    onChangeText={handleInputChange}
+                    onChangeText={(text) => onChange(text)}
                 />
             ) : !isSelection ? (
                 <TouchableOpacity onPress={() => setShowPicker(true)}>

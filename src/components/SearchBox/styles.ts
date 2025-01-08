@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { TextInput as RNTextInput, View, Text, TouchableOpacity } from 'react-native';
+import { TextInput as RNTextInput, View, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 
 export const SearchBarWrapper = styled(View)`
     position: relative;
@@ -45,6 +45,7 @@ export const DropdownItem = styled(TouchableOpacity)`
     padding: 12px;
     border-bottom-width: 1px;
     border-bottom-color: #eee;
+    width: 100%;
 `;
 
 export const ItemText = styled(Text)`

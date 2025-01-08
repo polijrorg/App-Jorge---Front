@@ -2,15 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FlatList, Keyboard } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as S from './styles';
-
-interface SearchItem {
-    id: string;
-    name: string;
-}
+import Medicine from '@interfaces/Medicine';
+import MedicinesService from '@services/MedicinesService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface SearchBoxProps {
-    data: SearchItem[];
-    onSelectItem?: (item: SearchItem) => void;
+    data: Medicine[];
+    onSelectItem?: (item: Medicine) => void;
     placeholder?: string;
 }
 
@@ -19,16 +18,16 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     onSelectItem, 
     placeholder = "Dúvidas, remédios, alergias..." 
 }) => {
+
     const [searchQuery, setSearchQuery] = useState('');
-    const [filteredData, setFilteredData] = useState<SearchItem[]>([]);
+    const [filteredData, setFilteredData] = useState<Medicine[]>([]);
     const [showDropdown, setShowDropdown] = useState(false);
 
-    const handleSearch = (query: string) => {
+    const handleSearch = async (query: string) => {
         setSearchQuery(query);
         if (query) {
-            const filtered = data.filter((item) =>
-                item.name.toLowerCase().includes(query.toLowerCase())
-            );
+            const token = await AsyncStorage.getItem('@jorge:token')
+            const filtered = await MedicinesService.search({name: query})
             setFilteredData(filtered);
             setShowDropdown(true);
         } else {
@@ -37,12 +36,13 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         }
     };
 
-    const handleSelectItem = (item: SearchItem) => {
+    const handleSelectItem = (item: Medicine) => {
         if (onSelectItem) {
             onSelectItem(item);
         }
         setSearchQuery(item.name);
         setShowDropdown(false);
+        setFilteredData([]);
     };
 
     return (
@@ -61,13 +61,13 @@ const SearchBox: React.FC<SearchBoxProps> = ({
                 <S.DropdownContainer>
                     <FlatList
                         data={filteredData}
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item) => item.idmedicinesdefault}
+                        style={{ width:'100%' }}
                         renderItem={({ item }) => (
                             <S.DropdownItem onPress={() => handleSelectItem(item)}>
                                 <S.ItemText>{item.name}</S.ItemText>
                             </S.DropdownItem>
                         )}
-                        // ListEmptyComponent={<S.EmptyText>Nenhum resultado encontrado</S.EmptyText>}
                     />
                 </S.DropdownContainer>
             )}

@@ -9,6 +9,7 @@ import ChildCard from '@components/ChildCard';
 import { CartesianChart, Line, useChartPressState } from "victory-native";
 import { Circle, useFont } from '@shopify/react-native-skia';
 import { SharedValue } from 'react-native-reanimated';
+import AddChildButton from '@components/AddChildButton';
 
 const ChildGrowthScreen = ({ navigation }) => {
     const { activeChild: child } = useChildContext();
@@ -86,6 +87,8 @@ const ChildGrowthScreen = ({ navigation }) => {
                             )}
                         </CartesianChart>
                         </View>
+
+                        <AddChildButton title='Gerenciar Dados' onPress={() => navigation.navigate('EditCurve')}/>
 
                     </S.Content>
                 </>

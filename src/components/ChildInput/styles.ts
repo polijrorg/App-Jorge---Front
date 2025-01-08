@@ -9,7 +9,6 @@ export const Container = styled(TextInput)`
     border-radius: 100px;
     width: 100%;
     border: solid 1px lightgray;
-    elevation: 1;
     font-family: "PoppinsRegular";
     line-height: 20px;
 `;
@@ -22,7 +21,7 @@ export const Title = styled(Text)`
     font-style: normal;
     line-height: 24px;
     letter-spacing: 0.5px;
-    font-family: "Poppins_600SemiBold";
+    font-family: "PoppinsRegular";
     
 `
 

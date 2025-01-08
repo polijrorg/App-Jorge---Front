@@ -21,8 +21,6 @@ const RegisterChildrenScreen = ({ navigation }) => {
     const [birthDate, setBirthDate] = useState<Date>(null);
     const [gender, setGender] = useState<string>('');
     const [premature, setPremature] = useState<string>('');
-    // const [healthPlan, setHealthPlan] = useState<string>('');
-    // const [CNS, setCNS] = useState<string>('');
     const [error, setError] = useState<string>('');
 
     const formatDate = (date: Date): string => {
@@ -39,8 +37,6 @@ const RegisterChildrenScreen = ({ navigation }) => {
         else if (birthDate === null) setError('Insira uma data de nascimento válida!')
         else if (gender === null) setError('Insira o sexo biológico da criança!')
         else if (premature === null) setError('Indique se a criança nasceu prematura!')
-        // else if (healthPlan.length < 19) setError('Insira um Plano de Saúde válido!')
-        // else if (CNS === '') setError('Insira um CNS válido!')
         else {
             const id = await AsyncStorage.getItem('@jorge:userId')
             const token = await AsyncStorage.getItem('@jorge:token')
@@ -53,8 +49,6 @@ const RegisterChildrenScreen = ({ navigation }) => {
                 nascimentopre: premature.toLowerCase(),
                 altura: height,
                 peso: weight,
-                // planosaude: healthPlan,
-                // cns: CNS
             }
 
             await ChildrenService.create(
@@ -88,10 +82,6 @@ const RegisterChildrenScreen = ({ navigation }) => {
                 <ChildInput title='Nascimento Prematuro' isSelection={true} options={['Sim', 'Não']} value={premature} onChange={(a) => setPremature(a)} />
                 <ChildInput title='Altura (em cm)' value={height} onChange={(a) => setHeight(a)} isNumber={true} />
                 <ChildInput title='Peso (em kg)' value={weight} onChange={(a) => setWeight(a)} isNumber={true} unit='kg' />
-
-                {/* <S.Description>Documentos</S.Description>
-                <ChildInput title='Plano de Saúde' value={healthPlan} onChange={(a) => setHealthPlan(a)} isNumber={true} />
-                <ChildInput title='CNS' value={CNS} onChange={(a) => setCNS(a)} isNumber={true} /> */}
 
                 {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
 

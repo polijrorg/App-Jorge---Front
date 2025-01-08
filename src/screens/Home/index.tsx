@@ -18,11 +18,18 @@ import ChildrenService from '@services/ChildrenService';
 import Child from '@interfaces/Child';
 import { useAuthContext } from '@hooks/useAuth';
 import { useChildContext } from '@hooks/useChild';
+import MedicinesService from '@services/MedicinesService';
 
 const HomeScreen = ({ navigation }) => {
 
     const { user } = useAuthContext();
     const { childList: children } = useChildContext();
+
+    async function print() {
+      let data = await MedicinesService.search({name: 'sina'});
+      // data = data.filter((a) => a.name.includes('sina'));
+      console.log(data);
+    }
 
     const formatNames = (names: string[]) => {
         if (names.length === 0) return 'Você ainda não tem crianças cadastradas!'
@@ -49,12 +56,12 @@ const HomeScreen = ({ navigation }) => {
                 <S.Line />
                 
                 <S.Title>Seus Ambientes</S.Title>
-                <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                    <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => 1} />
+                <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }}>
+                    <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => navigation.navigate('MyChildren')}/>
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
-                    <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => 1} />
+                    <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => print()} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
-                    <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => 1} />
+                    <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => navigation.navigate('MedMama')} />
                 </View>
                 <S.Line />
 
