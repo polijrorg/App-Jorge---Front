@@ -1,22 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FlatList, Keyboard } from 'react-native';
+import { FlatList, Keyboard, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as S from './styles';
 import Medicine from '@interfaces/Medicine';
 import MedicinesService from '@services/MedicinesService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 interface SearchBoxProps {
-    data: Medicine[];
-    onSelectItem?: (item: Medicine) => void;
-    placeholder?: string;
+  onSelectItem?: (item: Medicine) => void;
+  placeholder?: string;
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ 
-    data, 
-    onSelectItem, 
-    placeholder = "Dúvidas, remédios, alergias..." 
+const SearchBox: React.FC<SearchBoxProps> = ({
+  onSelectItem, 
+  placeholder = "Dúvidas, remédios, alergias..." 
 }) => {
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -26,8 +22,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     const handleSearch = async (query: string) => {
         setSearchQuery(query);
         if (query) {
-            const token = await AsyncStorage.getItem('@jorge:token')
-            const filtered = await MedicinesService.search({name: query})
+            const filtered = await MedicinesService.search({ name: query })
             setFilteredData(filtered);
             setShowDropdown(true);
         } else {
@@ -40,7 +35,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
         if (onSelectItem) {
             onSelectItem(item);
         }
-        setSearchQuery(item.name);
+        setSearchQuery('');
         setShowDropdown(false);
         setFilteredData([]);
     };
@@ -62,11 +57,10 @@ const SearchBox: React.FC<SearchBoxProps> = ({
                     <FlatList
                         data={filteredData}
                         keyExtractor={(item) => item.idmedicinesdefault}
-                        style={{ width:'100%' }}
                         renderItem={({ item }) => (
-                            <S.DropdownItem onPress={() => handleSelectItem(item)}>
+                            <TouchableOpacity onPress={() => handleSelectItem(item)}>
                                 <S.ItemText>{item.name}</S.ItemText>
-                            </S.DropdownItem>
+                            </TouchableOpacity>
                         )}
                     />
                 </S.DropdownContainer>

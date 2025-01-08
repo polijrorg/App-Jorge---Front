@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import * as S from './styles'
-import {LogoAzul} from '@assets/images/LogoAzul.png'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import ForgotMyPasswordModal from '@components/ForgotMyPasswordModal';
-import DefaultHeader from '@components/DefaultHeader';
 import UserService from '@services/UserService';
 import { useAuthContext } from '@hooks/useAuth';
 import { useChildContext } from '@hooks/useChild';

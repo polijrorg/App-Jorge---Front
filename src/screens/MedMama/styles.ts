@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Wrapper = styled(View)`
@@ -17,6 +17,20 @@ export const Content = styled(View)`
     width: 100%;
     height: 100%;
     gap: 8px;
+`;
+
+export const Scroll = styled(ScrollView).attrs(() => ({
+  contentContainerStyle: {
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      padding: 16,
+  },
+}))`
+  flex: 1;
+  background: ${({ theme }) => theme.colors.background };
+  width: 100%;
+  gap: 8px;
+  margin-bottom: 30px;
 `;
 
 export const ScaleContainer = styled(View)`

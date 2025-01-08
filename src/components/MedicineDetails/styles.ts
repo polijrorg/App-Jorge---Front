@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import styled from "styled-components";
 
 export const Wrapper = styled(View)`
@@ -36,5 +36,6 @@ export const Title = styled(Text)<{ width?: string, size?: number, color?: strin
 
 export const BackgroundColor = styled(View)<{color: string}>`
   background-color: ${({color}) => color};
+  flex: auto;
   padding: 8px 16px;
 `

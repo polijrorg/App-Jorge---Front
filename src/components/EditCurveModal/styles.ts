@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Pressable } from "react-native";
 import styled from "styled-components";
 
 export const Container = styled(View)`
@@ -12,7 +12,7 @@ export const Container = styled(View)`
     border-radius: 8px;
 `
 
-export const Fundo = styled(TouchableOpacity)`
+export const Fundo = styled(Pressable)`
     flex: 1;
     background-color: rgba(0, 0, 0, 0.5);
     justify-content: center;

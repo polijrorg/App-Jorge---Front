@@ -1,41 +1,42 @@
 import { View } from 'react-native';
 import * as S from './styles';
 import React from 'react';
+import Medicine from '@interfaces/Medicine';
 
 const safetyData = {
-  seguro: {
+  1: {
     color: '#50D76E',
     title: 'Seguro',
     description: 'Dê preferencia e pode utilizar sem maiores problemas.',
   },
-  'parcialmente seguro': {
+  2: {
     color: '#DB9E27',
     title: 'Parcialmente seguro',
     description: 'Dê preferencia a outros medicamentos, potencialmente causa de problemas.',
   },
-  inseguro: {
+  3: {
     color: '#D07327',
     title: 'Inseguro',
     description: 'Não utilize esses medicamentos nas condições dispostas, dê preferência total para alternativas.',
   },
-  'muito inseguro': {
+  4: {
     color: '#B94A48',
     title: 'Muito inseguro',
     description: 'Medicamento potencialmente tóxico e perigoso no contexto, evite totalmente o consumo.',
   },
 }
 
-export default function MedicineDetails(p: {
-  name: string,
-  safety: string,
-  comment: string
-}) {
+interface Props {
+  medicine: Medicine
+}
 
-  const {color, title, description} = safetyData[p.safety];
+export default function MedicineDetails({ medicine }: Props) {
+
+  const {color, title, description} = safetyData[medicine.classification];
 
   return (
     <S.Wrapper>
-      <S.Title color={color}>{p.name}</S.Title>
+      <S.Title color={color}>{medicine.name}</S.Title>
 
       <S.ScaleContainer>
         <S.Color color={color} />
@@ -45,17 +46,23 @@ export default function MedicineDetails(p: {
         </View>
       </S.ScaleContainer>
 
-      <View>
+      <View style={{ width: '100%' }}>
         <S.BackgroundColor color={color}>
-          <S.Title color='#FFF'>Compatibilidade Limitada</S.Title>
-          <S.Description color='#FFF'>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit adipisci laboriosam obcaecati porro itaque, ea tempora asperiores cumque deserunt delectus nesciunt totam distinctio tempore aspernatur minus atque quas illo veniam!
-          </S.Description>
+          <S.Title color='#FFF'>Detalhes</S.Title>
+          <S.Description color='#FFF'>➤ Substância ativa: {medicine.substance}</S.Description>
+          <S.Description color='#FFF'>➤ Classe: {medicine.class}</S.Description>
+          {
+            medicine.observation &&
+            <S.Description color='#FFF'>➤ Observações: {medicine.observation}</S.Description>
+          }
+          {
+            medicine.alternative &&
+            <S.Description color='#FFF'>➤ Alternativas: {medicine.alternative}</S.Description>
+          }
         </S.BackgroundColor>
         <S.BackgroundColor color='#E6E6E6'>
-          <S.Description>
-            {p.comment}
-          </S.Description>
+          <S.Title>Fonte</S.Title>
+          <S.Description size={12}>{medicine.source}</S.Description>
         </S.BackgroundColor>
       </View>
 
