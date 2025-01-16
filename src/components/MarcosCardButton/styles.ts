@@ -1,10 +1,10 @@
 import { TouchableOpacity, Text } from "react-native";
 import styled from "styled-components";
 
-export const Container = styled(TouchableOpacity)`
+export const Container = styled(TouchableOpacity)<{ selected: boolean }>`
     elevation: 3;
     padding: 8px 16px;
-    background-color: white; 
+    background-color: ${({ selected }) => selected ? '#95DDFF' : '#FFF'}; 
     border-radius: 8px;
 `
 

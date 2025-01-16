@@ -20,17 +20,20 @@ export const Container = styled(View)<{ color: number }>`
         }
     }};
     border-radius: 16px;
-    padding: 20px;
     padding-bottom: 40px;
     width: 100%
 `
 
 export const Img = styled(Image)`
     border-radius: 16px;
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
 `
 
 export const Description = styled(Text)`
     color: #000;
+    padding: 20px;
     text-align: center;
     font-feature-settings: 'liga' off, 'clig' off;
     font-size: 14px;

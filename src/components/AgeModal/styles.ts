@@ -10,6 +10,7 @@ export const Container = styled(View)`
     width: 90%;
     gap: 4px;
     border-radius: 8px;
+    max-height: 400px;
 `
 
 export const Fundo = styled(View)`

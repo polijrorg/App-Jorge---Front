@@ -49,15 +49,15 @@ export default function MedicineDetails({ medicine }: Props) {
       <View style={{ width: '100%' }}>
         <S.BackgroundColor color={color}>
           <S.Title color='#FFF'>Detalhes</S.Title>
-          <S.Description color='#FFF'>➤ Substância ativa: {medicine.substance}</S.Description>
-          <S.Description color='#FFF'>➤ Classe: {medicine.class}</S.Description>
+          <S.Description color='#FFF'>● Substância ativa: {medicine.substance}</S.Description>
+          <S.Description color='#FFF'>● Classe: {medicine.class}</S.Description>
           {
             medicine.observation &&
-            <S.Description color='#FFF'>➤ Observações: {medicine.observation}</S.Description>
+            <S.Description color='#FFF'>● Observações: {medicine.observation}</S.Description>
           }
           {
             medicine.alternative &&
-            <S.Description color='#FFF'>➤ Alternativas: {medicine.alternative}</S.Description>
+            <S.Description color='#FFF'>● Alternativas: {medicine.alternative}</S.Description>
           }
         </S.BackgroundColor>
         <S.BackgroundColor color='#E6E6E6'>

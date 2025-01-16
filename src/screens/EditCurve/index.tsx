@@ -76,12 +76,12 @@ const EditCurveScreen = ({ navigation }) => {
                   birthDate={child?.nascimento || ''}
                   weight={`${child?.peso}kg` || 'weight'}
                   height={`${child?.altura}cm` || 'height'}
-                  developmentPercentage={80}
+                  id={`${child?.idchildren}` || '0'}
                   vaccinePercentage={80}
                   avatar={Bebe}
                 />
                 <S.Line />
-                {tableHeader()}
+                {data.length > 0 && tableHeader()}
               </>
             )}
             ListFooterComponent={() => (

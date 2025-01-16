@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import * as S from './styles';
 import { TouchableOpacity, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import ChildrenService from '@services/ChildrenService';
+import { useChildContext } from '@hooks/useChild';
 
 interface ChildCardProps {
     name: string;
     birthDate: string;
     weight: string;
     height: string;
-    developmentPercentage: number;
+    id: string;
     vaccinePercentage: number;
     avatar: any;
     onPress?: (a: any) => void;
@@ -29,7 +31,7 @@ const ChildCard: React.FC<ChildCardProps> = ({
     birthDate,
     weight,
     height,
-    developmentPercentage,
+    id,
     vaccinePercentage,
     avatar,
     onPress,
@@ -38,6 +40,8 @@ const ChildCard: React.FC<ChildCardProps> = ({
 }) => {
 
     const [age, setAge] = useState<{years: number, months: number}>(null);
+    const [development, setDevelopment] = useState<number>(50);
+    const { activeChild } = useChildContext();
 
     useEffect(() => {
         if (birthDate) setAge(findAge(birthDate));
@@ -67,6 +71,15 @@ const ChildCard: React.FC<ChildCardProps> = ({
         if (!age || !age.years && !age.months) return '<1m';
         return [years, months].filter(Boolean).join(' ');
     }
+
+    useEffect(() => {
+      async function calculateDevelopment() {
+        const response = await ChildrenService.development(id);
+        setDevelopment(Number(response.developmentPercentage));
+        console.log('calculado', response.developmentPercentage);
+      }
+      calculateDevelopment();
+    }, [activeChild])
     
     return (
         <S.Card onPress={onPressMain}>
@@ -78,7 +91,7 @@ const ChildCard: React.FC<ChildCardProps> = ({
                 <S.Details>{formatAge(age)} - <S.HighlightGreen>{weight}</S.HighlightGreen> - <S.HighlightYellow>{height}</S.HighlightYellow></S.Details>
                 <S.ProgressContainer>
                     <S.ProgressLabel>Desenvolvimento</S.ProgressLabel>
-                    <ProgressBar percentage={developmentPercentage} color="#4CAF50" />
+                    <ProgressBar percentage={development || 0} color="#4CAF50" />
                 </S.ProgressContainer>
                 <S.ProgressContainer>
                     <S.ProgressLabel>Vacinas</S.ProgressLabel>
@@ -87,11 +100,12 @@ const ChildCard: React.FC<ChildCardProps> = ({
             </S.InfoContainer>
 
             {isEditable &&
-            <View style={{ height: '100%' }}>
-                <TouchableOpacity onPress={onPress} style={{ borderRadius: 100, padding: 5, backgroundColor: '#4D91B6' }}>
-                    <MaterialIcons name="edit" size={16} color="white" />
-                </TouchableOpacity>
-            </View>}
+              <View style={{ height: '100%' }}>
+                  <TouchableOpacity onPress={onPress} style={{ borderRadius: 100, padding: 5, backgroundColor: '#4D91B6' }}>
+                      <MaterialIcons name="edit" size={16} color="white" />
+                  </TouchableOpacity>
+              </View>
+            }
 
         </S.Card>
     );

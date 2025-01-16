@@ -10,6 +10,7 @@ import { CartesianChart, Line, useChartPressState } from "victory-native";
 import { Circle, useFont } from '@shopify/react-native-skia';
 import { SharedValue } from 'react-native-reanimated';
 import AddChildButton from '@components/AddChildButton';
+import NoChildrenWarning from '@components/NoChildrenWarning';
 
 const ChildGrowthScreen = ({ navigation }) => {
     const { activeChild: child } = useChildContext();
@@ -40,7 +41,8 @@ const ChildGrowthScreen = ({ navigation }) => {
                             </S.Button>
                             <S.Title>Curva de Crescimento</S.Title>
                         </View>
-                        <S.Description>Selecione uma criança na header para ver sua curva de crescimento!</S.Description>
+                        <S.Line />
+                        <NoChildrenWarning />
                     </S.Content>
                 </>
             :
@@ -61,7 +63,7 @@ const ChildGrowthScreen = ({ navigation }) => {
                             birthDate={child?.nascimento || ''}
                             weight={`${child?.peso}kg` || 'weight'}
                             height={`${child?.altura}cm` || 'height'}
-                            developmentPercentage={80}
+                            id={`${child?.idchildren}` || '0'}
                             vaccinePercentage={80}
                             avatar={Bebe} />
 

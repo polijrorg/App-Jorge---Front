@@ -10,7 +10,6 @@ export const button = styled(TouchableOpacity)`
     justify-content: center;
     align-items: center;
     border: solid 1px lightgray;
-    elevation: 1;
     padding-left: 8px;
     padding-right: 8px;
 `

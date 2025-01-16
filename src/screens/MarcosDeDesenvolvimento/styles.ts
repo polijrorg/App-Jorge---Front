@@ -8,14 +8,11 @@ export const Wrapper = styled(View)`
     background: ${({ theme }) => theme.colors.background };
 `;
 
-export const Content = styled(ScrollView).attrs(() => ({
-    contentContainerStyle: {
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        gap: 16,
-        padding: 16,
-    },
-}))`
+export const Content = styled(View)`
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
     flex: 1;
     background: ${({ theme }) => theme.colors.background};
     width: 100%;

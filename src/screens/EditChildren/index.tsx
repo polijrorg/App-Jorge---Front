@@ -101,7 +101,7 @@ const EditChildrenScreen = ({ navigation }) => {
                     birthDate={birthDate ? formatDate(birthDate) : '-'}
                     weight={`${weight}kg` || 'weight'}
                     height={`${height}cm` || 'height'}
-                    developmentPercentage={80}
+                    id={'50'}
                     vaccinePercentage={80}
                     avatar={Bebe}
                 />

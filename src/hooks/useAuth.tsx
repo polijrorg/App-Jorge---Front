@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode | undefined }> 
 
             setUser(response.user);
         } catch (error) {
-            // Errors handling
+            console.log(error);
         }
     };
 

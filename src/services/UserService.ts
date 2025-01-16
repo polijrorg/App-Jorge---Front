@@ -59,9 +59,6 @@ export default class UserService {
             if (response.status >= 200 && response.status < 300) {
                 await AsyncStorage.setItem('@jorge:token', response.data.token);
                 await AsyncStorage.setItem('@jorge:userId', response.data.user.id);
-                api.defaults.headers.common = {
-                    Authorization: `Bearer ${response.data.token}`,
-                  }; 
                 return response.data;
             } else {
                 throw new Error('There was a problem with the login');
@@ -93,9 +90,7 @@ export default class UserService {
                 data
             );
             if (response.status >= 200 && response.status < 300) {
-                const temp = response.data;
-                UserService.login({email: temp.email, password: temp.password});
-                return temp;
+                return response.data;
             } else {
                 throw new Error('There was a problem with the registration');
             }

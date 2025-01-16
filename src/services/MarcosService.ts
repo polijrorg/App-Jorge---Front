@@ -3,18 +3,31 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Marco from '@interfaces/Marco';
 import api from './api';
+import MarcoDefault from '@interfaces/MarcoDefault';
 
 interface ICreateRequest {
-    childrenId: string;
-    idade: string;
-    titulo: string;
-    status: string;
+  childrenId: string;
+  idade: string;
+  titulo: string;
+  status: string;
 }
 
 interface IUpdateRequest {
-    idade: string;
-    titulo: string;
-    status: string;
+  idade: string;
+  titulo: string;
+  status: string;
+}
+
+interface IUpsertRequest {
+  childrenId: string;
+  number: string;
+  status: string;
+}
+
+interface IUpsertResponse extends Marco {
+  idmarcos: string;
+  created_at: any;
+  updated_at: any;
 }
 
 export default class MarcosService {
@@ -52,6 +65,19 @@ export default class MarcosService {
             console.error('Erro ao atualizar marco', error.response.data.message);
             throw new Error(error);
         }
+    }
+
+    static async upsert(data: IUpsertRequest): Promise<IUpsertResponse> {
+      try {
+        const response: AxiosResponse<IUpsertResponse> = await api.post(
+          `/marcos/upsert`,
+          data
+        );
+        return response.data; 
+      } catch (error) {
+        console.log('Erro no upsert dos marcos: ', error);
+        throw new Error(error);
+      }
     }
 
     static async readAll(): Promise<Marco[]> {
@@ -103,5 +129,25 @@ export default class MarcosService {
             console.error('Erro ao deletar criança', error.response.data.message);
             throw new Error(error);
         }
+    }
+
+    static async readAllDefault(): Promise<MarcoDefault[]> {
+      try {
+        const response: AxiosResponse<MarcoDefault[]> = await api.get('/marcosdefault/readAll');
+        return response.data;
+      } catch (error) {
+        console.log(`Erro ao buscar marcos default: ${error}`);
+        throw new Error(error);
+      }
+    }
+
+    static async readAllChildren(childrenId: string): Promise<Marco[]> {
+      try {
+        const response: AxiosResponse<Marco[]> = await api.get(`/marcos/children/${childrenId}`);
+        return response.data;
+      } catch (error) {
+        console.log(`Erro ao buscar marcos default: ${error}`);
+        throw new Error(error);
+      }
     }
 }

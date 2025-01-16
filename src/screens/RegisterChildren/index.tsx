@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ChildInput } from '@components/ChildInput';
-import { LongButton } from '@components/LongButton';
 import AddChildButton from '@components/AddChildButton';
-import ChildrenHeader from '@components/ChildrenHeader';
 import ChildrenService from '@services/ChildrenService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useChildContext } from '@hooks/useChild';
@@ -49,6 +47,8 @@ const RegisterChildrenScreen = ({ navigation }) => {
                 nascimentopre: premature.toLowerCase(),
                 altura: height,
                 peso: weight,
+                cns: '1111111111111111111111',
+                planosaude: '1111111111111111111111'
             }
 
             await ChildrenService.create(

@@ -15,8 +15,7 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [modal, setModal] = useState(false);
     const [error, setError] = useState<string>(null);
-
-    const { setUser, user } = useAuthContext();
+    const { login } = useAuthContext();
     const { setChildList } = useChildContext();
 
     async function fetchChildren() {
@@ -26,23 +25,20 @@ const LoginScreen = ({ navigation }) => {
 
     const loginUser = async () => {    
         try {
-            const temp = await UserService.login({
+            login({
                 email: email,
                 password: password,
             });
             await fetchChildren();
-            setUser(temp.user);
-            console.log(user);
             navigation.navigate('Main', { screen: 'Home' });
             setEmail('');
             setPassword('');
-            console.log(user);
             alert("Login Realizado");
         } catch (error) {
             alert("Email ou senha inválidos.");
             setError("Email ou senha inválidos!")
         }
-        // navigation.navigate('Main', { screen: 'Home' })
+        navigation.navigate('Main', { screen: 'Home' })
     };
 
     return (

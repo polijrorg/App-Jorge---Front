@@ -33,7 +33,7 @@ const FollowUpScreen = ({ navigation }) => {
                     birthDate={child.nascimento || ''}
                     weight={child.peso || 'weight'}
                     height={child.altura || 'height'}
-                    developmentPercentage={80}
+                    id={child.idchildren}
                     vaccinePercentage={80}
                     avatar={Bebe}
                 />

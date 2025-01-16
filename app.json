@@ -17,7 +17,8 @@
       ]
     ],
     "android": {
-      "package": "com.anonymous.myapp5"
+      "package": "com.anonymous.myapp5",
+      "newArchEnabled": true
     }
   }
 }

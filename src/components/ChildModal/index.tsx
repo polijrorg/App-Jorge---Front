@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 import * as S from './styles'
 import { Modal, TouchableWithoutFeedback } from 'react-native'
-import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
-import ChildrenService from '@services/ChildrenService';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import Child from '@interfaces/Child';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useChildContext } from '@hooks/useChild';
 import AddChildButton from '@components/AddChildButton';
 import { RootStackParamList } from '@routes/app.routes';
@@ -34,10 +32,10 @@ export default function ChildModal(p: Props) {
             <S.Fundo onPress={() => p.onClose()}>
                 <TouchableWithoutFeedback>
                     <S.Container>
-                        <S.Description>Selecione qual criança deseja acompanhar:</S.Description>
+                        <S.Description>{children ? 'Selecione qual criança deseja acompanhar:' : 'Cadastre seu filho pelo botão abaixo!'}</S.Description>
                         <S.Line />
                         
-                        {children.map((child) => (
+                        {children && children.map((child) => (
                             <S.Button 
                                 key={child.idchildren} 
                                 onPress={() => handlePress(child)} 
@@ -46,7 +44,7 @@ export default function ChildModal(p: Props) {
                                 <S.Title selected={handleSelected(child.idchildren)}>{child.name}</S.Title>
                             </S.Button>
                         ))}
-                        <S.Line />
+                        {children && <S.Line />}
                         <AddChildButton onPress={() => navigation.navigate('RegisterChildren')}/>
                     </S.Container>
                 </TouchableWithoutFeedback>

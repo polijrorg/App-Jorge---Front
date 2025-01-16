@@ -4,12 +4,13 @@ import React from 'react';
 interface Props {
     onPress: () => void;
     title: string;
+    selected: boolean;
 }
 
-export default function MarcosCardButton(params: Props) {
+export default function MarcosCardButton(p: Props) {
     return (
-        <S.Container onPress={params.onPress}>
-            <S.Title>{params.title}</S.Title>
+        <S.Container selected={p.selected} onPress={p.onPress}>
+            <S.Title>{p.title}</S.Title>
         </S.Container>
     )
 }

@@ -12,8 +12,8 @@ interface ICreateRequest {
     nascimentopre: string;
     altura: string;
     peso: string;
-    // planosaude: string;
-    // cns: string;
+    planosaude: string;
+    cns: string;
 }
 
 interface IUpdateRequest {
@@ -114,5 +114,17 @@ export default class ChildrenService {
             console.error('Erro ao deletar criança', error.response.data.message);
             throw new Error(error);
         }
+    }
+
+    static async development(id: string): Promise<{ developmentPercentage: string }> {
+      try {
+        const response: AxiosResponse<{ developmentPercentage: string }> = await api.get(
+          `/children/${id}/development`
+        );
+        return response.data;
+      } catch (error) {
+        console.log('Erro ao calcular desenvolvimento: ', error);
+        throw new Error(error);
+      }
     }
 }
