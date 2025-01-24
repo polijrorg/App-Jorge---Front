@@ -12,7 +12,7 @@ interface SearchBoxProps {
 
 const SearchBox: React.FC<SearchBoxProps> = ({
   onSelectItem, 
-  placeholder = "Dúvidas, remédios, alergias..." 
+  placeholder = "Nome do medicamento..." 
 }) => {
 
     const [searchQuery, setSearchQuery] = useState('');
