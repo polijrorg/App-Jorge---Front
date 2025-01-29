@@ -57,12 +57,14 @@ const EditCurveModal = (p: Props) => {
                 value={data.growthDate}
                 onChange={(a) => setData(prevData => ({...prevData, date: a}))}
                 isDate={true}
+                isEditable
               />
               <ChildInput
                 title='Altura (em cm)'
                 value={data.height}
                 onChange={(a) => setData(prevData => ({...prevData, height: a}))}
                 isNumber={true}
+                isEditable
               />
               <ChildInput
                 title='Peso (em kg)'
@@ -70,6 +72,7 @@ const EditCurveModal = (p: Props) => {
                 onChange={(a) => setData(prevData => ({...prevData, weight: a}))}
                 isNumber={true}
                 unit='kg'
+                isEditable
               />
               <S.Line />
               {error && 
