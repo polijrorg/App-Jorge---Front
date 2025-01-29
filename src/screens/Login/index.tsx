@@ -4,10 +4,7 @@ import * as S from './styles'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import ForgotMyPasswordModal from '@components/ForgotMyPasswordModal';
-import UserService from '@services/UserService';
 import { useAuthContext } from '@hooks/useAuth';
-import { useChildContext } from '@hooks/useChild';
-import ChildrenService from '@services/ChildrenService';
 
 const LoginScreen = ({ navigation }) => {
 
@@ -15,13 +12,7 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [modal, setModal] = useState(false);
     const [error, setError] = useState<string>(null);
-    const { login } = useAuthContext();
-    const { setChildList } = useChildContext();
-
-    async function fetchChildren() {
-        const response = await ChildrenService.readAll();
-        setChildList(response);
-    }
+    const { login, user } = useAuthContext();
 
     const loginUser = async () => {    
         try {
@@ -29,7 +20,6 @@ const LoginScreen = ({ navigation }) => {
                 email: email,
                 password: password,
             });
-            await fetchChildren();
             navigation.navigate('Main', { screen: 'Home' });
             setEmail('');
             setPassword('');

@@ -1,39 +1,28 @@
 import * as S from './styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Bebe from '@assets/icons/Bebe.png';
 import { useChildContext } from '@hooks/useChild';
 import ChildrenHeader from '@components/ChildrenHeader';
 import ChildCard from '@components/ChildCard';
-import CurveEditModal from '@components/EditCurveModal';
+import InsertDataModal from '@components/InsertDataModal';
 import AddChildButton from '@components/AddChildButton';
+import GrowthData from '@interfaces/GrowthData';
+import GrowthDataService from '@services/GrowthDataService';
+import EditCurveModal from '@components/EditCurveModal';
 
-interface Row {
-  date: Date;
-  height: number;
-  weight: number;
+interface RowData {
+  weight: string,
+  height: string,
+  growthDate: string
 }
 
-function calculateIMC(height: number, weight: number) {
-  return Math.round(weight / (height * height / 10000));
-}
-
-function findAgeFromDate(date: Date): { years: number, months: number } {
-  const today = new Date();
-  let years = today.getFullYear() - date.getFullYear();
-  let months = today.getMonth() - date.getMonth();
-  
-  if (today.getDate() < date.getDate()) {
-      months--;
-  }
-
-  if (months < 0) {
-      years--;
-      months += 12;
-  }
-  
-  return { years, months };
+function formatAge(data: { months: number, years: number }) {
+  const years = data.years ? `${data.years}a` : '';
+  const months = data.months ? `${data.months}m` : '';
+  if (!data.years && !data.months) return '0m';
+  return years + months;
 }
 
 function tableHeader() {
@@ -52,10 +41,51 @@ function tableHeader() {
     </View>
   );
 }
+
 const EditCurveScreen = ({ navigation }) => {
-    const { activeChild: child } = useChildContext();
+    const { activeChild } = useChildContext();
+    const [insertModal, setInsertModal] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<boolean>(false);
-    const [data, setData] = useState<Row[]>([]);
+    const [selectedRow, setSelectedRow] = useState<GrowthData>({} as GrowthData)
+    const [data, setData] = useState<GrowthData[]>([]);
+
+    function onInsertClose(data: RowData) {
+      (async () => {
+          await GrowthDataService.create({
+              childrenId: activeChild.idchildren,
+              weight: Number(data.weight),
+              height: Number(data.height),
+              growthDate: data.growthDate
+          });
+          const allRows = await GrowthDataService.getByChild(activeChild.idchildren);
+          setData(allRows);
+          setInsertModal(false);
+      })();
+    }
+
+    async function onEditClose(data: RowData) {
+      (async () => {
+        await GrowthDataService.update({
+            childrenId: activeChild.idchildren,
+            weight: Number(data.weight),
+            height: Number(data.height),
+            growthDate: data.growthDate
+        },
+        selectedRow.id
+      );
+        const allRows = await GrowthDataService.getByChild(activeChild.idchildren);
+        setData(allRows);
+        setEditModal(false);
+      })();
+    }
+
+    useEffect(() => {
+      async function fetchRows() {
+        const allRows = await GrowthDataService.getByChild(activeChild.idchildren);
+        setData(allRows);
+      }
+      fetchRows();
+    }, [])
 
     return (
         <S.Wrapper>
@@ -72,11 +102,11 @@ const EditCurveScreen = ({ navigation }) => {
 
                 <ChildCard
                   isEditable={false}
-                  name={child?.name || 'name'}
-                  birthDate={child?.nascimento || ''}
-                  weight={`${child?.peso}kg` || 'weight'}
-                  height={`${child?.altura}cm` || 'height'}
-                  id={`${child?.idchildren}` || '0'}
+                  name={activeChild?.name || 'name'}
+                  birthDate={activeChild?.nascimento || ''}
+                  weight={`${activeChild?.peso}kg` || 'weight'}
+                  height={`${activeChild?.altura}cm` || 'height'}
+                  id={`${activeChild?.idchildren}` || '0'}
                   vaccinePercentage={80}
                   avatar={Bebe}
                 />
@@ -87,24 +117,29 @@ const EditCurveScreen = ({ navigation }) => {
             ListFooterComponent={() => (
               <S.Container>
                 <AddChildButton invertColors={true} title='Adicionar Dados' onPress={() => {
-                  setEditModal(true);
+                  setInsertModal(true);
                 }} />
                 <AddChildButton title='Salvar' hidePlus={true} onPress={() => 1} />
               </S.Container>
             )}
             data={data}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => setEditModal(true)}  style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                padding: 8,
-                borderBottomColor: 'lightgray',
-                borderBottomWidth: 1
-              }}>
-                <S.Description>{findAgeFromDate(item.date).months}/12</S.Description>
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectedRow(item); setEditModal(true);
+                }}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  padding: 8,
+                  borderBottomColor: 'lightgray',
+                  borderBottomWidth: 1
+                }
+              }>
+                <S.Description>{formatAge(item.age)}</S.Description>
                 <S.Description>{item.weight}</S.Description>
                 <S.Description>{item.height}</S.Description>
-                <S.Description>{calculateIMC(item.height, item.weight)}</S.Description>
+                <S.Description>{item.imc.toFixed(1)}</S.Description>
               </TouchableOpacity>
             )}
             showsVerticalScrollIndicator={false}
@@ -113,13 +148,18 @@ const EditCurveScreen = ({ navigation }) => {
             }}
             style={{ flex: 1, width: '100%' }}
           />
-          <CurveEditModal onClose={(a: Row) => {
-              setData(prevData => [...prevData, a]);
-              setEditModal(false);
-              console.log(data);
-            }}
+
+          <InsertDataModal
+            onClose={(a: RowData) => onInsertClose(a)}
+            onCancel={() => setInsertModal(false)}
+            visible={insertModal}
+          />
+
+          <EditCurveModal
+            onClose={(a: RowData) => onEditClose(a)}
             onCancel={() => setEditModal(false)}
             visible={editModal}
+            originalData={selectedRow}
           />
 
         </S.Wrapper>

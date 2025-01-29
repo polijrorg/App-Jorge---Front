@@ -13,12 +13,12 @@ export const Content = styled(ScrollView).attrs(() => ({
         alignItems: 'center',
         justifyContent: 'flex-start',
         padding: 16,
+        gap: 8,
     },
 }))`
     flex: 1;
     background: ${({ theme }) => theme.colors.background };
     width: 100%;
-    gap: 8px;
 `;
 
 export const Button = styled(TouchableOpacity)`
@@ -61,4 +61,21 @@ export const Line = styled(View)`
     border-color: lightblue;
     margin-bottom: 10px;
     margin-top: 10px;
+`
+
+export const ButtonContainer = styled(TouchableOpacity)<{ selected: boolean }>`
+  border-radius: 8px;
+  background-color: ${props => props.selected ? '#7BB0CC' : 'none'};
+  padding: 8px;
+`
+
+export const ButtonText = styled(Text)<{ selected: boolean }>`
+  color: ${props => props.selected ? '#FDFDFD' : '#000'};
+  font-family: PoppinsRegular;
+  font-size: 10px;
+`
+
+export const Row = styled(View)`
+  flex-direction: row;
+  flex: 1;
 `

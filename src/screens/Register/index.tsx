@@ -9,8 +9,11 @@ import { ReadAndAgree } from '@components/ReadAndAgree';
 import PrivacyPolicyModal from '@components/PrivacyPolicyModal';
 import TermsAndConditionsModal from '@components/TermsAndConditionsModal';
 import UserService from '@services/UserService';
+import { useAuthContext } from '@hooks/useAuth';
 
 const PasswordRecover = ({ navigation }) => {
+
+    const { login } = useAuthContext();
 
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -49,7 +52,7 @@ const PasswordRecover = ({ navigation }) => {
         }
         else {
             UserService.create({ email, name, password });
-            navigation.navigate('Main', { screen: 'Home' });
+            navigation.navigate('Login')
             alert("Cadastro Realizado");
         }
     }

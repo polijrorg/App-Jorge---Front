@@ -3,6 +3,6 @@ export default interface User {
     name: string;
     email: string;
     id: string;
-	created_at: Date;
+	  created_at: Date;
     updated_at: Date;
 }

@@ -1,83 +1,86 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import * as S from './styles'
-import { Modal, TouchableWithoutFeedback } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native';
-import ChildrenService from '@services/ChildrenService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from 'react';
+import * as S from './styles';
+import { Modal, TouchableWithoutFeedback } from 'react-native';
 import { useChildContext } from '@hooks/useChild';
 import { ChildInput } from '@components/ChildInput';
 import AddChildButton from '@components/AddChildButton';
+import GrowthData from '@interfaces/GrowthData';
+
+interface NewRowData {
+  weight: string,
+  height: string,
+  growthDate: string
+}
 
 interface Props {
-  onClose: (a: Row) => void;
+  onClose: (a: NewRowData) => void;
   visible: boolean;
   onCancel: () => void;
+  originalData: GrowthData;
 }
 
-interface Row {
-  date: Date;
-  height: number;
-  weight: number;
-}
+const EditCurveModal = (p: Props) => {
 
-export default function EditCurveModal(p: Props) {
-  
-  function handlePress(data: Row) {
-    if (!data.weight || !data.height || !data.date) {
-      setError(true);
-    } else {
-      p.onClose(data);
-      setError(false);
-      setData({
-        date: undefined,
-        height: undefined,
-        weight: undefined,
-      });
+    const [error, setError] = useState<boolean>(false);
+    const [data, setData] = useState<NewRowData>({
+      weight: p.originalData.weight.toString(),
+      height: p.originalData.height.toString(),
+      growthDate: p.originalData.growthDate
+    });
+
+    function handlePress() {
+      if (!data.weight || !data.height || !data.growthDate) {
+        setError(true);
+      } else {
+        setError(false);
+        p.onClose(data);
+      }
     }
-  }
 
-  const { setActiveChild, childList: children, activeChild } = useChildContext();
-  const [error, setError] = useState<boolean>(false);
-  const [data, setData] = useState<Row>({
-    date: undefined,
-    height: undefined,
-    weight: undefined,
-  });
+    useEffect(() => {
+      setData({
+        height: p.originalData.height.toString(),
+        weight: p.originalData.weight.toString(),
+        growthDate: p.originalData.growthDate,
+      });
+    }, [p.originalData])
 
-  return (
-    <Modal visible={p.visible} transparent animationType="fade">
-      <S.Fundo onPress={() => p.onCancel()}>
-        <TouchableWithoutFeedback>
-          <S.Container>
-            <S.Title>Adicionar estatura e peso:</S.Title>
-            <S.Line />
-            <ChildInput
-              title='Data'
-              value={data.date}
-              onChange={(a) => setData(prevData => ({...prevData, date: a}))}
-              isDate={true}
-            />
-            <ChildInput
-              title='Altura (em cm)'
-              value={data.height}
-              onChange={(a) => setData(prevData => ({...prevData, height: a}))}
-              isNumber={true}
-            />
-            <ChildInput
-              title='Peso (em kg)'
-              value={data.weight}
-              onChange={(a) => setData(prevData => ({...prevData, weight: a}))}
-              isNumber={true}
-              unit='kg'
-            />
-            <S.Line />
-            {error && 
-              <S.Title color='red'>Por favor, preencha todos os campos.</S.Title>
-            }
-            <AddChildButton title='Adicionar Dados' onPress={() => handlePress(data)}/>
-          </S.Container>
-        </TouchableWithoutFeedback>
-      </S.Fundo>
-    </Modal>
-  )
+    return (
+      <Modal visible={p.visible} transparent animationType="fade">
+        <S.Fundo onPress={() => p.onCancel()}>
+          <TouchableWithoutFeedback>
+            <S.Container>
+              <S.Title>Editar estatura e peso:</S.Title>
+              <S.Line />
+              <ChildInput
+                title='Data'
+                value={data.growthDate}
+                onChange={(a) => setData(prevData => ({...prevData, date: a}))}
+                isDate={true}
+              />
+              <ChildInput
+                title='Altura (em cm)'
+                value={data.height}
+                onChange={(a) => setData(prevData => ({...prevData, height: a}))}
+                isNumber={true}
+              />
+              <ChildInput
+                title='Peso (em kg)'
+                value={data.weight}
+                onChange={(a) => setData(prevData => ({...prevData, weight: a}))}
+                isNumber={true}
+                unit='kg'
+              />
+              <S.Line />
+              {error && 
+                <S.Title color='red'>Por favor, preencha todos os campos.</S.Title>
+              }
+              <AddChildButton title='Editar Dados' onPress={handlePress}/>
+            </S.Container>
+          </TouchableWithoutFeedback>
+        </S.Fundo>
+      </Modal>
+    )
 }
+
+export default EditCurveModal;

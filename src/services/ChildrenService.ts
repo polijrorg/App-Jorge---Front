@@ -99,6 +99,18 @@ export default class ChildrenService {
         }
     }
 
+    static async readByParent(id: string): Promise<Child[]> {
+      try {
+        const response: AxiosResponse<Child[]> = await api.get(
+          `/children/user/${id}`
+        )
+        return response.data;
+      } catch (error) {
+        console.log('Erro ao buscar crianças por pai: ', error);
+        throw new Error(error);
+      }
+    }
+
     static async delete(id: string): Promise<Child> {
         try {
             const response: AxiosResponse<Child> = await api.delete(

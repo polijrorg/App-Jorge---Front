@@ -1,6 +1,6 @@
 import DefaultHeader from '@components/DefaultHeader';
 import * as S from './styles';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AmbientCard from '@components/AmbientCard';
 import { View, TouchableOpacity } from 'react-native';
 import Bebe from '@assets/icons/Bebe.png';
@@ -12,14 +12,15 @@ import ReminderCard from '@components/ReminderCard';
 import { useAuthContext } from '@hooks/useAuth';
 import { useChildContext } from '@hooks/useChild';
 import Child from '@interfaces/Child';
+import ChildrenService from '@services/ChildrenService';
 
 const HomeScreen = ({ navigation }) => {
 
     const { user } = useAuthContext();
-    const { childList: children } = useChildContext();
+    const { childList: children, setChildList } = useChildContext();
 
     const formatNames = (children?: Child[]) => {
-        if (!children) return 'Cadastre seus filhos em "Meus Filhos"!'
+        if (!children || children.length === 0) return 'Cadastre seus filhos em "Meus Filhos"!'
         const names = children?.map((c) => (c?.name?.split(' ')[0]));
         if (names.length === 1) return `${names[0]} precisa ter seus marcos atualizados!`;
         if (names.length === 2) return `${names[0]} e ${names[1]} precisam ter seus marcos atualizados!`
@@ -28,6 +29,14 @@ const HomeScreen = ({ navigation }) => {
             return `${names.join(', ')} e ${lastChild} precisam ter seus marcos atualizados!`;
         }
     }
+
+    useEffect(() => {
+      async function fetchChildren() {
+        const response = await ChildrenService.readByParent(user.id);
+        setChildList(response);
+      }
+      fetchChildren()
+    }, [])
 
     return (
         <S.Wrapper>
@@ -44,7 +53,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }}>
                     <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => navigation.navigate('MyChildren')}/>
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
-                    <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => 1} />
+                    <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => console.log(user.id)} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
                     <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => navigation.navigate('MedMama')} />
                 </View>

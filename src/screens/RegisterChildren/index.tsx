@@ -8,10 +8,12 @@ import AddChildButton from '@components/AddChildButton';
 import ChildrenService from '@services/ChildrenService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useChildContext } from '@hooks/useChild';
+import { useAuthContext } from '@hooks/useAuth';
 
 const RegisterChildrenScreen = ({ navigation }) => {
 
     const { setChildList } = useChildContext();
+    const { user } = useAuthContext();
     
     const [name, setName] = useState<string>('');
     const [height, setHeight] = useState<string>(null);
@@ -56,7 +58,7 @@ const RegisterChildrenScreen = ({ navigation }) => {
                 token
             );
 
-            const temp = await ChildrenService.readAll();
+            const temp = await ChildrenService.readByParent(user.id);
             setChildList(temp);
 
             navigation.goBack();

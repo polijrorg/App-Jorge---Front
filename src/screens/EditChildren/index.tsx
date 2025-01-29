@@ -13,6 +13,7 @@ import ChildrenService from '@services/ChildrenService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { template } from '@babel/core';
 import { useChildContext } from '@hooks/useChild';
+import { useAuthContext } from '@hooks/useAuth';
 
 const EditChildrenScreen = ({ navigation }) => {
 
@@ -29,6 +30,7 @@ const EditChildrenScreen = ({ navigation }) => {
     };
 
     const { activeChild: child, setChildList } = useChildContext();
+    const { user } = useAuthContext();
 
     useEffect(() => {
         setName(child.name);
@@ -77,7 +79,7 @@ const EditChildrenScreen = ({ navigation }) => {
                 child.idchildren
             );
 
-            const response = await ChildrenService.readAll();
+            const response = await ChildrenService.readByParent(user.id);
             setChildList(response);
 
             navigation.goBack();
