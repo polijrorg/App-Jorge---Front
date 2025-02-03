@@ -1,4 +1,4 @@
-export default const dataP25_meninas_peso = [
+const dataP25_meninas_peso = [
 { month: '0', p25: '2,9' },
 { month: '1', p25: '3,8' },
 { month: '2', p25: '4,7' },
@@ -61,3 +61,5 @@ export default const dataP25_meninas_peso = [
 { month: '59', p25: '16,4' },
 { month: '60', p25: '16,5' },
 ]
+
+export default dataP25_meninas_peso;

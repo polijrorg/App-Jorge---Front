@@ -63,6 +63,23 @@ const EditCurveScreen = ({ navigation }) => {
       })();
     }
 
+    async function onDelete() {
+      GrowthDataService.deleteById(selectedRow.id);
+      setEditModal(false);
+      fetchRows();
+    }
+
+    async function fetchRows() {
+      const allRows = await GrowthDataService.getByChild(activeChild.idchildren);
+      const sortedRows = allRows.sort((a, b) => {
+        const ageA = a.age.years + a.age.months / 12;
+        const ageB = b.age.years + b.age.months / 12;
+        return ageB - ageA;
+      });
+  
+      setData(sortedRows);
+    }
+
     async function onEditClose(data: RowData) {
       (async () => {
         await GrowthDataService.update({
@@ -73,17 +90,12 @@ const EditCurveScreen = ({ navigation }) => {
         },
         selectedRow.id
       );
-        const allRows = await GrowthDataService.getByChild(activeChild.idchildren);
-        setData(allRows);
+        fetchRows();
         setEditModal(false);
       })();
     }
 
     useEffect(() => {
-      async function fetchRows() {
-        const allRows = await GrowthDataService.getByChild(activeChild.idchildren);
-        setData(allRows);
-      }
       fetchRows();
     }, [])
 
@@ -158,6 +170,7 @@ const EditCurveScreen = ({ navigation }) => {
           <EditCurveModal
             onClose={(a: RowData) => onEditClose(a)}
             onCancel={() => setEditModal(false)}
+            onDelete={() => onDelete()}
             visible={editModal}
             originalData={selectedRow}
           />

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import * as S from './styles';
-import { Modal, TouchableWithoutFeedback } from 'react-native';
-import { useChildContext } from '@hooks/useChild';
+import { Modal, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { ChildInput } from '@components/ChildInput';
 import AddChildButton from '@components/AddChildButton';
 import GrowthData from '@interfaces/GrowthData';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 interface NewRowData {
   weight: string,
@@ -16,6 +16,7 @@ interface Props {
   onClose: (a: NewRowData) => void;
   visible: boolean;
   onCancel: () => void;
+  onDelete: () => void;
   originalData: GrowthData;
 }
 
@@ -23,8 +24,8 @@ const EditCurveModal = (p: Props) => {
 
     const [error, setError] = useState<boolean>(false);
     const [data, setData] = useState<NewRowData>({
-      weight: p.originalData.weight.toString(),
-      height: p.originalData.height.toString(),
+      weight: p.originalData.weight?.toString(),
+      height: p.originalData.height?.toString(),
       growthDate: p.originalData.growthDate
     });
 
@@ -39,8 +40,8 @@ const EditCurveModal = (p: Props) => {
 
     useEffect(() => {
       setData({
-        height: p.originalData.height.toString(),
-        weight: p.originalData.weight.toString(),
+        height: p.originalData.height?.toString(),
+        weight: p.originalData.weight?.toString(),
         growthDate: p.originalData.growthDate,
       });
     }, [p.originalData])
@@ -55,22 +56,22 @@ const EditCurveModal = (p: Props) => {
               <ChildInput
                 title='Data'
                 value={data.growthDate}
-                onChange={(a) => setData(prevData => ({...prevData, date: a}))}
-                isDate={true}
+                onChange={(a) => setData(prevData => ({...prevData, growthDate: a}))}
+                isDate
                 isEditable
               />
               <ChildInput
                 title='Altura (em cm)'
                 value={data.height}
                 onChange={(a) => setData(prevData => ({...prevData, height: a}))}
-                isNumber={true}
+                isNumber
                 isEditable
               />
               <ChildInput
                 title='Peso (em kg)'
                 value={data.weight}
                 onChange={(a) => setData(prevData => ({...prevData, weight: a}))}
-                isNumber={true}
+                isNumber
                 unit='kg'
                 isEditable
               />
@@ -78,7 +79,15 @@ const EditCurveModal = (p: Props) => {
               {error && 
                 <S.Title color='red'>Por favor, preencha todos os campos.</S.Title>
               }
-              <AddChildButton title='Editar Dados' onPress={handlePress}/>
+              <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-around' }}>
+                <AddChildButton title='Editar Dados' onPress={handlePress}/>
+                <TouchableOpacity
+                  onPress={p.onDelete}
+                  style={{ backgroundColor: '#4D91B6', borderRadius: 8, padding: 8 }}
+                >
+                  <Ionicons name="trash-outline" size={24} color="white" />
+                </TouchableOpacity>
+              </View>
             </S.Container>
           </TouchableWithoutFeedback>
         </S.Fundo>

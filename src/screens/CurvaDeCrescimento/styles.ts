@@ -43,9 +43,6 @@ export const Description = styled(Text)<{ width?: number, size?: number }>`
 
 export const GreenText = styled(Text)<{ width?: number, size?: number }>`
     color: #339248;
-    font-family: 'PoppinsRegular';
-    font-size: ${({size}) => size || 14}px;
-    width: ${({width}) => (width) ? '' : '100%'};
 `
 
 export const BlueText = styled(Text)<{ size?: number }>`
@@ -77,5 +74,4 @@ export const ButtonText = styled(Text)<{ selected: boolean }>`
 
 export const Row = styled(View)`
   flex-direction: row;
-  flex: 1;
 `
