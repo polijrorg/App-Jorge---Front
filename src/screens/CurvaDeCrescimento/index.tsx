@@ -53,18 +53,17 @@ const ChildGrowthScreen = ({ navigation }) => {
     months.forEach((month, index) => {
       const point = { x: month };
       percentiles.forEach((percentile) => {
-        point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()]);
+        point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()].replace(',', '.'));
       });
       dataPoints.push(point);
     });
-
     return dataPoints;
   }, [child, selectedCurveType]);
 
   const yDomain: [number, number] = useMemo(() => {
     if (!chartData.length) return [0, 100];
 
-    const age = findFloatAge(child.nascimento);
+    const age = findFloatAge(child?.nascimento);
     const ageMinus1 = age < 1 ? 0 : age - 1;
     const agePlus1 = age + 1;
 
@@ -92,7 +91,7 @@ const ChildGrowthScreen = ({ navigation }) => {
   }, [chartData, child, selectedCurveType]);
 
   const xDomain: [number, number] = useMemo(() => {
-    let age = findFloatAge(child.nascimento);
+    let age = findFloatAge(child?.nascimento);
   if (age < 1) return [0, 2]; 
     return [age - 1, age + 1];
   }, [selectedCurveType]);
@@ -219,7 +218,7 @@ const ChildGrowthScreen = ({ navigation }) => {
                           points={points[percentile]}
                           color={`hsl(${index * 30}, 70%, 50%)`}
                           strokeWidth={2}
-                          curveType='natural'
+                          curveType={selectedCurveType === "peso" ? "linear" : "natural"}
                         />
                       ))}
                     </>
