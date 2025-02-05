@@ -15,7 +15,7 @@ interface ILoginRequest {
 interface AuthContextData {
     user: User;
     setUser: (data: User) => void;
-    login: (data: ILoginRequest) => void;
+    login: (data: ILoginRequest) => Promise<void>;
     logout: () => void;
 }
 

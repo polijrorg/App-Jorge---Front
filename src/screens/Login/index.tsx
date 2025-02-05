@@ -16,21 +16,20 @@ const LoginScreen = ({ navigation }) => {
 
     const loginUser = async () => {    
         try {
-            login({
+            await login({
                 email: email,
                 password: password,
             });
-            console.log(user);
             if (user) {
               navigation.navigate('Main', { screen: 'Home' });
               setEmail('');
               setPassword('');
             } else {
-              setError("Usuário não encontrado!")
+              setError("Usuário não encontrado!");
             }
         } catch (error) {
             alert("Email ou senha inválidos.");
-            setError("Email ou senha inválidos!")
+            setError("Email ou senha inválidos!");
         }
     };
 

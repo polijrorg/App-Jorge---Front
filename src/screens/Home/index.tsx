@@ -53,7 +53,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }}>
                     <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => navigation.navigate('MyChildren')}/>
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
-                    <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => console.log(children, user.id)} />
+                    <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => console.log(children, user)} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
                     <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => navigation.navigate('MedMama')} />
                 </View>

@@ -57,6 +57,7 @@ const RegisterChildrenScreen = ({ navigation }) => {
                 data,
                 token
             );
+            console.log('teoricamente criamos');
 
             const temp = await ChildrenService.readByParent(user.id);
             setChildList(temp);
