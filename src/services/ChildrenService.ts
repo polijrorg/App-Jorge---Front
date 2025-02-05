@@ -28,12 +28,11 @@ interface IUpdateRequest {
 }
 
 export default class ChildrenService {
-    static async create(data: ICreateRequest, token: string): Promise<Child> {
+    static async create(data: ICreateRequest): Promise<Child> {
         try {
             const response: AxiosResponse<Child> = await api.post(
                 '/children/register/',
-                data,
-                { headers: { Authorization: `Bearer ${token}` }}
+                data
             );
 
             if (response.status >= 200 && response.status < 300) {

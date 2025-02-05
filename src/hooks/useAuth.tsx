@@ -15,7 +15,7 @@ interface ILoginRequest {
 interface AuthContextData {
     user: User;
     setUser: (data: User) => void;
-    login: (data: ILoginRequest) => Promise<void>;
+    login: (data: ILoginRequest) => Promise<User>;
     logout: () => void;
 }
 
@@ -33,6 +33,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode | undefined }> 
             };
 
             setUser(response.user);
+            return response.user;
         } catch (error) {
             console.log(error);
         }

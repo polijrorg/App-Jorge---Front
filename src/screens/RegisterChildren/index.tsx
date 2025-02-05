@@ -6,7 +6,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { ChildInput } from '@components/ChildInput';
 import AddChildButton from '@components/AddChildButton';
 import ChildrenService from '@services/ChildrenService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useChildContext } from '@hooks/useChild';
 import { useAuthContext } from '@hooks/useAuth';
 
@@ -15,36 +14,26 @@ const RegisterChildrenScreen = ({ navigation }) => {
     const { setChildList } = useChildContext();
     const { user } = useAuthContext();
     
-    const [name, setName] = useState<string>('');
+    const [name, setName] = useState<string>(null);
     const [height, setHeight] = useState<string>(null);
     const [weight, setWeight] = useState<string>(null);
-    const [birthDate, setBirthDate] = useState<Date>(null);
-    const [gender, setGender] = useState<string>('');
-    const [premature, setPremature] = useState<string>('');
-    const [error, setError] = useState<string>('');
-
-    const formatDate = (date: Date): string => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-    };    
+    const [birthDate, setBirthDate] = useState<string>(null);
+    const [gender, setGender] = useState<string>(null);
+    const [premature, setPremature] = useState<string>(null);
+    const [error, setError] = useState<string>(null); 
 
     async function handleConfirm() {
-        if (name === '') setError('Insira um nome válido!');
-        else if (height === null) setError('Insira uma altura válida!')
-        else if (weight === null) setError('Insira um peso válido!')
-        else if (birthDate === null) setError('Insira uma data de nascimento válida!')
-        else if (gender === null) setError('Insira o sexo biológico da criança!')
-        else if (premature === null) setError('Indique se a criança nasceu prematura!')
+        if (!name) setError('Insira um nome válido!');
+        else if (!height) setError('Insira uma altura válida!');
+        else if (!weight) setError('Insira um peso válido!');
+        else if (!birthDate) setError('Insira uma data de nascimento válida!');
+        else if (!gender) setError('Insira o sexo biológico da criança!');
+        else if (!premature) setError('Indique se a criança nasceu prematura!');
         else {
-            const id = await AsyncStorage.getItem('@jorge:userId')
-            const token = await AsyncStorage.getItem('@jorge:token')
-
             const data = {
-                userId: id,
+                userId: user.id,
                 name: name,
-                nascimento: formatDate(birthDate),
+                nascimento: birthDate,
                 gender: gender.toLowerCase(),
                 nascimentopre: premature.toLowerCase(),
                 altura: height,
@@ -54,10 +43,8 @@ const RegisterChildrenScreen = ({ navigation }) => {
             }
 
             await ChildrenService.create(
-                data,
-                token
+                data
             );
-            console.log('teoricamente criamos');
 
             const temp = await ChildrenService.readByParent(user.id);
             setChildList(temp);

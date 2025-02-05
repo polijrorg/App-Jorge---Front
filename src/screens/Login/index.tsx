@@ -12,15 +12,15 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [modal, setModal] = useState(false);
     const [error, setError] = useState<string>(null);
-    const { login, user } = useAuthContext();
+    const { login } = useAuthContext();
 
     const loginUser = async () => {    
         try {
-            await login({
+            const isLoginDone = await login({
                 email: email,
                 password: password,
             });
-            if (user) {
+            if (isLoginDone) {
               navigation.navigate('Main', { screen: 'Home' });
               setEmail('');
               setPassword('');
