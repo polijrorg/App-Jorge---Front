@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import * as S from './styles'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
@@ -20,15 +20,18 @@ const LoginScreen = ({ navigation }) => {
                 email: email,
                 password: password,
             });
-            navigation.navigate('Main', { screen: 'Home' });
-            setEmail('');
-            setPassword('');
-            alert("Login Realizado");
+            console.log(user);
+            if (user) {
+              navigation.navigate('Main', { screen: 'Home' });
+              setEmail('');
+              setPassword('');
+            } else {
+              setError("Usuário não encontrado!")
+            }
         } catch (error) {
             alert("Email ou senha inválidos.");
             setError("Email ou senha inválidos!")
         }
-        navigation.navigate('Main', { screen: 'Home' })
     };
 
     return (

@@ -22,7 +22,7 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider: React.FC<{ children?: React.ReactNode | undefined }> = ({ children }) => {
-    const [user, setUser] = useState({} as User);
+    const [user, setUser] = useState<User>(undefined);
 
     const login = async (data: ILoginRequest) => {
         try {

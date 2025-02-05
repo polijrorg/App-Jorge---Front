@@ -1,5 +1,5 @@
 import * as S from "./styles";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ScrollView, View, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Bebe from "@assets/icons/Bebe.png";
@@ -13,6 +13,8 @@ import datasets from "@services/DefaultCurves/datasets";
 import CurveTypeButton from "@components/CurveTypeButton";
 import { DashPathEffect, useFont } from "@shopify/react-native-skia"
 import React from "react";
+import GrowthData from "@interfaces/GrowthData";
+import GrowthDataService from "@services/GrowthDataService";
 
 const curveTypeMapping: Record<string, string> = {
   "Estatura (cm)": "altura",
@@ -37,6 +39,7 @@ const Legend = ({ data }) => {
 
 const ChildGrowthScreen = ({ navigation }) => {
   const { activeChild: child } = useChildContext();
+  const [childData, setChildData] = useState<GrowthData[]>();
   const [curveType, setCurveType] = useState<string>("Estatura (cm)");
   const selectedCurveType = curveTypeMapping[curveType];
   const font = useFont(require("@assets/fonts/Poppins-Regular.ttf"), 12);
@@ -96,6 +99,14 @@ const ChildGrowthScreen = ({ navigation }) => {
   if (age < 1) return [0, 2]; 
     return [age - 1, age + 1];
   }, [selectedCurveType]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await GrowthDataService.getByChild(child.idchildren);
+      setChildData(data);
+    }
+    fetchData();
+  }, []);
 
   const legendData = percentiles.map((percentile, index) => ({
     label: percentile,
@@ -185,29 +196,29 @@ const ChildGrowthScreen = ({ navigation }) => {
                   yKeys={percentiles}
                   domain={{ x: xDomain }}
                   xAxis={{
-                    font: font, // Usa a fonte carregada
-                    lineColor: "hsla(0, 0%, 0%, 0.25)", // Cor da linha do eixo X
-                    lineWidth: 1, // Largura da linha do eixo X
-                    labelColor: "#000", // Cor do label do eixo X
-                    labelOffset: 2, // Offset do label do eixo X
-                    labelPosition: "outset", // Posição do label do eixo X
-                    axisSide: "bottom", // Lado do gráfico em que o eixo X é renderizado
-                    formatXLabel: (label) => `${label}a`, // Formatação dos labels do eixo X
-                    linePathEffect: <DashPathEffect intervals={[4, 4]} />, // Efeito da linha do eixo X
+                    font: font,
+                    lineColor: "hsla(0, 0%, 0%, 0.25)",
+                    lineWidth: 1,
+                    labelColor: "#000",
+                    labelOffset: 2,
+                    labelPosition: "outset",
+                    axisSide: "bottom",
+                    formatXLabel: (label) => `${label}a`,
+                    linePathEffect: <DashPathEffect intervals={[4, 4]} />,
                   }}
                   yAxis={[
                     {
-                      yKeys: percentiles, // Chaves de dados do eixo Y
-                      font: font, // Usa a fonte carregada
-                      lineColor: "hsla(0, 0%, 0%, 0.25)", // Cor da linha do eixo Y
-                      lineWidth: 1, // Largura da linha do eixo Y
-                      labelColor: "#000", // Cor do label do eixo Y
-                      labelOffset: 4, // Offset do label do eixo Y
-                      labelPosition: "outset", // Posição do label do eixo Y
-                      axisSide: "left", // Lado do gráfico em que o eixo Y é renderizado
-                      formatYLabel: (label) => `${label}`, // Formatação dos labels do eixo Y
-                      domain: yDomain, // Domínio do eixo Y
-                      linePathEffect: <DashPathEffect intervals={[4, 4]} />, // Efeito da linha do eixo Y
+                      yKeys: percentiles,
+                      font: font,
+                      lineColor: "hsla(0, 0%, 0%, 0.25)",
+                      lineWidth: 1,
+                      labelColor: "#000",
+                      labelOffset: 4,
+                      labelPosition: "outset",
+                      axisSide: "left", 
+                      formatYLabel: (label) => `${label}`,
+                      domain: yDomain,
+                      linePathEffect: <DashPathEffect intervals={[4, 4]} />,
                     }
                   ]}
                 >
@@ -217,7 +228,7 @@ const ChildGrowthScreen = ({ navigation }) => {
                         <Line
                           key={percentile}
                           points={points[percentile]}
-                          color={`hsl(${index * 30}, 70%, 50%)`}
+                          color={`hsla(${index * 30}, 70%, 50%, 20%)`}
                           strokeWidth={2}
                           curveType='natural'
                         />
