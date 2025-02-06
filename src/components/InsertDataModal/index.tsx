@@ -20,13 +20,6 @@ interface Props {
   onCancel: () => void;
 }
 
-const formatDate = (date: Date): string => {
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}-${month}-${year}`;
-};
-
 export default function InsertDataModal(p: Props) {
   
   function handlePress(data: NewRowData) {
@@ -60,7 +53,7 @@ export default function InsertDataModal(p: Props) {
             <ChildInput
               title='Data'
               value={data.growthDate}
-              onChange={(a) => setData(prevData => ({...prevData, date: formatDate(a)}))}
+              onChange={(a) => setData(prevData => ({...prevData, growthDate: a}))}
               isDate={true}
             />
             <ChildInput

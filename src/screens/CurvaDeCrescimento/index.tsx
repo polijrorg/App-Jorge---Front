@@ -13,7 +13,6 @@ import datasets from "@services/DefaultCurves/datasets";
 import CurveTypeButton from "@components/CurveTypeButton";
 import { DashPathEffect, useFont } from "@shopify/react-native-skia"
 import React from "react";
-import GrowthData from "@interfaces/GrowthData";
 import GrowthDataService from "@services/GrowthDataService";
 
 const curveTypeMapping: Record<string, string> = {
@@ -38,11 +37,20 @@ const Legend = ({ data }) => {
 };
 
 const ChildGrowthScreen = ({ navigation }) => {
-  const { activeChild: child } = useChildContext();
-  const [childData, setChildData] = useState<GrowthData[]>();
+  const { activeChild: child, setGrowthData, growthData } = useChildContext();
   const [curveType, setCurveType] = useState<string>("Estatura (cm)");
   const selectedCurveType = curveTypeMapping[curveType];
   const font = useFont(require("@assets/fonts/Poppins-Regular.ttf"), 12);
+
+  async function fetchData() {
+    const data = await GrowthDataService.getByChild(child.idchildren);
+    const sortedData = data.sort((a, b) => {
+      const ageA = a.age.years + a.age.months / 12;
+      const ageB = b.age.years + b.age.months / 12;
+      return ageB - ageA;
+    });
+    setGrowthData(sortedData);
+  }
 
   const chartData = useMemo(() => {
     if (!child || !selectedCurveType) return [];
@@ -56,7 +64,7 @@ const ChildGrowthScreen = ({ navigation }) => {
     months.forEach((month, index) => {
       const point = { x: month };
       percentiles.forEach((percentile) => {
-        point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()]);
+        point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()].replace(',', '.'));
       });
       dataPoints.push(point);
     });
@@ -64,10 +72,65 @@ const ChildGrowthScreen = ({ navigation }) => {
     return dataPoints;
   }, [child, selectedCurveType]);
 
+  // const childGrowthData = useMemo(() => {
+  //   return growthData.map(item => {
+  //     const ageInYears = item.age.years + item.age.months / 12;
+
+  //     let yValue;
+  //     switch (selectedCurveType) {
+  //       case "altura":
+  //         yValue = item.height;
+  //         break;
+  //       case "peso":
+  //         yValue = item.weight;
+  //         break;
+  //       case "imc":
+  //         yValue = item.imc;
+  //         break;
+  //       default:
+  //         yValue = 0;
+  //     }
+  
+  //     return {
+  //       x: ageInYears,
+  //       xValue: ageInYears,
+  //       y: yValue,
+  //       yValue: yValue,
+  //     };
+  //   });
+  // }, [growthData, selectedCurveType]);
+
+  const childGrowthData = [
+    {x: 0.5, y: 5, xValue: 0.5, yValue: 5},
+    {x: 1, y: 10, xValue: 1, yValue: 10}
+  ]
+
+  const combinedData = useMemo(() => {
+    // Create a copy of chartData
+    const combined = [...chartData];
+    
+    // Add child data points to the dataset
+    childGrowthData.forEach(point => {
+      const index = combined.findIndex(d => d.x === point.x);
+      if (index >= 0) {
+        combined[index].childValue = point.y;
+      } else {
+        combined.push({
+          x: point.x,
+          childValue: point.y,
+          // Include empty values for percentiles to maintain data structure
+          ...percentiles.reduce((acc, p) => ({ ...acc, [p]: null }), {})
+        });
+      }
+    });
+    
+    return combined;
+  }, [chartData, childGrowthData]);
+
   const yDomain: [number, number] = useMemo(() => {
     if (!chartData.length) return [0, 100];
 
-    const age = findFloatAge(child.nascimento);
+    const age = findFloatAge(child?.nascimento);
     const ageMinus1 = age < 1 ? 0 : age - 1;
     const agePlus1 = age + 1;
 
@@ -95,17 +158,14 @@ const ChildGrowthScreen = ({ navigation }) => {
   }, [chartData, child, selectedCurveType]);
 
   const xDomain: [number, number] = useMemo(() => {
-    let age = findFloatAge(child.nascimento);
+    let age = findFloatAge(child?.nascimento);
   if (age < 1) return [0, 2]; 
     return [age - 1, age + 1];
   }, [selectedCurveType]);
 
   useEffect(() => {
-    async function fetchData() {
-      const data = await GrowthDataService.getByChild(child.idchildren);
-      setChildData(data);
-    }
     fetchData();
+    console.log(childGrowthData);
   }, []);
 
   const legendData = percentiles.map((percentile, index) => ({
@@ -191,7 +251,7 @@ const ChildGrowthScreen = ({ navigation }) => {
             <View style={{ height: 300, width: "100%" }}>
               {chartData.length > 0 && (
                 <CartesianChart
-                  data={chartData}
+                  data={combinedData}
                   xKey="x"
                   yKeys={percentiles}
                   domain={{ x: xDomain }}
@@ -199,22 +259,15 @@ const ChildGrowthScreen = ({ navigation }) => {
                     font: font,
                     lineColor: "hsla(0, 0%, 0%, 0.25)",
                     lineWidth: 1,
-                    labelColor: "#000",
-                    labelOffset: 2,
-                    labelPosition: "outset",
-                    axisSide: "bottom",
                     formatXLabel: (label) => `${label}a`,
                     linePathEffect: <DashPathEffect intervals={[4, 4]} />,
                   }}
                   yAxis={[
                     {
-                      yKeys: percentiles,
                       font: font,
                       lineColor: "hsla(0, 0%, 0%, 0.25)",
                       lineWidth: 1,
                       labelColor: "#000",
-                      labelOffset: 4,
-                      labelPosition: "outset",
                       axisSide: "left", 
                       formatYLabel: (label) => `${label}`,
                       domain: yDomain,
@@ -224,6 +277,12 @@ const ChildGrowthScreen = ({ navigation }) => {
                 >
                   {({ points }) => (
                     <>
+                      <Line
+                        points={childGrowthData.map(({ x, y }) => ({ x, xValue: x, y, yValue: y }))}
+                        color='#008AFF'
+                        strokeWidth={3}
+                        curveType='natural'
+                      />
                       {percentiles.map((percentile, index) => (
                         <Line
                           key={percentile}

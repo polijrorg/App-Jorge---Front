@@ -1,33 +1,17 @@
 import * as S from './styles';
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ChildInput } from '@components/ChildInput';
 import AddChildButton from '@components/AddChildButton';
 import ChildrenHeader from '@components/ChildrenHeader';
 import ChildCard from '@components/ChildCard';
 import Bebe from '@assets/icons/Bebe.png'
-import { RouteProp, useRoute } from '@react-navigation/native';
-import Child from '@interfaces/Child';
 import ChildrenService from '@services/ChildrenService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { template } from '@babel/core';
 import { useChildContext } from '@hooks/useChild';
 import { useAuthContext } from '@hooks/useAuth';
 
 const EditChildrenScreen = ({ navigation }) => {
-
-    const convertToDate = (dateString: string): Date => {
-        const [day, month, year] = dateString.split('-').map(Number);
-        return new Date(year, month - 1, day);
-    };
-
-    const formatDate = (date: Date): string => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-    };
 
     const { activeChild: child, setChildList } = useChildContext();
     const { user } = useAuthContext();
@@ -36,7 +20,7 @@ const EditChildrenScreen = ({ navigation }) => {
         setName(child.name);
         setHeight(child.altura);
         setWeight(child.peso);
-        setBirthDate(convertToDate(child.nascimento));
+        setBirthDate(child.nascimento);
         setGender(child.gender === 'masculino' ? 'Masculino' : 'Feminino');
         setPremature(child.nascimentopre === 'sim' ? 'Sim' : 'Não');
         // setHealthPlan(child.planosaude);
@@ -46,7 +30,7 @@ const EditChildrenScreen = ({ navigation }) => {
     const [name, setName] = useState<string>('');
     const [height, setHeight] = useState<string>('');
     const [weight, setWeight] = useState<string>('');
-    const [birthDate, setBirthDate] = useState<Date>(new Date());
+    const [birthDate, setBirthDate] = useState<string>('');
     const [gender, setGender] = useState<string>('');
     const [premature, setPremature] = useState<string>(''); 
     // const [healthPlan, setHealthPlan] = useState<string>('');
@@ -65,7 +49,7 @@ const EditChildrenScreen = ({ navigation }) => {
         else {
             const data = {
                 name: name,
-                nascimento: formatDate(birthDate),
+                nascimento: birthDate,
                 gender: gender.toLowerCase(),
                 nascimentopre: premature.toLowerCase(),
                 altura: height,
@@ -100,7 +84,7 @@ const EditChildrenScreen = ({ navigation }) => {
                 <ChildCard
                     isEditable={false}
                     name={name || 'name'}
-                    birthDate={birthDate ? formatDate(birthDate) : '-'}
+                    birthDate={birthDate ? birthDate : '-'}
                     weight={`${weight}kg` || 'weight'}
                     height={`${height}cm` || 'height'}
                     id={'50'}

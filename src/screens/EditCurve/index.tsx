@@ -43,11 +43,20 @@ function tableHeader() {
 }
 
 const EditCurveScreen = ({ navigation }) => {
-    const { activeChild } = useChildContext();
+    const { activeChild, setGrowthData, growthData } = useChildContext();
     const [insertModal, setInsertModal] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<boolean>(false);
     const [selectedRow, setSelectedRow] = useState<GrowthData>({} as GrowthData)
-    const [data, setData] = useState<GrowthData[]>([]);
+
+    async function fetchData() {
+      const data = await GrowthDataService.getByChild(activeChild.idchildren);
+      const sortedData = data.sort((a, b) => {
+        const ageA = a.age.years + a.age.months / 12;
+        const ageB = b.age.years + b.age.months / 12;
+        return ageB - ageA;
+      });
+      setGrowthData(sortedData);
+    }
 
     function onInsertClose(data: RowData) {
       (async () => {
@@ -57,27 +66,15 @@ const EditCurveScreen = ({ navigation }) => {
               height: Number(data.height),
               growthDate: data.growthDate
           });
-          const allRows = await GrowthDataService.getByChild(activeChild.idchildren);
-          setData(allRows);
-          setInsertModal(false);
       })();
+      fetchData();
+      setInsertModal(false);
     }
 
     async function onDelete() {
       GrowthDataService.deleteById(selectedRow.id);
       setEditModal(false);
-      fetchRows();
-    }
-
-    async function fetchRows() {
-      const allRows = await GrowthDataService.getByChild(activeChild.idchildren);
-      const sortedRows = allRows.sort((a, b) => {
-        const ageA = a.age.years + a.age.months / 12;
-        const ageB = b.age.years + b.age.months / 12;
-        return ageB - ageA;
-      });
-  
-      setData(sortedRows);
+      fetchData();
     }
 
     async function onEditClose(data: RowData) {
@@ -90,13 +87,13 @@ const EditCurveScreen = ({ navigation }) => {
         },
         selectedRow.id
       );
-        fetchRows();
+        fetchData();
         setEditModal(false);
       })();
     }
 
     useEffect(() => {
-      fetchRows();
+      fetchData();
     }, [])
 
     return (
@@ -123,7 +120,7 @@ const EditCurveScreen = ({ navigation }) => {
                   avatar={Bebe}
                 />
                 <S.Line />
-                {data.length > 0 && tableHeader()}
+                {growthData.length > 0 && tableHeader()}
               </>
             )}
             ListFooterComponent={() => (
@@ -134,7 +131,7 @@ const EditCurveScreen = ({ navigation }) => {
                 <AddChildButton title='Salvar' hidePlus={true} onPress={() => 1} />
               </S.Container>
             )}
-            data={data}
+            data={growthData}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
