@@ -10,6 +10,7 @@ import EditChildren from '@screens/EditChildren';
 import FollowUpScreen from '@screens/ChildFollowUp';
 import GrowthCurveScreen from '@screens/CurvaDeCrescimento';
 import EditCurveScreen from '@screens/EditCurve';
+import VacinasScreen from '@screens/Vacinas';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -39,6 +40,7 @@ const AppRoutes = () => {
         <Screen name="Marcos" component={MarcosScreen} />
         <Screen name="Curva" component={GrowthCurveScreen} />
         <Screen name="EditCurve" component={EditCurveScreen} />
+        <Screen name="Vacinas" component={VacinasScreen} />
 
         <Screen
             name="Main"

@@ -11,8 +11,9 @@ export const Button = styled(TouchableOpacity)<{ selected: boolean }>`
   align-items: center;
 `;
 
-export const ButtonText = styled(Text)<{ selected: boolean }>`
+export const ButtonText = styled(Text)<{ selected: boolean, allCaps: boolean }>`
   color: ${({ selected }) => (selected ? '#FFF' : '#000')};
   font-size: 12px;
   font-family: 'PoppinsRegular';
+  text-transform: ${({ allCaps }) => allCaps ? 'uppercase' : ''};
 `;

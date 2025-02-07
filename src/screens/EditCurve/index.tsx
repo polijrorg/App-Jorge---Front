@@ -30,6 +30,7 @@ function tableHeader() {
     <View style={{
       flexDirection: 'row',
       justifyContent: 'space-between',
+      alignItems: 'center',
       padding: 8,
       borderBottomColor: 'dodgerblue',
       borderBottomWidth: 1
@@ -46,9 +47,10 @@ const EditCurveScreen = ({ navigation }) => {
     const { activeChild, setGrowthData, growthData } = useChildContext();
     const [insertModal, setInsertModal] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<boolean>(false);
-    const [selectedRow, setSelectedRow] = useState<GrowthData>({} as GrowthData)
+    const [selectedRow, setSelectedRow] = useState<GrowthData>({} as GrowthData);
 
     async function fetchData() {
+      console.log(activeChild.name)
       const data = await GrowthDataService.getByChild(activeChild.idchildren);
       const sortedData = data.sort((a, b) => {
         const ageA = a.age.years + a.age.months / 12;
@@ -94,7 +96,7 @@ const EditCurveScreen = ({ navigation }) => {
 
     useEffect(() => {
       fetchData();
-    }, [])
+    }, [activeChild])
 
     return (
         <S.Wrapper>

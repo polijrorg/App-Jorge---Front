@@ -43,13 +43,42 @@ const ChildGrowthScreen = ({ navigation }) => {
   const font = useFont(require("@assets/fonts/Poppins-Regular.ttf"), 12);
 
   async function fetchData() {
-    const data = await GrowthDataService.getByChild(child.idchildren);
-    const sortedData = data.sort((a, b) => {
-      const ageA = a.age.years + a.age.months / 12;
-      const ageB = b.age.years + b.age.months / 12;
-      return ageB - ageA;
-    });
-    setGrowthData(sortedData);
+    let data = await GrowthDataService.getByChild(child.idchildren);
+    if (data.length > 0) {
+      data = data.sort((a, b) => {
+        const ageA = a.age.years + a.age.months / 12;
+        const ageB = b.age.years + b.age.months / 12;
+        return ageB - ageA;
+      });
+    }
+    setGrowthData(data);
+  }
+
+  function findClosestPercentile(): string {
+    if (!child) return "";
+
+    const genderData = datasets[child.gender]?.[selectedCurveType];
+    if (!genderData) return "";
+
+    const latestData = growthData[growthData.length-1];
+    if (!latestData) return "aqui";
+  
+    const ageInYears = latestData.age.years + latestData.age.months / 12;
+    const measureValue = latestData[curveTypeMapping[curveType]];
+    
+    const closestAgeData = genderData.reduce((closest, current) => {
+      const month = Number.parseFloat(current.month) / 12;
+      const diff = Math.abs(month - ageInYears);
+      return diff < closest.diff ? { data: current, diff } : closest;
+    }, { data: null, diff: Infinity }).data;
+  
+    if (!closestAgeData) return "";
+  
+    return percentiles.reduce((closest, percentile) => {
+      const percentileValue = Number.parseFloat(closestAgeData[percentile.toLowerCase()].replace(',', '.'));
+      const diff = Math.abs(percentileValue - measureValue);
+      return diff < closest.diff ? { percentile, diff } : closest;
+    }, { percentile: "", diff: Infinity }).percentile;
   }
 
   const chartData = useMemo(() => {
@@ -72,60 +101,10 @@ const ChildGrowthScreen = ({ navigation }) => {
     return dataPoints;
   }, [child, selectedCurveType]);
 
-  // const childGrowthData = useMemo(() => {
-  //   return growthData.map(item => {
-  //     const ageInYears = item.age.years + item.age.months / 12;
-
-  //     let yValue;
-  //     switch (selectedCurveType) {
-  //       case "altura":
-  //         yValue = item.height;
-  //         break;
-  //       case "peso":
-  //         yValue = item.weight;
-  //         break;
-  //       case "imc":
-  //         yValue = item.imc;
-  //         break;
-  //       default:
-  //         yValue = 0;
-  //     }
-  
-  //     return {
-  //       x: ageInYears,
-  //       xValue: ageInYears,
-  //       y: yValue,
-  //       yValue: yValue,
-  //     };
-  //   });
-  // }, [growthData, selectedCurveType]);
-
   const childGrowthData = [
     {x: 0.5, y: 5, xValue: 0.5, yValue: 5},
     {x: 1, y: 10, xValue: 1, yValue: 10}
   ]
-
-  const combinedData = useMemo(() => {
-    // Create a copy of chartData
-    const combined = [...chartData];
-    
-    // Add child data points to the dataset
-    childGrowthData.forEach(point => {
-      const index = combined.findIndex(d => d.x === point.x);
-      if (index >= 0) {
-        combined[index].childValue = point.y;
-      } else {
-        combined.push({
-          x: point.x,
-          childValue: point.y,
-          // Include empty values for percentiles to maintain data structure
-          ...percentiles.reduce((acc, p) => ({ ...acc, [p]: null }), {})
-        });
-      }
-    });
-    
-    return combined;
-  }, [chartData, childGrowthData]);
 
   const yDomain: [number, number] = useMemo(() => {
     if (!chartData.length) return [0, 100];
@@ -251,7 +230,7 @@ const ChildGrowthScreen = ({ navigation }) => {
             <View style={{ height: 300, width: "100%" }}>
               {chartData.length > 0 && (
                 <CartesianChart
-                  data={combinedData}
+                  data={chartData}
                   xKey="x"
                   yKeys={percentiles}
                   domain={{ x: xDomain }}
@@ -277,12 +256,6 @@ const ChildGrowthScreen = ({ navigation }) => {
                 >
                   {({ points }) => (
                     <>
-                      <Line
-                        points={childGrowthData.map(({ x, y }) => ({ x, xValue: x, y, yValue: y }))}
-                        color='#008AFF'
-                        strokeWidth={3}
-                        curveType='natural'
-                      />
                       {percentiles.map((percentile, index) => (
                         <Line
                           key={percentile}
@@ -300,7 +273,7 @@ const ChildGrowthScreen = ({ navigation }) => {
             </View>
 
             <S.Description>
-              Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil 50</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
+              Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil {findClosestPercentile()}</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
             </S.Description>
 
             <AddChildButton title="Gerenciar Dados" onPress={() => navigation.navigate("EditCurve")} />

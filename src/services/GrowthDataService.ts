@@ -31,7 +31,7 @@ export default class GrowthDataService {
       return response.data;
     } catch(error) {
       console.log('Erro ao buscar dados de crescimento por criança: ', error);
-      throw new Error(error);
+      return [] as GrowthData[];
     }
   }
 
