@@ -8,9 +8,11 @@ import Vaccine from '@interfaces/Vaccine';
 import VaccineService from '@services/VaccineService';
 import { useChildContext } from '@hooks/useChild';
 import NoChildrenWarning from '@components/NoChildrenWarning';
+import VaccineModal from '@components/VaccineModal';
 
 interface ButtonProps {
   text: string,
+  onPress?: () => void,
   isPrivate?: boolean,
   isPublic?: boolean,
   status?: string,
@@ -23,7 +25,7 @@ interface Row {
   chunks: any[];
 }
 
-type ButtonPropsWithoutText = Omit<ButtonProps, "text">;
+type ButtonPropsWithoutText = Omit<ButtonProps, "text" | "onPress">;
 
 function determineColor(data: ButtonPropsWithoutText) {
   if (data.next) {
@@ -41,7 +43,7 @@ function determineColor(data: ButtonPropsWithoutText) {
 
 function Button(data: ButtonProps) {
   return (
-    <S.ButtonContainer color={data.color || determineColor(data)}>
+    <S.ButtonContainer color={data.color || determineColor(data)} onPress={data.onPress}>
       <S.ButtonText>{data.text}</S.ButtonText>
     </S.ButtonContainer>
   )
@@ -76,24 +78,30 @@ const Buttons = [
 function Vacinas({ navigation }) {
   const [filter, setFilter] = useState<string>('Próximas');
   const [rows, setRows] = useState<Row[]>([]);
+  const [modal, setModal] = useState<boolean>(false);
+  const [vaccine, setVaccine] = useState<Vaccine>(null);
   const { activeChild } = useChildContext();
 
   useEffect(() => {
     fetchVaccines();
-    console.log(rows);
   }, [filter, activeChild]);
 
   async function fetchVaccines() {
     const vaccineList = (filter === 'Próximas')
       ? await VaccineService.getNext(activeChild.idchildren)
       : await VaccineService.getPast(activeChild.idchildren);
-
+  
     const groupedVaccines = groupVaccinesByAge(vaccineList);
-    const rows = Object.entries(groupedVaccines).map(([age, vaccines]) => {
-      const chunks = chunkArray(vaccines, 2);
-      return { age, chunks };
-    });
-
+  
+    // Ordenar as idades de forma crescente antes de mapear para rows
+    const rows = Object.entries(groupedVaccines)
+      .sort(([ageA], [ageB]) => Number(ageA) - Number(ageB)) // Ordena por idade
+      .map(([age, vaccines]) => {
+        const sortedVaccines = vaccines.sort((a, b) => a.vaccine.name.localeCompare(b.vaccine.name)); // Opcional: ordena por nome da vacina dentro do grupo
+        const chunks = chunkArray(sortedVaccines, 2);
+        return { age, chunks };
+      });
+  
     setRows(rows);
   }
 
@@ -114,6 +122,24 @@ function Vacinas({ navigation }) {
       result.push(array.slice(i, i + chunkSize));
     }
     return result;
+  }
+
+  async function handleStatusUpdate(status: string) {
+    console.log(vaccine);
+    await VaccineService.upsert({
+      childrenId: vaccine.childrenId,
+      vaccineId: vaccine.vaccineId,
+      scheduleId: vaccine.scheduleId,
+      status: status
+    })
+    await fetchVaccines();
+    setModal(false);
+  }
+
+  function handleVaccineSelect(vaccine: Vaccine) {
+    setVaccine(vaccine);
+    setModal(true);
+    console.log(vaccine.vaccine.name)
   }
 
   return (
@@ -144,23 +170,23 @@ function Vacinas({ navigation }) {
 
             {filter === 'Próximas' ?
               <S.LegendContainer>
-                <LegendItem text='Rede pública' color={determineColor({ isPublic: true })} />
-                <LegendItem text='Rede privada' color={determineColor({ isPrivate: true })} />
+                <LegendItem text='Rede pública' color={determineColor({ isPublic: true, next: true })} />
+                <LegendItem text='Rede privada' color={determineColor({ isPrivate: true, next: true })} />
               </S.LegendContainer>
 
               :
-              <ProgressBar percentage={50} color='#F5CD2F' />
-                          
+
+              <ProgressBar percentage={50} color='#F5CD2F' />        
             }
 
             <S.TableContainer>
               {rows.map((row) => (
                 <S.TableRow key={row.age}>
-                  <Button text={row.age} color='none' />
+                  <Button text={row.age} color='none' onPress={() => console.log("ta apertando nos meses pq????")} />
 
                   <S.Column>
                     {row.chunks.map((chunk, chunkIndex) => (
-                      <S.Row key={chunkIndex}>
+                      <S.Row key={chunkIndex + chunk}>
                         {chunk.map((vaccine: Vaccine) => (
                           <Button
                             text={vaccine.vaccine.name}
@@ -168,6 +194,7 @@ function Vacinas({ navigation }) {
                             isPublic={Boolean(vaccine.vaccine.foundInPublic)}
                             next={filter === 'Próximas'}
                             status={vaccine.status}
+                            onPress={() => handleVaccineSelect(vaccine)}
                           />
                         ))}
                       </S.Row>
@@ -180,8 +207,12 @@ function Vacinas({ navigation }) {
           :
       <NoChildrenWarning/>
       }
-        
-
+      <VaccineModal
+        vaccine={vaccine}
+        visible={modal}
+        onClose={() => setModal(false)}
+        onStatusChange={(status: string) => handleStatusUpdate(status)}
+      />
         
       </S.Content>
     </S.Wrapper>

@@ -4,16 +4,27 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FeedbackCard from '@components/FeedbackCard';
+import FeedbackService from '@services/FeedbackService';
+import { useAuthContext } from '@hooks/useAuth';
 
 const FeedbackScreen = ({ navigation }) => {
 
     const values = Array.from({ length: 10 }, (a, i) => i + 1);
-    const [currentValue, setCurrentValue] = useState<number>();
+    const [rating, setRating] = useState<number>();
+    const { user } = useAuthContext();
+
+    async function onSubmit(category: string, message: string) {
+      await FeedbackService.create({
+        email: user.email,
+        category: category,
+        message: message,
+        rating: rating,
+      }, user.id);
+    }
 
     return (
         <S.Wrapper>
             <DefaultHeader />
-
             <S.Content>
                 <View style={{ gap: 10, flexDirection: 'row', width: '100%' }}>
                     <S.Button onPress={() => navigation.goBack()} >
@@ -21,7 +32,7 @@ const FeedbackScreen = ({ navigation }) => {
                     </S.Button >
                     <S.Title>Feedbacks</S.Title>
                 </View>
-                <FeedbackCard />
+                <FeedbackCard onSubmit={onSubmit}/>
                 <S.Line />
                 
                 <S.Title>Avalie nossos serviços</S.Title>
@@ -30,13 +41,13 @@ const FeedbackScreen = ({ navigation }) => {
                         <TouchableOpacity
                             key={value}
                             style={{
-                                backgroundColor: value === currentValue ? '#71AAC9' : '#E6E6E6',
+                                backgroundColor: value === rating ? '#71AAC9' : '#E6E6E6',
                                 minWidth: 22,
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: 100
                             }}
-                            onPress={() => setCurrentValue(value)}
+                            onPress={() => setRating(value)}
                         >
                             <S.Number>{value}</S.Number>
                         </TouchableOpacity>

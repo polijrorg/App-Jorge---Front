@@ -1,6 +1,6 @@
 export default interface Vaccine {
   id: string;
-  vaccinedId: string;
+  vaccineId: string;
   scheduleId: string;
   childrenId: string;
   status: string;

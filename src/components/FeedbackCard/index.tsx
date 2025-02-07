@@ -5,9 +5,13 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from 'react';
 import React from 'react';
 
-export default function FeedbackCard() {
-    const [selectedOption, setSelectedOption] = useState<string>();
-    const [text, setText] = useState<string>();
+interface Props {
+  onSubmit: (category: string, message: string) => void
+}
+
+export default function FeedbackCard(data: Props) {
+    const [category, setCategory] = useState<string>('');
+    const [text, setText] = useState<string>('');
     const options = [
         'Vacinas',
         'MedMama',
@@ -18,8 +22,11 @@ export default function FeedbackCard() {
     return (
         <S.Wrapper>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Dropdown options={options} onOptionSelect={(a) => setSelectedOption(a)} />
-                <S.Button>
+                <Dropdown options={options} onOptionSelect={(a) => setCategory(a)} />
+                <S.Button onPress={() => {
+                  data.onSubmit(category, text);
+                  setText('');
+                }}>
                     <View style={{ flexDirection: 'row', gap: 10 }}>
                         <Ionicons name="send" size={20} color="white" />
                         <S.Label>Enviar</S.Label>
@@ -36,6 +43,7 @@ export default function FeedbackCard() {
                     onChangeText={(a) => setText(a)}
                     multiline
                     style={{ padding: 10 }}
+                    keyboardType='twitter'
                 >
                 </S.Container>
             </View>

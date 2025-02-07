@@ -17,7 +17,7 @@ interface IUpsertResponse {
   scheduleId: string;
   childrenId: string;
   status: string;
-  date: string;
+  date: any;
 }
 
 interface IDevelopmentResponse {
