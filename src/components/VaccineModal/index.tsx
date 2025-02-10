@@ -30,20 +30,26 @@ export default function VaccineModal({ vaccine, visible, onClose, onStatusChange
 
           <ScrollView style={{ width: "100%" }}>
             <S.Content>
-              <S.Section>
-                <S.SectionTitle>O que previne:</S.SectionTitle>
-                <S.SectionText>{vaccine?.vaccine.prevents}</S.SectionText>
-              </S.Section>
+              {vaccine?.vaccine.prevents &&
+                <S.Section>
+                  <S.SectionTitle>O que previne:</S.SectionTitle>
+                  <S.SectionText>{vaccine?.vaccine.prevents}</S.SectionText>
+                </S.Section>
+              }
 
-              <S.Section>
-                <S.SectionTitle>Do que é feita:</S.SectionTitle>
-                <S.SectionText>{vaccine?.vaccine.composition}</S.SectionText>
-              </S.Section>
+              {vaccine?.vaccine.composition &&
+                <S.Section>
+                  <S.SectionTitle>Do que é feita:</S.SectionTitle>
+                  <S.SectionText>{vaccine?.vaccine.composition}</S.SectionText>
+                </S.Section>
+              }
 
-              <S.Section>
-                <S.SectionTitle>Indicação:</S.SectionTitle>
-                <S.SectionText>{vaccine?.vaccine.indication}</S.SectionText>
-              </S.Section>
+              {vaccine?.vaccine.indication &&
+                <S.Section>
+                  <S.SectionTitle>Indicação:</S.SectionTitle>
+                  <S.SectionText>{vaccine?.vaccine.indication}</S.SectionText>
+                </S.Section>
+              }
             </S.Content>
           </ScrollView>
 

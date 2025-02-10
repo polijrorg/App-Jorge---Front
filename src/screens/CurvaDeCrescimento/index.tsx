@@ -54,33 +54,6 @@ const ChildGrowthScreen = ({ navigation }) => {
     setGrowthData(data);
   }
 
-  function findClosestPercentile(): string {
-    if (!child) return "";
-
-    const genderData = datasets[child.gender]?.[selectedCurveType];
-    if (!genderData) return "";
-
-    const latestData = growthData[growthData.length-1];
-    if (!latestData) return "aqui";
-  
-    const ageInYears = latestData.age.years + latestData.age.months / 12;
-    const measureValue = latestData[curveTypeMapping[curveType]];
-    
-    const closestAgeData = genderData.reduce((closest, current) => {
-      const month = Number.parseFloat(current.month) / 12;
-      const diff = Math.abs(month - ageInYears);
-      return diff < closest.diff ? { data: current, diff } : closest;
-    }, { data: null, diff: Infinity }).data;
-  
-    if (!closestAgeData) return "";
-  
-    return percentiles.reduce((closest, percentile) => {
-      const percentileValue = Number.parseFloat(closestAgeData[percentile.toLowerCase()].replace(',', '.'));
-      const diff = Math.abs(percentileValue - measureValue);
-      return diff < closest.diff ? { percentile, diff } : closest;
-    }, { percentile: "", diff: Infinity }).percentile;
-  }
-
   const chartData = useMemo(() => {
     if (!child || !selectedCurveType) return [];
 
@@ -144,7 +117,6 @@ const ChildGrowthScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchData();
-    console.log(childGrowthData);
   }, []);
 
   const legendData = percentiles.map((percentile, index) => ({
@@ -273,7 +245,7 @@ const ChildGrowthScreen = ({ navigation }) => {
             </View>
 
             <S.Description>
-              Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil {findClosestPercentile()}</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
+              Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil P50</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
             </S.Description>
 
             <AddChildButton title="Gerenciar Dados" onPress={() => navigation.navigate("EditCurve")} />

@@ -15,18 +15,23 @@ export default function FeedbackCard(data: Props) {
     const options = [
         'Vacinas',
         'MedMama',
-        'Medicamentos',
+        'Marcos de Desenvolvimento',
         'Curva de Crescimento'
     ];
+
+    function onFormSubmit() {
+      data.onSubmit(category, text);
+      if (category) {
+        setText('');
+        setCategory('');
+      }
+    }
 
     return (
         <S.Wrapper>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Dropdown options={options} onOptionSelect={(a) => setCategory(a)} />
-                <S.Button onPress={() => {
-                  data.onSubmit(category, text);
-                  setText('');
-                }}>
+                <S.Button onPress={() => onFormSubmit()}>
                     <View style={{ flexDirection: 'row', gap: 10 }}>
                         <Ionicons name="send" size={20} color="white" />
                         <S.Label>Enviar</S.Label>

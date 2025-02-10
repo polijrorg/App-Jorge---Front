@@ -22,7 +22,7 @@ export default class FeedbackService {
     static async create(data: ICreateRequest, userId: string) {
       try {
         const response: AxiosResponse<ICreateResponse> = await api.post(
-          `feedback/create/${userId}`,
+          `/feedback/create/${userId}`,
           data
         );
         return response.data;

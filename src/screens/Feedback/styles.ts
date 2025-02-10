@@ -32,10 +32,19 @@ export const Number = styled(Text)`
 `
 
 export const Description = styled(Text)<{ width?: number, size?: number }>`
-    color: #000;
     font-family: 'PoppinsRegular';
     font-size: ${({size}) => size || 14}px;
-    width: ${({width}) => (width) ? '' : '100%'};
+    width: 100%;
+    color: steelblue;
+    text-align: center;
+`
+
+export const Error = styled(Text)<{ width?: number, size?: number }>`
+    font-family: 'PoppinsRegular';
+    font-size: ${({size}) => size || 14}px;
+    width: 100%;
+    color: crimson;
+    text-align: center;
 `
 
 export const BlueText = styled(Text)<{ size?: number }>`

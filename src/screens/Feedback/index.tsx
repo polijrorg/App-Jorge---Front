@@ -10,16 +10,28 @@ import { useAuthContext } from '@hooks/useAuth';
 const FeedbackScreen = ({ navigation }) => {
 
     const values = Array.from({ length: 10 }, (a, i) => i + 1);
-    const [rating, setRating] = useState<number>();
+    const [rating, setRating] = useState<number>(10);
+    const [feedbackSent, setFeedbackSent] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
     const { user } = useAuthContext();
 
+    function formatCategory(category: string) {
+      return category.toUpperCase().replace(' ', '_');
+    }
+    
     async function onSubmit(category: string, message: string) {
-      await FeedbackService.create({
-        email: user.email,
-        category: category,
-        message: message,
-        rating: rating,
-      }, user.id);
+      if (category) {
+        setFeedbackSent(true);
+        setError('');
+        await FeedbackService.create({
+          email: user.email,
+          category: formatCategory(category),
+          message: message,
+          rating: rating,
+        }, user.id);
+      } else {
+        setError('Selecione uma category para deixar seu feedback!')
+      }
     }
 
     return (
@@ -53,6 +65,8 @@ const FeedbackScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     ))}
                 </View>
+                {feedbackSent && <S.Description>Feedback enviado com sucesso!</S.Description>}
+                {error && <S.Error>{error}</S.Error>}
             </S.Content>
         </S.Wrapper>
     )

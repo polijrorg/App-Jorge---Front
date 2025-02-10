@@ -93,11 +93,10 @@ function Vacinas({ navigation }) {
   
     const groupedVaccines = groupVaccinesByAge(vaccineList);
   
-    // Ordenar as idades de forma crescente antes de mapear para rows
     const rows = Object.entries(groupedVaccines)
-      .sort(([ageA], [ageB]) => Number(ageA) - Number(ageB)) // Ordena por idade
+      .sort(([ageA], [ageB]) => Number(ageA) - Number(ageB))
       .map(([age, vaccines]) => {
-        const sortedVaccines = vaccines.sort((a, b) => a.vaccine.name.localeCompare(b.vaccine.name)); // Opcional: ordena por nome da vacina dentro do grupo
+        const sortedVaccines = vaccines.sort((a, b) => a.vaccine.name.localeCompare(b.vaccine.name));
         const chunks = chunkArray(sortedVaccines, 2);
         return { age, chunks };
       });
@@ -179,34 +178,36 @@ function Vacinas({ navigation }) {
               <ProgressBar percentage={50} color='#F5CD2F' />        
             }
 
-            <S.TableContainer>
-              {rows.map((row) => (
-                <S.TableRow key={row.age}>
-                  <Button text={row.age} color='none' onPress={() => console.log("ta apertando nos meses pq????")} />
+            {rows.length > 0 &&
+              <S.TableContainer>
+                {rows.map((row) => (
+                  <S.TableRow key={row.age}>
+                    <Button text={row.age} color='none' onPress={() => console.log("ta apertando nos meses pq????")} />
 
-                  <S.Column>
-                    {row.chunks.map((chunk, chunkIndex) => (
-                      <S.Row key={chunkIndex + chunk}>
-                        {chunk.map((vaccine: Vaccine) => (
-                          <Button
-                            text={vaccine.vaccine.name}
-                            isPrivate={Boolean(vaccine.vaccine.foundInPrivate)}
-                            isPublic={Boolean(vaccine.vaccine.foundInPublic)}
-                            next={filter === 'Próximas'}
-                            status={vaccine.status}
-                            onPress={() => handleVaccineSelect(vaccine)}
-                          />
-                        ))}
-                      </S.Row>
-                    ))}
-                  </S.Column>
-                </S.TableRow>
-              ))}
-            </S.TableContainer>
+                    <S.Column>
+                      {row.chunks.map((chunk, chunkIndex) => (
+                        <S.Row key={chunkIndex + chunk}>
+                          {chunk.map((vaccine: Vaccine) => (
+                            <Button
+                              text={vaccine.vaccine.name}
+                              isPrivate={Boolean(vaccine.vaccine.foundInPrivate)}
+                              isPublic={Boolean(vaccine.vaccine.foundInPublic)}
+                              next={filter === 'Próximas'}
+                              status={vaccine.status}
+                              onPress={() => handleVaccineSelect(vaccine)}
+                            />
+                          ))}
+                        </S.Row>
+                      ))}
+                    </S.Column>
+                  </S.TableRow>
+                ))}
+              </S.TableContainer>
+            }
           </>
-          :
-      <NoChildrenWarning/>
-      }
+        :
+          <NoChildrenWarning/>
+        }
       <VaccineModal
         vaccine={vaccine}
         visible={modal}
