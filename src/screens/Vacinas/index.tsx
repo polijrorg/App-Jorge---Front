@@ -29,8 +29,9 @@ type ButtonPropsWithoutText = Omit<ButtonProps, "text" | "onPress">;
 
 function determineColor(data: ButtonPropsWithoutText) {
   if (data.next) {
-    if (data.isPublic) return 'rgba(188, 54, 54, 0.36)';
-    else return 'rgba(188, 54, 54, 0.72)';
+    if (data.isPublic && data.isPrivate) return 'rgba(188, 54, 54, 0.60)'
+    if (data.isPublic) return 'rgba(188, 54, 54, 0.30)';
+    else return 'rgba(188, 54, 54, 0.90)';
   } else {
     switch (data.status) {
       case 'NAO_VAI_TOMAR': return 'rgba(208, 115, 39, 1)';
@@ -58,18 +59,6 @@ function LegendItem({ text, color }: { text: string, color: string }) {
   )
 }
 
-const ProgressBar = ({ percentage, color }: { percentage: number; color: string }) => {
-  return (
-    <S.LegendRow>
-      <S.LegendText>Vacinas tomadas:</S.LegendText>
-      <S.ProgressBarBackground>
-        <S.ProgressBarFill style={{ width: `${percentage}%`, backgroundColor: color }} />
-      </S.ProgressBarBackground>
-      <S.LegendText>4/6</S.LegendText>
-    </S.LegendRow>
-  );
-};
-
 const Buttons = [
   'Próximas',
   'Histórico',
@@ -80,13 +69,47 @@ function Vacinas({ navigation }) {
   const [rows, setRows] = useState<Row[]>([]);
   const [modal, setModal] = useState<boolean>(false);
   const [vaccine, setVaccine] = useState<Vaccine>(null);
+  const [development, setDevelopment] = useState<number>(0);
   const { activeChild } = useChildContext();
 
   useEffect(() => {
     fetchVaccines();
   }, [filter, activeChild]);
 
+  const ProgressBar = ({ percentage, color }: { percentage: number; color: string }) => {
+    return (
+      <S.LegendRow>
+        <S.LegendText>Vacinas tomadas:</S.LegendText>
+        <S.ProgressBarBackground>
+          <S.ProgressBarFill style={{ width: `${percentage}%`, backgroundColor: color }} />
+        </S.ProgressBarBackground>
+        <S.LegendText>{development.toFixed()}%</S.LegendText>
+      </S.LegendRow>
+    );
+  };
+
+  function sortVaccines(a: Vaccine, b: Vaccine) {
+    const suffixA = a.vaccine.name.split('').pop();
+    const suffixB = b.vaccine.name.split('').pop();
+
+    if (suffixA === 'meses' && suffixB === 'anos') {
+      return -1;
+    }
+
+    if (suffixA === 'anos' && suffixB === 'meses') {
+      return 1;
+    }
+
+    if (suffixA === suffixB) {
+        const numberA = Number(a.vaccine.name.split('-')[0].trim());
+        const numberB = Number(b.vaccine.name.split('-')[0].trim());
+        return numberA - numberB;
+    }
+  }
+
   async function fetchVaccines() {
+    const response = await VaccineService.development(activeChild.idchildren);
+    setDevelopment(Number(response.developmentPercentage));
     const vaccineList = (filter === 'Próximas')
       ? await VaccineService.getNext(activeChild.idchildren)
       : await VaccineService.getPast(activeChild.idchildren);
@@ -96,7 +119,7 @@ function Vacinas({ navigation }) {
     const rows = Object.entries(groupedVaccines)
       .sort(([ageA], [ageB]) => Number(ageA) - Number(ageB))
       .map(([age, vaccines]) => {
-        const sortedVaccines = vaccines.sort((a, b) => a.vaccine.name.localeCompare(b.vaccine.name));
+        const sortedVaccines = vaccines.sort((a, b) => sortVaccines(a, b));
         const chunks = chunkArray(sortedVaccines, 2);
         return { age, chunks };
       });
@@ -170,12 +193,13 @@ function Vacinas({ navigation }) {
             {filter === 'Próximas' ?
               <S.LegendContainer>
                 <LegendItem text='Rede pública' color={determineColor({ isPublic: true, next: true })} />
+                <LegendItem text='Ambos' color={determineColor({ isPrivate: true, isPublic: true, next: true })} />
                 <LegendItem text='Rede privada' color={determineColor({ isPrivate: true, next: true })} />
               </S.LegendContainer>
 
               :
 
-              <ProgressBar percentage={50} color='#F5CD2F' />        
+              <ProgressBar percentage={development} color='#F5CD2F' />
             }
 
             {rows.length > 0 &&

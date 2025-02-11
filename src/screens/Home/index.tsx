@@ -2,7 +2,7 @@ import DefaultHeader from '@components/DefaultHeader';
 import * as S from './styles';
 import React, { useEffect } from 'react';
 import AmbientCard from '@components/AmbientCard';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import Bebe from '@assets/icons/Bebe.png';
 import Seringa from '@assets/icons/Seringa.png';
 import Graph from '@assets/icons/Graph.png';
@@ -44,19 +44,19 @@ const HomeScreen = ({ navigation }) => {
             <S.Content>
                 {user && <S.Title>Bem vindo de volta {user?.name?.split(' ')[0]}!</S.Title>}
                 <S.Description>{formatNames(children)} </S.Description>
-                <TouchableOpacity style={{ width: '100%' }}>
+                <TouchableOpacity style={{ width: '100%' }} onPress={() => navigation.navigate('Main', { screen: 'MyChildren' })}>
                     <S.BlueText>Conferir {'>'}</S.BlueText>
                 </TouchableOpacity>
                 <S.Line />
                 
                 <S.Title>Seus Ambientes</S.Title>
-                <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }}>
+                <ScrollView horizontal contentContainerStyle={{ alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }}>
                     <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => navigation.navigate('MyChildren')}/>
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
                     <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => navigation.navigate('Vacinas')} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
                     <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => navigation.navigate('MedMama')} />
-                </View>
+                </ScrollView>
                 <S.Line />
 
                 <S.Title>Lembretes</S.Title>
@@ -64,7 +64,7 @@ const HomeScreen = ({ navigation }) => {
                 
                 <View style={{ flexDirection: 'row' }}>
                     <S.Description width={1} size={12} >Dúvidas, críticas ou sugestões? </S.Description>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Feedback' })}>
                         <S.BlueText size={12}>Nos ajude também!</S.BlueText>
                     </TouchableOpacity>
                 </View>

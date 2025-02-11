@@ -65,7 +65,7 @@ const BottomTabNav = () => {
                     paddingTop: 10,
                 },
         }}>
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Settings"
                 component={SettingsScreen}
                 options={{
@@ -76,7 +76,7 @@ const BottomTabNav = () => {
                         focused
                       ),
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="MyChildren"
                 component={MyChildrenScreen}
