@@ -22,7 +22,7 @@ interface ButtonProps {
 
 interface Row {
   age: string;
-  chunks: any[];
+  vaccines: Vaccine[];
 }
 
 type ButtonPropsWithoutText = Omit<ButtonProps, "text" | "onPress">;
@@ -88,24 +88,25 @@ function Vacinas({ navigation }) {
     );
   };
 
-  function sortVaccines(a: Vaccine, b: Vaccine) {
-    const suffixA = a.vaccine.name.split('').pop();
-    const suffixB = b.vaccine.name.split('').pop();
-
-    if (suffixA === 'meses' && suffixB === 'anos') {
-      return -1;
+  function sortVaccineGroups(a: [string, Vaccine[]], b: [string, Vaccine[]]) {
+    const parseAge = (age: string) => {
+      const match = age.match(/(\d+)\s*(meses|anos)/);
+      if (!match) return { value: Infinity, unit: 'anos' };
+      
+      const value = Number(match[1]);
+      const unit = match[2];
+      return { value, unit };
+    };
+  
+    const ageA = parseAge(a[0]);
+    const ageB = parseAge(b[0]);
+  
+    if (ageA.unit !== ageB.unit) {
+      return ageA.unit === 'meses' ? -1 : 1;
     }
-
-    if (suffixA === 'anos' && suffixB === 'meses') {
-      return 1;
-    }
-
-    if (suffixA === suffixB) {
-        const numberA = Number(a.vaccine.name.split('-')[0].trim());
-        const numberB = Number(b.vaccine.name.split('-')[0].trim());
-        return numberA - numberB;
-    }
-  }
+  
+    return ageA.value - ageB.value;
+  }  
 
   async function fetchVaccines() {
     const response = await VaccineService.development(activeChild.idchildren);
@@ -114,16 +115,10 @@ function Vacinas({ navigation }) {
       ? await VaccineService.getNext(activeChild.idchildren)
       : await VaccineService.getPast(activeChild.idchildren);
   
-    const groupedVaccines = groupVaccinesByAge(vaccineList);
+      const groupedVaccines = groupVaccinesByAge(vaccineList);
+      const sortedGroups = Object.entries(groupedVaccines).sort(sortVaccineGroups);
   
-    const rows = Object.entries(groupedVaccines)
-      .sort(([ageA], [ageB]) => Number(ageA) - Number(ageB))
-      .map(([age, vaccines]) => {
-        const sortedVaccines = vaccines.sort((a, b) => sortVaccines(a, b));
-        const chunks = chunkArray(sortedVaccines, 2);
-        return { age, chunks };
-      });
-  
+    const rows = sortedGroups.map(([age, vaccines]) => ({ age, vaccines }));
     setRows(rows);
   }
 
@@ -138,16 +133,7 @@ function Vacinas({ navigation }) {
     }, {} as { [key: string]: Vaccine[] });
   }
 
-  function chunkArray(array: any[], chunkSize: number) {
-    const result = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-      result.push(array.slice(i, i + chunkSize));
-    }
-    return result;
-  }
-
   async function handleStatusUpdate(status: string) {
-    console.log(vaccine);
     await VaccineService.upsert({
       childrenId: vaccine.childrenId,
       vaccineId: vaccine.vaccineId,
@@ -161,7 +147,6 @@ function Vacinas({ navigation }) {
   function handleVaccineSelect(vaccine: Vaccine) {
     setVaccine(vaccine);
     setModal(true);
-    console.log(vaccine.vaccine.name)
   }
 
   return (
@@ -207,21 +192,17 @@ function Vacinas({ navigation }) {
                 {rows.map((row) => (
                   <S.TableRow key={row.age}>
                     <Button text={row.age} color='none' onPress={() => console.log("ta apertando nos meses pq????")} />
-
                     <S.Column>
-                      {row.chunks.map((chunk, chunkIndex) => (
-                        <S.Row key={chunkIndex + chunk}>
-                          {chunk.map((vaccine: Vaccine) => (
-                            <Button
-                              text={vaccine.vaccine.name}
-                              isPrivate={Boolean(vaccine.vaccine.foundInPrivate)}
-                              isPublic={Boolean(vaccine.vaccine.foundInPublic)}
-                              next={filter === 'Próximas'}
-                              status={vaccine.status}
-                              onPress={() => handleVaccineSelect(vaccine)}
-                            />
-                          ))}
-                        </S.Row>
+                      {row.vaccines.map((vaccine: Vaccine) => (
+                        <Button
+                          key={vaccine.vaccineId}
+                          text={vaccine.vaccine.name}
+                          isPrivate={Boolean(vaccine.vaccine.foundInPrivate)}
+                          isPublic={Boolean(vaccine.vaccine.foundInPublic)}
+                          next={filter === 'Próximas'}
+                          status={vaccine.status}
+                          onPress={() => handleVaccineSelect(vaccine)}
+                        />
                       ))}
                     </S.Column>
                   </S.TableRow>
