@@ -14,6 +14,7 @@ import CurveTypeButton from "@components/CurveTypeButton";
 import { DashPathEffect, useFont } from "@shopify/react-native-skia"
 import React from "react";
 import GrowthDataService from "@services/GrowthDataService";
+import GrowthData from "@interfaces/GrowthData";
 
 const curveTypeMapping: Record<string, string> = {
   "Estatura (cm)": "altura",
@@ -54,6 +55,40 @@ const ChildGrowthScreen = ({ navigation }) => {
     setGrowthData(data);
   }
 
+  const findClosestPercentile = () => {
+    const genderData = datasets[child.gender]?.[curveType];
+    if (!genderData) return "N/A";
+
+    const latestData = growthData[growthData.length - 1];
+    console.log("data mais recente -> ", latestData);
+
+    const measure = () => {
+      switch (curveType) {
+        case 'Estatura (cm)': return Number(latestData.height);
+        case 'Peso (kg)': return Number(latestData.weight);
+        case 'IMC': return Number(latestData.imc);
+      }
+    }
+
+    const dataAge = latestData.age.months + latestData.age.years * 12;
+  
+    let closestPercentile = "N/A";
+    let minDifference = Infinity;
+  
+    for (const percentile of percentiles) {
+      const percentileData = genderData[percentile];
+      const percentileValue = Number(percentileData[dataAge][percentile.toLowerCase()].replace(',', '.'));
+      const difference = Math.abs(measure() - percentileValue);
+  
+      if (difference < minDifference) {
+        minDifference = difference;
+        closestPercentile = percentile;
+      }
+    }
+  
+    return closestPercentile;
+  };
+
   const chartData = useMemo(() => {
     if (!child || !selectedCurveType) return [];
 
@@ -73,11 +108,6 @@ const ChildGrowthScreen = ({ navigation }) => {
 
     return dataPoints;
   }, [child, selectedCurveType]);
-
-  const childGrowthData = [
-    {x: 0.5, y: 5, xValue: 0.5, yValue: 5},
-    {x: 1, y: 10, xValue: 1, yValue: 10}
-  ]
 
   const yDomain: [number, number] = useMemo(() => {
     if (!chartData.length) return [0, 100];
@@ -244,9 +274,11 @@ const ChildGrowthScreen = ({ navigation }) => {
               <Legend data={legendData} />
             </View>
 
-            <S.Description>
-              Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil P50</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
-            </S.Description>
+            {growthData.length > 0 &&
+              <S.Description>
+                Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil {findClosestPercentile()}</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
+              </S.Description>
+            }
 
             <AddChildButton title="Gerenciar Dados" onPress={() => navigation.navigate("EditCurve")} />
           </S.Content>

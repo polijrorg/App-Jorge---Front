@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import styled from 'styled-components/native';
 
 export const Wrapper = styled(View)`
@@ -8,14 +8,16 @@ export const Wrapper = styled(View)`
     background: ${({ theme }) => theme.colors.background };
 `;
 
-export const Content = styled(View)`
-    flex: 1;
-    align-items: center;
-    justify-content: top;
-    background: ${({ theme }) => theme.colors.background };
-    padding: 16px;
-    width: 100%;
-    gap: 8px;
+export const Content = styled(ScrollView).attrs({
+  contentContainerStyle: {
+      alignItems: "center",
+      padding: 16,
+      gap: 16,
+  },
+})`
+  flex: 1;
+  background: ${({ theme }) => theme.colors.background};
+  width: 100%;
 `;
 
 export const Title = styled(Text)`
@@ -43,5 +45,6 @@ export const Line = styled(View)`
     width: 100%;
     border: 0.3px;
     border-color: lightblue;
-    margin-bottom: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 `

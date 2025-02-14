@@ -77,7 +77,7 @@ const BottomTabNav = () => {
                       ),
                 }}
             /> */}
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="MyChildren"
                 component={MyChildrenScreen}
                 options={{
@@ -85,6 +85,18 @@ const BottomTabNav = () => {
                       renderIcon(
                         require('@assets/icons/Bebe.png'),
                         'Filhos',
+                        focused
+                      ),
+                }}
+            /> */}
+            <Tab.Screen
+                name="MedMama"
+                component={MedMamaScreen}
+                options={{
+                    tabBarIcon: ({ focused }) =>
+                      renderIcon(
+                        require('@assets/icons/Mamadeira.png'),
+                        'MedMama',
                         focused
                       ),
                 }}
@@ -97,18 +109,6 @@ const BottomTabNav = () => {
                       renderIcon(
                         require('@assets/icons/Home.png'),
                         'Home',
-                        focused
-                      ),
-                }}
-            />
-            <Tab.Screen
-                name="MedMama"
-                component={MedMamaScreen}
-                options={{
-                    tabBarIcon: ({ focused }) =>
-                      renderIcon(
-                        require('@assets/icons/Mamadeira.png'),
-                        'MedMama',
                         focused
                       ),
                 }}

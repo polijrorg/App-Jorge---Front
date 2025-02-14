@@ -13,11 +13,13 @@ import { useAuthContext } from '@hooks/useAuth';
 import { useChildContext } from '@hooks/useChild';
 import Child from '@interfaces/Child';
 import ChildrenService from '@services/ChildrenService';
+import AddChildButton from '@components/AddChildButton';
+import ChildCard from '@components/ChildCard';
 
 const HomeScreen = ({ navigation }) => {
 
     const { user } = useAuthContext();
-    const { childList: children, setChildList } = useChildContext();
+    const { childList: children, setChildList, setActiveChild } = useChildContext();
 
     const formatNames = (children?: Child[]) => {
         if (!children || children.length === 0) return 'Cadastre seus filhos em "Meus Filhos"!'
@@ -28,6 +30,16 @@ const HomeScreen = ({ navigation }) => {
             const lastChild = names.pop();
             return `${names.join(', ')} e ${lastChild} precisam ter seus marcos atualizados!`;
         }
+    }
+
+    async function handlePress(data: Child) {
+        setActiveChild(data);
+        navigation.navigate('EditChildren');
+    }
+
+    async function handlePressMain(data: Child) {
+        setActiveChild(data);
+        navigation.navigate('FollowUp');
     }
 
     useEffect(() => {
@@ -44,9 +56,9 @@ const HomeScreen = ({ navigation }) => {
             <S.Content>
                 {user && <S.Title>Bem vindo de volta {user?.name?.split(' ')[0]}!</S.Title>}
                 <S.Description>{formatNames(children)} </S.Description>
-                <TouchableOpacity style={{ width: '100%' }} onPress={() => navigation.navigate('Main', { screen: 'MyChildren' })}>
+                {/* <TouchableOpacity style={{ width: '100%' }} onPress={() => navigation.navigate('Main', { screen: 'MyChildren' })}>
                     <S.BlueText>Conferir {'>'}</S.BlueText>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <S.Line />
                 
                 <S.Title>Seus Ambientes</S.Title>
@@ -59,9 +71,29 @@ const HomeScreen = ({ navigation }) => {
                 </ScrollView>
                 <S.Line />
 
-                <S.Title>Lembretes</S.Title>
-                <ReminderCard />
+                <S.Title>Suas Crianças</S.Title>                
+                {(children && children.length > 0) &&
+                  children.map((c) => (
+                    <ChildCard
+                        key={c.idchildren}
+                        onPress={() => handlePress(c)}
+                        onPressMain={() => handlePressMain(c)}
+                        name={c.name.split(' ')[0]}
+                        birthDate={c.nascimento}
+                        weight={`${c.peso}kg`}
+                        height={`${c.altura}cm`}
+                        id={`${c.idchildren}`}
+                        vaccinePercentage={50}
+                        avatar={Bebe}
+                    />
+                ))}
+
+                <AddChildButton onPress={() => navigation.navigate('RegisterChildren')}/>
+
+                {/* <S.Title>Lembretes</S.Title> */}
+                {/* <ReminderCard /> */}
                 
+                <S.Line />
                 <View style={{ flexDirection: 'row' }}>
                     <S.Description width={1} size={12} >Dúvidas, críticas ou sugestões? </S.Description>
                     <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Feedback' })}>
