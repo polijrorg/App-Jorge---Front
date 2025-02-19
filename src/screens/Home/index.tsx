@@ -84,7 +84,7 @@ const HomeScreen = ({ navigation }) => {
                         height={`${c.altura}cm`}
                         id={`${c.idchildren}`}
                         vaccinePercentage={50}
-                        avatar={Bebe}
+                        gender={c.gender}
                     />
                 ))}
 

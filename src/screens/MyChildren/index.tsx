@@ -4,7 +4,6 @@ import React from 'react';
 import { View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ChildCard from '@components/ChildCard';
-import Bebe from '@assets/icons/Bebe.png'
 import AddChildButton from '@components/AddChildButton';
 import Child from '@interfaces/Child';
 import { useChildContext } from '@hooks/useChild';
@@ -46,7 +45,7 @@ const MyChildrenScreen = ({ navigation }) => {
                         height={`${c.altura}cm`}
                         id={`${c.idchildren}`}
                         vaccinePercentage={50}
-                        avatar={Bebe}
+                        gender={c.gender}
                     />
                 ))}
 

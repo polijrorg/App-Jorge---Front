@@ -89,7 +89,7 @@ const EditChildrenScreen = ({ navigation }) => {
                     height={`${height}cm` || 'height'}
                     id={'50'}
                     vaccinePercentage={80}
-                    avatar={Bebe}
+                    gender={gender}
                 />
 
                 <S.Description>Dados Básicos</S.Description>

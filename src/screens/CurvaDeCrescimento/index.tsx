@@ -1,8 +1,7 @@
 import * as S from "./styles";
 import { useState, useMemo, useEffect } from "react";
-import { ScrollView, View, Text } from "react-native";
+import { View, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Bebe from "@assets/icons/Bebe.png";
 import { useChildContext } from "@hooks/useChild";
 import ChildrenHeader from "@components/ChildrenHeader";
 import ChildCard from "@components/ChildCard";
@@ -15,6 +14,7 @@ import { DashPathEffect, useFont } from "@shopify/react-native-skia"
 import React from "react";
 import GrowthDataService from "@services/GrowthDataService";
 import GrowthData from "@interfaces/GrowthData";
+import { ReadAndAgree } from "@components/ReadAndAgree";
 
 const curveTypeMapping: Record<string, string> = {
   "Estatura (cm)": "altura",
@@ -27,7 +27,7 @@ const percentiles = ["P01", "P3", "P5", "P10", "P15", "P25", "P50", "P75", "P85"
 const Legend = ({ data }) => {
   return (
     <View style={{ position: "absolute", top: 10, right: 10, backgroundColor: "rgba(255,255,255,0.8)", padding: 5, borderRadius: 5 }}>
-      {data.reverse().map((item, index) => (
+      {data.reverse().map((item) => (
         <View key={item.label} style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
           <View style={{ width: 10, height: 10, backgroundColor: item.color, marginRight: 5 }} />
           <Text style={{ fontSize: 10 }}>{item.label}</Text>
@@ -40,6 +40,8 @@ const Legend = ({ data }) => {
 const ChildGrowthScreen = ({ navigation }) => {
   const { activeChild: child, setGrowthData, growthData } = useChildContext();
   const [curveType, setCurveType] = useState<string>("Estatura (cm)");
+  const [defaultCurves, setDefaultCurves] = useState<boolean>(false);
+  const [childData, setChildData] = useState<any[]>([]);
   const selectedCurveType = curveTypeMapping[curveType];
   const font = useFont(require("@assets/fonts/Poppins-Regular.ttf"), 12);
 
@@ -96,7 +98,7 @@ const ChildGrowthScreen = ({ navigation }) => {
     if (!genderData) return [];
 
     const dataPoints = [];
-    const months = genderData.P01.map((item) => Number.parseFloat(item.month) / 12);
+    const months = genderData.P50.map((item) => Number.parseFloat(item.month) / 12);
 
     months.forEach((month, index) => {
       const point = { x: month };
@@ -104,21 +106,49 @@ const ChildGrowthScreen = ({ navigation }) => {
         point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()].replace(',', '.'));
       });
       dataPoints.push(point);
+      console.log(dataPoints);
     });
 
     return dataPoints;
   }, [child, selectedCurveType]);
 
+  const combinedChartData = useMemo(() => {
+    if (!child || !selectedCurveType) return [];
+    const genderData = datasets[child.gender]?.[selectedCurveType];
+    if (!genderData) return [];
+    const dataPoints = [];
+    const months = genderData.P50.map((item) => Number.parseFloat(item.month) / 12);
+    months.forEach((month, index) => {
+      const point = { x: month };
+      percentiles.forEach((percentile) => {
+        point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()].replace(',', '.'));
+      });
+      dataPoints.push(point);
+    });
+  
+    if (childData.length > 0) {
+      childData.forEach(childPoint => {
+        const existingPointIndex = dataPoints.findIndex(point => point.x === childPoint.x);
+        if (existingPointIndex !== -1) {
+          dataPoints[existingPointIndex]['childY'] = childPoint.y;
+        } else {
+          dataPoints.push({ x: childPoint.x, childY: childPoint.y });
+        }
+      });
+    }
+  
+    return dataPoints;
+  }, [child, selectedCurveType, childData]);
+
   const yDomain: [number, number] = useMemo(() => {
     if (!chartData.length) return [0, 100];
 
     const age = findFloatAge(child?.nascimento);
-    const ageMinus1 = age < 1 ? 0 : age - 1;
-    const agePlus1 = age + 1;
+    const rightLimit = age < 2 ? 2 : 5;
 
     const closestPoints = chartData.reduce((acc, point) => {
-      const diffAgeMinus1 = Math.abs(point.x - ageMinus1);
-      const diffAgePlus1 = Math.abs(point.x - agePlus1);
+      const diffAgeMinus1 = Math.abs(point.x - 0);
+      const diffAgePlus1 = Math.abs(point.x - rightLimit);
       
       if (diffAgeMinus1 < acc.minDiffAgeMinus1) {
         acc.minDiffAgeMinus1 = diffAgeMinus1;
@@ -141,13 +171,40 @@ const ChildGrowthScreen = ({ navigation }) => {
 
   const xDomain: [number, number] = useMemo(() => {
     let age = findFloatAge(child?.nascimento);
-  if (age < 1) return [0, 2]; 
-    return [age - 1, age + 1];
+  if (age < 2) return [0, 2]; 
+    return [0, 5];
   }, [selectedCurveType]);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  function determineGrowthData(item: GrowthData) {
+    switch (curveType) {
+      case 'Estatura (cm)': return item.height;
+      case 'Peso (kg)': return item.weight;
+      case 'IMC': return item.imc;
+    }
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+        if (!child || !selectedCurveType) return;
+        try {
+            const response: GrowthData[] = await GrowthDataService.getByChild(child.idchildren);
+            if (!response || response.length === 0) return;
+            const data = response.map(item => ({
+                x: item.age.years + item.age.months / 12,
+                y: determineGrowthData(item),
+            }));
+            setChildData(data);
+        } catch (error) {
+            console.error("Error fetching growth data:", error);
+        }
+    }
+    fetchData();
+    console.log(childData);
+}, [child, selectedCurveType, curveType]);
 
   const legendData = percentiles.map((percentile, index) => ({
     label: percentile,
@@ -213,7 +270,7 @@ const ChildGrowthScreen = ({ navigation }) => {
               height={`${child?.altura}cm` || "height"}
               id={`${child?.idchildren}` || "0"}
               vaccinePercentage={80}
-              avatar={Bebe}
+              gender={child.gender}
             />
 
             <S.Line />
@@ -229,12 +286,22 @@ const ChildGrowthScreen = ({ navigation }) => {
                 ))}
             </S.Row>
 
+            <S.Row>
+              <ReadAndAgree
+                isChecked={defaultCurves}
+                blueText={undefined}
+                blackText='Mostrar curvas padrão?'
+                onPress={() => setDefaultCurves(!defaultCurves)}
+                onTextPress={undefined}
+              />
+            </S.Row>
+
             <View style={{ height: 300, width: "100%" }}>
-              {chartData.length > 0 && (
+              {combinedChartData.length > 0 && (
                 <CartesianChart
-                  data={chartData}
+                  data={combinedChartData}
                   xKey="x"
-                  yKeys={percentiles}
+                  yKeys={defaultCurves ? [...percentiles, "childY"] : ["childY"]}
                   domain={{ x: xDomain }}
                   xAxis={{
                     font: font,
@@ -249,30 +316,43 @@ const ChildGrowthScreen = ({ navigation }) => {
                       lineColor: "hsla(0, 0%, 0%, 0.25)",
                       lineWidth: 1,
                       labelColor: "#000",
-                      axisSide: "left", 
+                      axisSide: "left",
                       formatYLabel: (label) => `${label}`,
                       domain: yDomain,
                       linePathEffect: <DashPathEffect intervals={[4, 4]} />,
-                    }
+                    },
                   ]}
                 >
                   {({ points }) => (
                     <>
-                      {percentiles.map((percentile, index) => (
+                      {defaultCurves && percentiles.map((percentile, index) => (
                         <Line
                           key={percentile}
                           points={points[percentile]}
                           color={`hsla(${index * 30}, 70%, 50%, 20%)`}
                           strokeWidth={2}
-                          curveType='natural'
+                          curveType="natural"
                         />
                       ))}
+                      {points.childY && (
+                        <Line
+                          key="childData"
+                          points={points.childY}
+                          color="blue"
+                          strokeWidth={2}
+                          curveType="linear"
+                        />
+                      )}
                     </>
                   )}
                 </CartesianChart>
               )}
-              <Legend data={legendData} />
+              {
+                defaultCurves && 
+                <Legend data={legendData} />
+              }
             </View>
+
 
             {growthData.length > 0 &&
               <S.Description>

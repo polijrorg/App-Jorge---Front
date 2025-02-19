@@ -12,7 +12,7 @@ interface ChildCardProps {
     height: string;
     id: string;
     vaccinePercentage: number;
-    avatar: any;
+    gender: string;
     onPress?: (a: any) => void;
     isEditable?: boolean;
     onPressMain?: (a: any) => void;
@@ -33,7 +33,7 @@ const ChildCard: React.FC<ChildCardProps> = ({
     height,
     id,
     vaccinePercentage,
-    avatar,
+    gender,
     onPress,
     onPressMain,
     isEditable = true
@@ -80,15 +80,22 @@ const ChildCard: React.FC<ChildCardProps> = ({
       }
       calculateDevelopment();
     }, [activeChild])
+
+    function determineAvatar() {
+      if (age?.years < 2) return require('@assets/icons/baby.png');
+      return (gender === 'feminino') ? require('@assets/icons/girl.png') : require('@assets/icons/boy.png');
+    }
     
     return (
         <S.Card onPress={onPressMain}>
             <S.AvatarContainer>
-                <S.Avatar source={avatar} />
+                <S.Avatar source={determineAvatar()} />
             </S.AvatarContainer>
             <S.InfoContainer>
                 <S.Name>{name}</S.Name>
-                <S.Details>{formatAge(age)} - <S.HighlightGreen>{weight}</S.HighlightGreen> - <S.HighlightYellow>{height}</S.HighlightYellow></S.Details>
+                <S.Details>
+                  {formatAge(age)} - <S.HighlightGreen>{weight}</S.HighlightGreen> - <S.HighlightYellow>{height}</S.HighlightYellow>
+                </S.Details>
                 <S.ProgressContainer>
                     <S.ProgressLabel>Desenvolvimento</S.ProgressLabel>
                     <ProgressBar percentage={development || 0} color="#4CAF50" />

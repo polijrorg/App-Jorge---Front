@@ -21,7 +21,6 @@ export const AvatarContainer = styled(View)`
 export const Avatar = styled(Image)`
     width: 64px;
     height: 64px;
-    border-radius: 32px;
 `;
 
 export const InfoContainer = styled(View)`

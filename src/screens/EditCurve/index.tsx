@@ -119,7 +119,7 @@ const EditCurveScreen = ({ navigation }) => {
                   height={`${activeChild?.altura}cm` || 'height'}
                   id={`${activeChild?.idchildren}` || '0'}
                   vaccinePercentage={80}
-                  avatar={Bebe}
+                  gender={activeChild.gender}
                 />
                 <S.Line />
                 {growthData.length > 0 && tableHeader()}

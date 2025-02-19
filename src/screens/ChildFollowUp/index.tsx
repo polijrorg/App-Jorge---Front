@@ -35,7 +35,7 @@ const FollowUpScreen = ({ navigation }) => {
                     height={child.altura || 'height'}
                     id={child.idchildren}
                     vaccinePercentage={80}
-                    avatar={Bebe}
+                    gender={child.gender}
                 />
 
                 <S.Line />
