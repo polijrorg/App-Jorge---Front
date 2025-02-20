@@ -48,9 +48,11 @@ const ChildGrowthScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchData();
+  }, [child, selectedCurveType]);
+  
+  useEffect(() => {
     convertData();
-    console.log('Esse é o combinedData: ', combinedChartData)
-  }, [child, selectedCurveType, curveType]);
+  }, [growthData, selectedCurveType]);  
 
   async function fetchData() {
     let data = await GrowthDataService.getByChild(child.idchildren);
@@ -290,36 +292,35 @@ const ChildGrowthScreen = ({ navigation }) => {
               />
             </S.Row>
 
-            <View style={{ height: 300, width: "100%" }}>
-              {(combinedChartData.length > 0 && growthData.length > 0) && (
-                <CartesianChart
-                  data={combinedChartData}
-                  xKey="x"
-                  yKeys={defaultCurves ? [...percentiles, "childY"] : ["childY"]}
-                  domain={{ x: xDomain }}
-                  xAxis={{
+            <View style={{ height: 300, width: "100%", position: "relative" }}>
+              {defaultCurves && (
+                <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
+                  <CartesianChart
+                    data={chartData}
+                    xKey="x"
+                    yKeys={[...percentiles]}
+                    domain={{ x: xDomain, y: yDomain }}
+                    xAxis={{
                       font: font,
                       lineColor: "hsla(0, 0%, 0%, 0.25)",
                       lineWidth: 1,
                       formatXLabel: (label) => `${label}a`,
                       linePathEffect: <DashPathEffect intervals={[4, 4]} />,
-                  }}
-                  yAxis={[
+                    }}
+                    yAxis={[
                       {
-                          font: font,
-                          lineColor: "hsla(0, 0%, 0%, 0.25)",
-                          lineWidth: 1,
-                          labelColor: "#000",
-                          axisSide: "left",
-                          formatYLabel: (label) => `${label}`,
-                          domain: yDomain,
-                          linePathEffect: <DashPathEffect intervals={[4, 4]} />,
+                        font: font,
+                        lineColor: "hsla(0, 0%, 0%, 0.25)",
+                        lineWidth: 1,
+                        labelColor: "#000",
+                        axisSide: "left",
+                        formatYLabel: (label) => `${label}`,
+                        linePathEffect: <DashPathEffect intervals={[4, 4]} />,
                       },
-                  ]}
-                >
-                  {({ points }) => (
-                    <>
-                      {defaultCurves && percentiles.map((percentile, index) => (
+                    ]}
+                  >
+                    {({ points }) =>
+                      percentiles.map((percentile, index) => (
                         <Line
                           key={percentile}
                           points={points[percentile]}
@@ -327,22 +328,52 @@ const ChildGrowthScreen = ({ navigation }) => {
                           strokeWidth={2}
                           curveType="natural"
                         />
-                      ))}
+                      ))
+                    }
+                  </CartesianChart>
+                </View>
+              )}
+
+              {growthData.length > 0 && (
+                <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
+                  <CartesianChart
+                    data={childData}
+                    xKey="x"
+                    yKeys={["y"]}
+                    domain={{ x: xDomain, y: yDomain }}
+                    xAxis={{
+                      font: font,
+                      lineColor: "hsla(0, 0%, 0%, 0.12)",
+                      lineWidth: 1,
+                      formatXLabel: (label) => `${label}a`,
+                      linePathEffect: <DashPathEffect intervals={[4, 4]} />,
+                    }}
+                    yAxis={[
+                      {
+                        font: font,
+                        lineColor: "hsla(0, 0%, 0%, 0.12)",
+                        lineWidth: 1,
+                        labelColor: "#000",
+                        axisSide: "left",
+                        formatYLabel: (label) => `${label}`,
+                        linePathEffect: <DashPathEffect intervals={[4, 4]} />,
+                      },
+                    ]}
+                  >
+                    {({ points }) => (
                       <Line
                         key="childData"
-                        points={points.childY}
+                        points={points.y}
                         color="blue"
                         strokeWidth={3}
                         curveType="linear"
                       />
-                    </>
-                  )}
-                </CartesianChart>
+                    )}
+                  </CartesianChart>
+                </View>
               )}
-              {
-                defaultCurves && 
-                <Legend data={legendData} />
-              }
+
+              {defaultCurves && <Legend data={legendData} />}
             </View>
 
 
