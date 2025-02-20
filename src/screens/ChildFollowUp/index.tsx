@@ -1,13 +1,11 @@
 import * as S from './styles';
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import AmbientCard from '@components/AmbientCard';
 import { View, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Bebe from '@assets/icons/Bebe.png';
 import Seringa from '@assets/icons/Seringa.png';
 import Graph from '@assets/icons/Graph.png';
 import Trophy from '@assets/icons/Trophy.png';
-import ReminderCard from '@components/ReminderCard';
 import { useChildContext } from '@hooks/useChild';
 import ChildrenHeader from '@components/ChildrenHeader';
 import ChildCard from '@components/ChildCard';

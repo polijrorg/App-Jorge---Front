@@ -60,7 +60,7 @@ const EditCurveScreen = ({ navigation }) => {
       setGrowthData(sortedData);
     }
 
-    function onInsertClose(data: RowData) {
+    async function onInsertClose(data: RowData) {
       (async () => {
           await GrowthDataService.create({
               childrenId: activeChild.idchildren,
@@ -68,9 +68,9 @@ const EditCurveScreen = ({ navigation }) => {
               height: Number(data.height),
               growthDate: data.growthDate
           });
+          await fetchData();
+          setInsertModal(false);
       })();
-      fetchData();
-      setInsertModal(false);
     }
 
     async function onDelete() {
@@ -89,7 +89,7 @@ const EditCurveScreen = ({ navigation }) => {
         },
         selectedRow.id
       );
-        fetchData();
+        await fetchData();
         setEditModal(false);
       })();
     }

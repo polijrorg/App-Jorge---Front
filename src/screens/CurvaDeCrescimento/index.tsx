@@ -58,17 +58,16 @@ const ChildGrowthScreen = ({ navigation }) => {
   }
 
   const findClosestPercentile = () => {
-    const genderData = datasets[child.gender]?.[curveType];
+    const genderData = datasets[child.gender][selectedCurveType];
     if (!genderData) return "N/A";
 
     const latestData = growthData[growthData.length - 1];
-    console.log("data mais recente -> ", latestData);
 
     const measure = () => {
       switch (curveType) {
-        case 'Estatura (cm)': return Number(latestData.height);
-        case 'Peso (kg)': return Number(latestData.weight);
-        case 'IMC': return Number(latestData.imc);
+        case 'Estatura (cm)': return latestData.height;
+        case 'Peso (kg)': return latestData.weight;
+        case 'IMC': return latestData.imc;
       }
     }
 
@@ -106,7 +105,6 @@ const ChildGrowthScreen = ({ navigation }) => {
         point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()].replace(',', '.'));
       });
       dataPoints.push(point);
-      console.log(dataPoints);
     });
 
     return dataPoints;
@@ -203,8 +201,7 @@ const ChildGrowthScreen = ({ navigation }) => {
         }
     }
     fetchData();
-    console.log(childData);
-}, [child, selectedCurveType, curveType]);
+  }, [child, selectedCurveType, curveType]);
 
   const legendData = percentiles.map((percentile, index) => ({
     label: percentile,
