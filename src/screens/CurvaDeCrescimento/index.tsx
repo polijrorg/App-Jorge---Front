@@ -43,7 +43,14 @@ const ChildGrowthScreen = ({ navigation }) => {
   const [defaultCurves, setDefaultCurves] = useState<boolean>(false);
   const [childData, setChildData] = useState<any[]>([]);
   const selectedCurveType = curveTypeMapping[curveType];
+  const Buttons = Object.keys(curveTypeMapping);
   const font = useFont(require("@assets/fonts/Poppins-Regular.ttf"), 12);
+
+  useEffect(() => {
+    fetchData();
+    convertData();
+    console.log('Esse é o combinedData: ', combinedChartData)
+  }, [child, selectedCurveType, curveType]);
 
   async function fetchData() {
     let data = await GrowthDataService.getByChild(child.idchildren);
@@ -51,10 +58,28 @@ const ChildGrowthScreen = ({ navigation }) => {
       data = data.sort((a, b) => {
         const ageA = a.age.years + a.age.months / 12;
         const ageB = b.age.years + b.age.months / 12;
-        return ageB - ageA;
+        return ageA - ageB;
       });
     }
     setGrowthData(data);
+  }
+
+  async function convertData() {
+    if (!child || !selectedCurveType) return;
+    try {
+        if (!growthData || growthData.length === 0) {
+          console.log("growthData está vazio");
+          return;
+        }
+        const data = growthData.map(item => ({
+            x: item.age.years + item.age.months / 12,
+            y: determineGrowthData(item),
+        }));
+        setChildData(data);
+        console.log("Esse é o growthData arrumado:", data);
+    } catch (error) {
+        console.error("Error fetching growth data:", error);
+    }
   }
 
   const findClosestPercentile = () => {
@@ -63,13 +88,7 @@ const ChildGrowthScreen = ({ navigation }) => {
 
     const latestData = growthData[growthData.length - 1];
 
-    const measure = () => {
-      switch (curveType) {
-        case 'Estatura (cm)': return latestData.height;
-        case 'Peso (kg)': return latestData.weight;
-        case 'IMC': return latestData.imc;
-      }
-    }
+    const measure = determineGrowthData(latestData);
 
     const dataAge = latestData.age.months + latestData.age.years * 12;
   
@@ -79,7 +98,7 @@ const ChildGrowthScreen = ({ navigation }) => {
     for (const percentile of percentiles) {
       const percentileData = genderData[percentile];
       const percentileValue = Number(percentileData[dataAge][percentile.toLowerCase()].replace(',', '.'));
-      const difference = Math.abs(measure() - percentileValue);
+      const difference = Math.abs(measure - percentileValue);
   
       if (difference < minDifference) {
         minDifference = difference;
@@ -112,31 +131,33 @@ const ChildGrowthScreen = ({ navigation }) => {
 
   const combinedChartData = useMemo(() => {
     if (!child || !selectedCurveType) return [];
-    const genderData = datasets[child.gender]?.[selectedCurveType];
+    const genderData = datasets[child.gender][selectedCurveType];
+    console.log('genderData: ', genderData);
     if (!genderData) return [];
     const dataPoints = [];
-    const months = genderData.P50.map((item) => Number.parseFloat(item.month) / 12);
+
+    const months = genderData[Object.keys(genderData)[0]].map((item) => Number(item.month) / 12);
+
     months.forEach((month, index) => {
-      const point = { x: month };
-      percentiles.forEach((percentile) => {
-        point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()].replace(',', '.'));
-      });
-      dataPoints.push(point);
+        const point = { x: month };
+        percentiles.forEach((percentile) => {
+            const percentileData = genderData[percentile];
+            if (percentileData && percentileData[index]) {
+                const percentileValue = Number(percentileData[index][percentile.toLowerCase()].replace(',', '.'));
+                point[percentile] = percentileValue;
+            }
+        });
+        dataPoints.push(point);
     });
-  
+
     if (childData.length > 0) {
-      childData.forEach(childPoint => {
-        const existingPointIndex = dataPoints.findIndex(point => point.x === childPoint.x);
-        if (existingPointIndex !== -1) {
-          dataPoints[existingPointIndex]['childY'] = childPoint.y;
-        } else {
-          dataPoints.push({ x: childPoint.x, childY: childPoint.y });
-        }
-      });
+        childData.forEach(childPoint => {
+            dataPoints.push({ x: childPoint.x, childY: childPoint.y });
+        });
     }
-  
+
     return dataPoints;
-  }, [child, selectedCurveType, childData]);
+}, [child, selectedCurveType, childData]);
 
   const yDomain: [number, number] = useMemo(() => {
     if (!chartData.length) return [0, 100];
@@ -173,10 +194,6 @@ const ChildGrowthScreen = ({ navigation }) => {
     return [0, 5];
   }, [selectedCurveType]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   function determineGrowthData(item: GrowthData) {
     switch (curveType) {
       case 'Estatura (cm)': return item.height;
@@ -184,24 +201,6 @@ const ChildGrowthScreen = ({ navigation }) => {
       case 'IMC': return item.imc;
     }
   }
-
-  useEffect(() => {
-    async function fetchData() {
-        if (!child || !selectedCurveType) return;
-        try {
-            const response: GrowthData[] = await GrowthDataService.getByChild(child.idchildren);
-            if (!response || response.length === 0) return;
-            const data = response.map(item => ({
-                x: item.age.years + item.age.months / 12,
-                y: determineGrowthData(item),
-            }));
-            setChildData(data);
-        } catch (error) {
-            console.error("Error fetching growth data:", error);
-        }
-    }
-    fetchData();
-  }, [child, selectedCurveType, curveType]);
 
   const legendData = percentiles.map((percentile, index) => ({
     label: percentile,
@@ -229,8 +228,6 @@ const ChildGrowthScreen = ({ navigation }) => {
     const ageInYears = years + months / 12 + days / 365;
     return parseFloat(ageInYears.toFixed(2));
   }
-
-  const Buttons = Object.keys(curveTypeMapping);
 
   return (
     <S.Wrapper>
@@ -294,30 +291,30 @@ const ChildGrowthScreen = ({ navigation }) => {
             </S.Row>
 
             <View style={{ height: 300, width: "100%" }}>
-              {combinedChartData.length > 0 && (
+              {(combinedChartData.length > 0 && growthData.length > 0) && (
                 <CartesianChart
                   data={combinedChartData}
                   xKey="x"
                   yKeys={defaultCurves ? [...percentiles, "childY"] : ["childY"]}
                   domain={{ x: xDomain }}
                   xAxis={{
-                    font: font,
-                    lineColor: "hsla(0, 0%, 0%, 0.25)",
-                    lineWidth: 1,
-                    formatXLabel: (label) => `${label}a`,
-                    linePathEffect: <DashPathEffect intervals={[4, 4]} />,
-                  }}
-                  yAxis={[
-                    {
                       font: font,
                       lineColor: "hsla(0, 0%, 0%, 0.25)",
                       lineWidth: 1,
-                      labelColor: "#000",
-                      axisSide: "left",
-                      formatYLabel: (label) => `${label}`,
-                      domain: yDomain,
+                      formatXLabel: (label) => `${label}a`,
                       linePathEffect: <DashPathEffect intervals={[4, 4]} />,
-                    },
+                  }}
+                  yAxis={[
+                      {
+                          font: font,
+                          lineColor: "hsla(0, 0%, 0%, 0.25)",
+                          lineWidth: 1,
+                          labelColor: "#000",
+                          axisSide: "left",
+                          formatYLabel: (label) => `${label}`,
+                          domain: yDomain,
+                          linePathEffect: <DashPathEffect intervals={[4, 4]} />,
+                      },
                   ]}
                 >
                   {({ points }) => (
@@ -331,15 +328,13 @@ const ChildGrowthScreen = ({ navigation }) => {
                           curveType="natural"
                         />
                       ))}
-                      {points.childY && (
-                        <Line
-                          key="childData"
-                          points={points.childY}
-                          color="blue"
-                          strokeWidth={2}
-                          curveType="linear"
-                        />
-                      )}
+                      <Line
+                        key="childData"
+                        points={points.childY}
+                        color="blue"
+                        strokeWidth={3}
+                        curveType="linear"
+                      />
                     </>
                   )}
                 </CartesianChart>

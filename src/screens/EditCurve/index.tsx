@@ -55,7 +55,7 @@ const EditCurveScreen = ({ navigation }) => {
       const sortedData = data.sort((a, b) => {
         const ageA = a.age.years + a.age.months / 12;
         const ageB = b.age.years + b.age.months / 12;
-        return ageB - ageA;
+        return ageA - ageB;
       });
       setGrowthData(sortedData);
     }
