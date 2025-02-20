@@ -300,19 +300,10 @@ const ChildGrowthScreen = ({ navigation }) => {
                     xKey="x"
                     yKeys={[...percentiles]}
                     domain={{ x: xDomain, y: yDomain }}
-                    xAxis={{
-                      font: font,
-                      lineColor: "hsla(0, 0%, 0%, 0.25)",
-                      lineWidth: 1,
-                      formatXLabel: (label) => `${label}a`,
-                      linePathEffect: <DashPathEffect intervals={[4, 4]} />,
-                    }}
                     yAxis={[
                       {
                         font: font,
-                        lineColor: "hsla(0, 0%, 0%, 0.25)",
-                        lineWidth: 1,
-                        labelColor: "#000",
+                        labelColor: "rgba(0, 0, 0, 0)",
                         axisSide: "left",
                         formatYLabel: (label) => `${label}`,
                         linePathEffect: <DashPathEffect intervals={[4, 4]} />,
@@ -343,7 +334,7 @@ const ChildGrowthScreen = ({ navigation }) => {
                     domain={{ x: xDomain, y: yDomain }}
                     xAxis={{
                       font: font,
-                      lineColor: "hsla(0, 0%, 0%, 0.12)",
+                      lineColor: "hsla(0, 0%, 0%, 0.25)",
                       lineWidth: 1,
                       formatXLabel: (label) => `${label}a`,
                       linePathEffect: <DashPathEffect intervals={[4, 4]} />,
@@ -351,7 +342,7 @@ const ChildGrowthScreen = ({ navigation }) => {
                     yAxis={[
                       {
                         font: font,
-                        lineColor: "hsla(0, 0%, 0%, 0.12)",
+                        lineColor: "hsla(0, 0%, 0%, 0.25)",
                         lineWidth: 1,
                         labelColor: "#000",
                         axisSide: "left",
