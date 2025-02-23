@@ -149,6 +149,12 @@ function Vacinas({ navigation }) {
     setModal(true);
   }
 
+  function formatName(name: string) {
+    if (name.includes('HPV')) return 'HPV';
+    if (name.includes('HEPATITE A')) return 'Hepatite A';
+    if (name.includes('DENGUE')) return 'Dengue';
+  }
+
   return (
     <S.Wrapper>
       <ChildrenHeader />
@@ -196,7 +202,7 @@ function Vacinas({ navigation }) {
                       {row.vaccines.map((vaccine: Vaccine) => (
                         <Button
                           key={vaccine.vaccineId}
-                          text={vaccine.vaccine.name}
+                          text={formatName(vaccine.vaccine.name)}
                           isPrivate={Boolean(vaccine.vaccine.foundInPrivate)}
                           isPublic={Boolean(vaccine.vaccine.foundInPublic)}
                           next={filter === 'Próximas'}
