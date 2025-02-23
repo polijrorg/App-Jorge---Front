@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import LoginScreen from '@screens/Login';
 import RegisterScreen from '@screens/Register';
 import BottomTabNav from './BottomTabNav/index';
-import PasswordRecover from '@screens/Register';
+import PasswordRecover from '@screens/PasswordRecover';
 import RegisterChildren from '@screens/RegisterChildren';
 import MarcosScreen from '@screens/MarcosDeDesenvolvimento';
 import EditChildren from '@screens/EditChildren';
@@ -17,7 +17,7 @@ const { Navigator, Screen } = createNativeStackNavigator();
 export type RootStackParamList = {
     Register: undefined;
     Login: undefined;
-    PasswordRecover: { code?: string };
+    PasswordRecover: { code?: string, email?: string };
     Main: undefined;
     RegisterChildren: undefined;
     EditChildren: undefined;

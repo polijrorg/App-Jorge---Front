@@ -135,33 +135,26 @@ export default class UserService {
         }
     }
 
-    static async restorePassword(email: string): Promise<void | string> {
-        try {
-            const response: AxiosResponse = await api.post(`/users/restore-password`, { email });
-            if (!(response.status >= 200 && response.status < 300)) {
-                throw new Error('There was a problem with restoring the password');
-            }
-        } catch (error) {
-            console.error('Erro ao enviar o email para restaurar a senha:', error.response?.data?.message || error.message);
-            throw new Error('Failed to send restore password email');
-        }
+    static async restorePassword(email: string): Promise<string | null> {
+      try {
+        await api.post(`/users/restore-password`, { email });
+        return null;
+      } catch (error) {
+        return error?.response?.data?.message || 'Erro desconhecido';
+      }
     }
+  
     
 
-    static async redefinePassword(data: IRedefinePasswordRequest): Promise<ICreateResponse | string> {
+    static async redefinePassword(data: IRedefinePasswordRequest): Promise<string | string> {
         try {
-            const response: AxiosResponse<ICreateResponse> = await api.patch(
-                `/users/new-password`,
-                data
-            );
-            if (response.status >= 200 && response.status < 300) {
-                return response.data;
-            } else {
-                throw new Error('There was a problem with redefining the password');
-            }
+          await api.patch(
+              `/users/new-password`,
+              data
+          );
+          return null
         } catch (error) {
-            console.error('Erro ao editar dados do usuário', error.response.data.message);
-            throw new Error(error);
+          return error?.response?.data?.message || 'Erro desconhecido';
         }
     }
 }

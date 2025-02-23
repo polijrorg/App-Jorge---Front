@@ -23,9 +23,8 @@ export const ModalContent = styled.View`
 export const RedText = styled(Text)`
     color: red;
     width: 100%;
-    font-feature-settings: 'liga' off, 'clig' off;
     font-size: 12px;
-    line-height: 24px; /* 200% */
+    text-align: center;
     letter-spacing: 0.5px;
     font-family: "Poppins_600SemiBold";
 `

@@ -111,7 +111,10 @@ const MarcosScreen = ({ navigation }) => {
                     <S.Title>Marcos de Desenvolvimento</S.Title>
                 </View>
                 {!activeChild ?
-                    <NoChildrenWarning /> 
+                    <>
+                      <S.Line />
+                      <NoChildrenWarning />
+                    </> 
                 :
                     (<>
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, TouchableWithoutFeedback, View } from 'react-native';
+import { Modal, TouchableWithoutFeedback, View, LogBox } from 'react-native';
 import * as S from './styles';
 import { Input } from '@components/Input';
 import { LongButton } from '@components/LongButton';
@@ -8,6 +8,8 @@ import UserService from '@services/UserService';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@routes/app.routes';
+
+LogBox.ignoreLogs(['logbox error stack getter called with an invalid receiver']);
 
 type Props = {
     visible: boolean;
@@ -20,20 +22,24 @@ const ForgotPasswordModal: React.FC<Props> = ({ visible, onClose }) => {
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
     const [isCodeModalVisible, setIsCodeModalVisible] = useState(false);
-    const [error, setError] = useState<string>(null);
+    const [error, setError] = useState<string>('');
 
     const navigation = useNavigation<NavigationProps>();
 
-    const handleEmailSubmit = () => {
-        if (!isValidEmail(email)) {
-            setError('Insira um email válido!');
-            setEmail('');
-        }
-        else {
-            UserService.restorePassword(email);
-            setIsCodeModalVisible(true);
-        }
-    };
+    const handleEmailSubmit = async () => {
+      if (!isValidEmail(email)) {
+          setError('Insira um email válido!');
+          setEmail('');
+      } else {
+          const errorMessage = await UserService.restorePassword(email);
+          if (errorMessage) {
+              setError(errorMessage);
+          } else {
+              setIsCodeModalVisible(true);
+              setError('');
+          }
+      }
+  };
 
     const isValidEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -41,11 +47,10 @@ const ForgotPasswordModal: React.FC<Props> = ({ visible, onClose }) => {
     };
 
     const handleCodeSubmit = () => {
-        UserService.restorePassword(email);
         setIsCodeModalVisible(false);
         setEmail('');
         onClose();
-        navigation.navigate('PasswordRecover', { code });
+        navigation.navigate('PasswordRecover', { code, email });
     };
 
     return (

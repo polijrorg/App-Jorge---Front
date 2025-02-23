@@ -9,7 +9,7 @@ export const Wrapper = styled(View)`
 `;
 
 export const Content = styled(View)`
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     gap: 16px;
     padding: 16px;
@@ -51,7 +51,8 @@ export const Line = styled(View)`
     width: 100%;
     border: 0.3px;
     border-color: lightblue;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 `
 
 export const Button = styled(TouchableOpacity)`
