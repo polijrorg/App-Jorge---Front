@@ -8,6 +8,7 @@ export const Button = styled(TouchableOpacity)<{invert: boolean}>`
     border: ${({invert, theme}) => invert ? '1px solid #4D91B6' : 'none'};
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     border-radius: 8px;
 `
 

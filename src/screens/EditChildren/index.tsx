@@ -6,14 +6,12 @@ import { ChildInput } from '@components/ChildInput';
 import AddChildButton from '@components/AddChildButton';
 import ChildrenHeader from '@components/ChildrenHeader';
 import ChildCard from '@components/ChildCard';
-import Bebe from '@assets/icons/Bebe.png'
 import ChildrenService from '@services/ChildrenService';
 import { useChildContext } from '@hooks/useChild';
 import { useAuthContext } from '@hooks/useAuth';
 
 const EditChildrenScreen = ({ navigation }) => {
-
-    const { activeChild: child, setChildList } = useChildContext();
+    const { activeChild: child, setChildList, setActiveChild } = useChildContext();
     const { user } = useAuthContext();
 
     useEffect(() => {
@@ -36,6 +34,14 @@ const EditChildrenScreen = ({ navigation }) => {
     // const [healthPlan, setHealthPlan] = useState<string>('');
     // const [CNS, setCNS] = useState<string>('');
     const [error, setError] = useState<string>('');
+
+    async function deleteChild() {
+      ChildrenService.delete(child.idchildren);
+      const response = await ChildrenService.readByParent(user.id);
+      setChildList(response);
+      setActiveChild(null);
+      navigation.goBack();
+    }
 
     async function handleConfirm() {
         if (name === '') setError('Insira um nome válido!');
@@ -88,7 +94,6 @@ const EditChildrenScreen = ({ navigation }) => {
                     weight={`${weight}kg` || 'weight'}
                     height={`${height}cm` || 'height'}
                     id={'50'}
-                    vaccinePercentage={80}
                     gender={gender}
                 />
 
@@ -108,7 +113,10 @@ const EditChildrenScreen = ({ navigation }) => {
 
                 {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
 
-                <AddChildButton title='Completar Cadastro' onPress={() => handleConfirm()}/>
+                <View style={{ gap:8 }}>
+                  <AddChildButton title='Completar Cadastro' onPress={() => handleConfirm()}/>
+                  <AddChildButton hidePlus invertColors title='Deletar Criança' onPress={() => deleteChild()}/>
+                </View>
             </S.Content>
         </S.Wrapper>
     )

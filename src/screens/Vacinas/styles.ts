@@ -19,6 +19,16 @@ export const ButtonContainer = styled(TouchableOpacity)<{ color: string }>`
   margin: 4px;
 `;
 
+export const MonthButtonContainer = styled(View)`
+  padding: 8px 6px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  background-color: #FFF;
+  margin: 4px;
+`
+
 export const ButtonText = styled(Text)`
   font-family: Poppins;
   font-size: 12px;

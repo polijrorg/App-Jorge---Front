@@ -50,6 +50,14 @@ function Button(data: ButtonProps) {
   )
 }
 
+function MonthButton(data: ButtonProps) {
+  return (
+    <S.MonthButtonContainer >
+      <S.ButtonText>{data.text}</S.ButtonText>
+    </S.MonthButtonContainer>
+  )
+}
+
 function LegendItem({ text, color }: { text: string, color: string }) {
   return (
     <S.LegendRow>
@@ -198,7 +206,7 @@ function Vacinas({ navigation }) {
               <S.TableContainer>
                 {rows.map((row) => (
                   <S.TableRow key={row.age}>
-                    <Button text={row.age} color='none' onPress={() => console.log("ta apertando nos meses pq????")} />
+                    <MonthButton text={row.age} color='none' onPress={() => console.log("ta apertando nos meses pq????")} />
                     <S.Column>
                       {row.vaccines.map((vaccine: Vaccine) => (
                         <Button
