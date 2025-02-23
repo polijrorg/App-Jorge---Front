@@ -4,6 +4,7 @@ import { TouchableOpacity, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import ChildrenService from '@services/ChildrenService';
 import { useChildContext } from '@hooks/useChild';
+import VaccineService from '@services/VaccineService';
 
 interface ChildCardProps {
     name: string;
@@ -11,7 +12,6 @@ interface ChildCardProps {
     weight: string;
     height: string;
     id: string;
-    vaccinePercentage: number;
     gender: string;
     onPress?: (a: any) => void;
     isEditable?: boolean;
@@ -32,7 +32,6 @@ const ChildCard: React.FC<ChildCardProps> = ({
     weight,
     height,
     id,
-    vaccinePercentage,
     gender,
     onPress,
     onPressMain,
@@ -40,7 +39,8 @@ const ChildCard: React.FC<ChildCardProps> = ({
 }) => {
 
     const [age, setAge] = useState<{years: number, months: number}>(null);
-    const [development, setDevelopment] = useState<number>(50);
+    const [marcosDevelopment, setMarcosDevelopment] = useState<number>(50);
+    const [vaccineDevelopment, setVaccineDevelopment] = useState<number>(50);
     const { activeChild } = useChildContext();
 
     useEffect(() => {
@@ -74,9 +74,12 @@ const ChildCard: React.FC<ChildCardProps> = ({
 
     useEffect(() => {
       async function calculateDevelopment() {
-        const response = await ChildrenService.development(id);
-        setDevelopment(Number(response.developmentPercentage));
-        console.log('calculado', response.developmentPercentage);
+        const marcosResponse = await ChildrenService.development(id);
+        setMarcosDevelopment(Number(marcosResponse.developmentPercentage));
+        console.log('Desenvolvimento dos marcos calculado:', marcosResponse.developmentPercentage);
+        const vaccinesResponse = await VaccineService.development(id);
+        setVaccineDevelopment(Number(vaccinesResponse.developmentPercentage));
+        console.log('Desenvolvimento dos marcos calculado:', vaccinesResponse.developmentPercentage);
       }
       calculateDevelopment();
     }, [activeChild])
@@ -98,11 +101,11 @@ const ChildCard: React.FC<ChildCardProps> = ({
                 </S.Details>
                 <S.ProgressContainer>
                     <S.ProgressLabel>Desenvolvimento</S.ProgressLabel>
-                    <ProgressBar percentage={development || 0} color="#4CAF50" />
+                    <ProgressBar percentage={marcosDevelopment} color="#4CAF50" />
                 </S.ProgressContainer>
                 <S.ProgressContainer>
                     <S.ProgressLabel>Vacinas</S.ProgressLabel>
-                    <ProgressBar percentage={vaccinePercentage} color="#F5CD2F" />
+                    <ProgressBar percentage={vaccineDevelopment} color="#F5CD2F" />
                 </S.ProgressContainer>
             </S.InfoContainer>
 
