@@ -22,7 +22,7 @@ const curveTypeMapping: Record<string, string> = {
   "IMC": "imc",
 };
 
-const percentiles = ["P01", "P3", "P5", "P10", "P15", "P25", "P50", "P75", "P85", "P90", "P95", "P97", "P99"];
+const percentiles = ["P3", "P15", "P50", "P85", "P97"];
 
 const Legend = ({ data }) => {
   return (
@@ -78,7 +78,6 @@ const ChildGrowthScreen = ({ navigation }) => {
             y: determineGrowthData(item),
         }));
         setChildData(data);
-        console.log("Esse é o growthData arrumado:", data);
     } catch (error) {
         console.error("Error fetching growth data:", error);
     }
@@ -131,36 +130,6 @@ const ChildGrowthScreen = ({ navigation }) => {
     return dataPoints;
   }, [child, selectedCurveType]);
 
-  const combinedChartData = useMemo(() => {
-    if (!child || !selectedCurveType) return [];
-    const genderData = datasets[child.gender][selectedCurveType];
-    console.log('genderData: ', genderData);
-    if (!genderData) return [];
-    const dataPoints = [];
-
-    const months = genderData[Object.keys(genderData)[0]].map((item) => Number(item.month) / 12);
-
-    months.forEach((month, index) => {
-        const point = { x: month };
-        percentiles.forEach((percentile) => {
-            const percentileData = genderData[percentile];
-            if (percentileData && percentileData[index]) {
-                const percentileValue = Number(percentileData[index][percentile.toLowerCase()].replace(',', '.'));
-                point[percentile] = percentileValue;
-            }
-        });
-        dataPoints.push(point);
-    });
-
-    if (childData.length > 0) {
-        childData.forEach(childPoint => {
-            dataPoints.push({ x: childPoint.x, childY: childPoint.y });
-        });
-    }
-
-    return dataPoints;
-}, [child, selectedCurveType, childData]);
-
   const yDomain: [number, number] = useMemo(() => {
     if (!chartData.length) return [0, 100];
 
@@ -173,18 +142,18 @@ const ChildGrowthScreen = ({ navigation }) => {
       
       if (diffAgeMinus1 < acc.minDiffAgeMinus1) {
         acc.minDiffAgeMinus1 = diffAgeMinus1;
-        acc.p01Value = point.P01;
+        acc.p01Value = point.P3;
       }
       
       if (diffAgePlus1 < acc.minDiffAgePlus1) {
         acc.minDiffAgePlus1 = diffAgePlus1;
-        acc.p99Value = point.P99;
+        acc.p99Value = point.P97;
       }
   
       return acc;
     }, { minDiffAgeMinus1: Infinity, minDiffAgePlus1: Infinity, p01Value: 0, p99Value: 100});
 
-    const minY = closestPoints.p01Value * 0.9;
+    const minY = closestPoints.p01Value * 0.98;
     const maxY = closestPoints.p99Value * 1.1;
 
     return [minY, maxY];
@@ -265,7 +234,6 @@ const ChildGrowthScreen = ({ navigation }) => {
               weight={`${child?.peso}kg` || "weight"}
               height={`${child?.altura}cm` || "height"}
               id={`${child?.idchildren}` || "0"}
-              vaccinePercentage={80}
               gender={child.gender}
             />
 
