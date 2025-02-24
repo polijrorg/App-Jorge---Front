@@ -1,11 +1,18 @@
 {
   "expo": {
-    "name": "my-app5",
-    "slug": "my-app5",
+    "name": "puerino",
+    "slug": "puerino",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "assetBundlePatterns": [
       "**/*"
     ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F8F9FA"
+    },
     "plugins": [
       [
         "expo-font",
@@ -18,7 +25,19 @@
     ],
     "android": {
       "package": "com.anonymous.myapp5",
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F8F9FA"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "90f40bc0-3882-499e-a0e6-8e4e6ce00ca3"
+      }
     }
   }
 }
