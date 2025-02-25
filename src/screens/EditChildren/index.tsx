@@ -114,7 +114,7 @@ const EditChildrenScreen = ({ navigation }) => {
                 {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
 
                 <View style={{ gap:8 }}>
-                  <AddChildButton title='Completar Cadastro' onPress={() => handleConfirm()}/>
+                  <AddChildButton title='Alterar Cadastro' onPress={() => handleConfirm()}/>
                   <AddChildButton hidePlus invertColors title='Deletar Criança' onPress={() => deleteChild()}/>
                 </View>
             </S.Content>

@@ -6,23 +6,23 @@ import Medicine from '@interfaces/Medicine';
 const safetyData = {
   1: {
     color: '#50D76E',
-    title: 'Seguro',
-    description: 'Dê preferencia e pode utilizar sem maiores problemas.',
+    title: 'Compatível',
+    description: 'Produto seguro e/ou a amamentação é a melhor opção.',
   },
   2: {
     color: '#DB9E27',
-    title: 'Parcialmente seguro',
-    description: 'Dê preferencia a outros medicamentos, potencialmente causa de problemas.',
+    title: 'Compatibilidade Provável',
+    description: 'Relativamente seguro. Efeitos adversos leves ou improváveis. Compatível em certas circunstâncias. Acompanhamento recomendado.',
   },
   3: {
     color: '#D07327',
-    title: 'Inseguro',
-    description: 'Não utilize esses medicamentos nas condições dispostas, dê preferência total para alternativas.',
+    title: 'Compatibilidade Limitada',
+    description: 'Inseguro. Efeitos adversos moderados/graves. Compatível em certas circunstâncias. Acompanhamento recomendado. Utilize uma alternativa mais segura ou suspenda a amamentação.',
   },
   4: {
     color: '#B94A48',
-    title: 'Muito inseguro',
-    description: 'Medicamento potencialmente tóxico e perigoso no contexto, evite totalmente o consumo.',
+    title: 'Incompatível',
+    description: 'Muito inseguro. Contraindicado. Recomenda-se o uso de uma alternativa ou a suspensão da amamentação.',
   },
 }
 

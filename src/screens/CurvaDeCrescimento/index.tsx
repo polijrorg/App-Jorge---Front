@@ -14,7 +14,6 @@ import { DashPathEffect, useFont } from "@shopify/react-native-skia"
 import React from "react";
 import GrowthDataService from "@services/GrowthDataService";
 import GrowthData from "@interfaces/GrowthData";
-import { ReadAndAgree } from "@components/ReadAndAgree";
 
 const curveTypeMapping: Record<string, string> = {
   "Estatura (cm)": "altura",
@@ -40,7 +39,6 @@ const Legend = ({ data }) => {
 const ChildGrowthScreen = ({ navigation }) => {
   const { activeChild: child, setGrowthData, growthData } = useChildContext();
   const [curveType, setCurveType] = useState<string>("Estatura (cm)");
-  const [defaultCurves, setDefaultCurves] = useState<boolean>(false);
   const [childData, setChildData] = useState<any[]>([]);
   const selectedCurveType = curveTypeMapping[curveType];
   const Buttons = Object.keys(curveTypeMapping);
@@ -250,28 +248,27 @@ const ChildGrowthScreen = ({ navigation }) => {
                 ))}
             </S.Row>
 
-            <S.Row>
-              <ReadAndAgree
-                isChecked={defaultCurves}
-                blueText={undefined}
-                blackText='Mostrar curvas padrão?'
-                onPress={() => setDefaultCurves(!defaultCurves)}
-                onTextPress={undefined}
-              />
-            </S.Row>
-
             <View style={{ height: 300, width: "100%", position: "relative" }}>
-              {defaultCurves && (
+              {(
                 <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
                   <CartesianChart
                     data={chartData}
                     xKey="x"
                     yKeys={[...percentiles]}
                     domain={{ x: xDomain, y: yDomain }}
+                    xAxis={{
+                      font: font,
+                      lineColor: "hsla(0, 0%, 0%, 0.25)",
+                      lineWidth: 1,
+                      formatXLabel: (label) => `${label}a`,
+                      linePathEffect: <DashPathEffect intervals={[4, 4]} />,
+                    }}
                     yAxis={[
                       {
                         font: font,
-                        labelColor: "rgba(0, 0, 0, 0)",
+                        lineColor: "hsla(0, 0%, 0%, 0.25)",
+                        lineWidth: 1,
+                        labelColor: "#000",
                         axisSide: "left",
                         formatYLabel: (label) => `${label}`,
                         linePathEffect: <DashPathEffect intervals={[4, 4]} />,
@@ -300,19 +297,10 @@ const ChildGrowthScreen = ({ navigation }) => {
                     xKey="x"
                     yKeys={["y"]}
                     domain={{ x: xDomain, y: yDomain }}
-                    xAxis={{
-                      font: font,
-                      lineColor: "hsla(0, 0%, 0%, 0.25)",
-                      lineWidth: 1,
-                      formatXLabel: (label) => `${label}a`,
-                      linePathEffect: <DashPathEffect intervals={[4, 4]} />,
-                    }}
                     yAxis={[
                       {
                         font: font,
-                        lineColor: "hsla(0, 0%, 0%, 0.25)",
-                        lineWidth: 1,
-                        labelColor: "#000",
+                        labelColor: "rgba(0, 0, 0, 0)",
                         axisSide: "left",
                         formatYLabel: (label) => `${label}`,
                         linePathEffect: <DashPathEffect intervals={[4, 4]} />,
@@ -332,17 +320,21 @@ const ChildGrowthScreen = ({ navigation }) => {
                 </View>
               )}
 
-              {defaultCurves && <Legend data={legendData} />}
+              <Legend data={legendData} />
             </View>
 
 
-            {growthData.length > 0 &&
+            {growthData.length > 0 ?
               <S.Description>
                 Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil {findClosestPercentile()}</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
               </S.Description>
+              :
+              <S.Description>
+                Adicione abaixo os dados de crescimento de seu filho para comparar com a média mundial!
+              </S.Description>
             }
 
-            <AddChildButton title="Gerenciar Dados" onPress={() => navigation.navigate("EditCurve")} />
+            <AddChildButton title="Adicionar Dados" onPress={() => navigation.navigate("EditCurve")} />
           </S.Content>
         </>
       )}

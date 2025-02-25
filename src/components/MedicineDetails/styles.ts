@@ -1,12 +1,17 @@
 import { ScrollView, Text, View } from "react-native";
 import styled from "styled-components";
 
-export const Wrapper = styled(View)`
-  align-items: center;
-  justify-content: top;
-  background: ${({ theme }) => theme.colors.background };
-  gap: 8px;
+export const Wrapper = styled(ScrollView).attrs({
+  contentContainerStyle: {
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: 8,
+    paddingBottom: 60
+  },
+})`
+  background: ${({ theme }) => theme.colors.background};
 `;
+
 
 export const ScaleContainer = styled(View)`
   align-items: center;

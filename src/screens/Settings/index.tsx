@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
+import { View, TouchableOpacity } from 'react-native';
 import * as S from './styles'
-import {LogoAzul} from '@assets/images/LogoAzul.png'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import ForgotMyPasswordModal from '@components/ForgotMyPasswordModal';
@@ -13,22 +11,6 @@ const SettingsScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [modal, setModal] = useState(false);
-
-    // const loginUser = async () => {    
-    //     try {
-    //         const user = await UserService.login({
-    //             email: email,
-    //             password: password,
-    //         });
-    //         navigation.navigate("App");
-    //         setEmail('');
-    //         setPassword('');
-    //         console.log(user);
-    //         alert("Login Realizado");
-    //     } catch (error) {
-    //         alert("Email ou senha inválidos.");
-    //     }
-    // };
 
     return (
         <S.Wrapper>

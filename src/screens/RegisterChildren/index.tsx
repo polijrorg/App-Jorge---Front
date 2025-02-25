@@ -75,7 +75,7 @@ const RegisterChildrenScreen = ({ navigation }) => {
 
                 {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
 
-                <AddChildButton title='Completar Cadastro' onPress={() => handleConfirm()}/>
+                <AddChildButton title='Cadastrar Criança' onPress={() => handleConfirm()}/>
 
             </S.Content>
         </S.Wrapper>

@@ -1,20 +1,19 @@
 import * as S from './styles';
 import React from 'react';
 import AmbientCard from '@components/AmbientCard';
-import { View, TouchableOpacity, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Seringa from '@assets/icons/Seringa.png';
 import Graph from '@assets/icons/Graph.png';
 import Trophy from '@assets/icons/Trophy.png';
-import Bebe from '@assets/icons/Bebe.png';
 import Mamadeira from '@assets/icons/Mamadeira.png';
 import { useChildContext } from '@hooks/useChild';
 import ChildrenHeader from '@components/ChildrenHeader';
 import ChildCard from '@components/ChildCard';
-import FollowUpCard from '@components/FollowUpCard';
 
 const FollowUpScreen = ({ navigation }) => {
     const { activeChild: child } = useChildContext();
+    const estimular = child.gender === 'masculino' ? 'estimulá-lo' : 'estimulá-la';
 
     return (
         <S.Wrapper>
@@ -41,16 +40,15 @@ const FollowUpScreen = ({ navigation }) => {
                 
                 <S.Title>Resumo</S.Title>
                 <S.Description>
-                    <S.GreenText>Desenvolvimento está dentro dos padrões esperados </S.GreenText>
-                    para a idade. {child.name} está no 
-                    <S.GreenText> percentil 50 </S.GreenText>
-                    para peso e altura, o que indica que está crescendo de forma saudável e proporcional.
+                {child.name} se encontra no percentil X de peso e Y de altura. Suas vacinas estão em dia. Atualize o calendário vacinal!
+                Os marcos de desenvolvimento estão adequados para sua idade.
+                Converse com seu pediatra a respeito de como {estimular}!
+
                 </S.Description>
                 <S.Line />
                 
                 <S.Title>Seus Ambientes</S.Title>
                 <ScrollView horizontal contentContainerStyle={{ alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }} style={{ maxHeight:100 }}>
-                    <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => navigation.navigate('MyChildren')}/>
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
                     <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => navigation.navigate('Vacinas')} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />

@@ -66,18 +66,6 @@ const BottomTabNav = () => {
                 },
         }}>
             {/* <Tab.Screen
-                name="Settings"
-                component={SettingsScreen}
-                options={{
-                    tabBarIcon: ({ focused }) =>
-                      renderIcon(
-                        require('@assets/icons/Config.png'),
-                        'Editar',
-                        focused
-                      ),
-                }}
-            /> */}
-            {/* <Tab.Screen
                 name="MyChildren"
                 component={MyChildrenScreen}
                 options={{
@@ -113,7 +101,7 @@ const BottomTabNav = () => {
                       ),
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Feedback"
                 component={FeedbackScreen}
                 options={{
@@ -121,6 +109,18 @@ const BottomTabNav = () => {
                       renderIcon(
                         require('@assets/icons/Feedback.png'),
                         'Feedback',
+                        focused
+                      ),
+                }}
+            /> */}
+            <Tab.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                    tabBarIcon: ({ focused }) =>
+                      renderIcon(
+                        require('@assets/icons/Config.png'),
+                        'Editar',
                         focused
                       ),
                 }}

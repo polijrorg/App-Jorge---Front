@@ -37,6 +37,7 @@ export const Title = styled(Text)`
 export const Description = styled(Text)<{ width?: number, size?: number }>`
     color: #000;
     font-family: 'PoppinsRegular';
+    text-align: center;
     font-size: ${({size}) => size || 14}px;
     width: ${({width}) => (width) ? '' : '100%'};
 `

@@ -3,7 +3,6 @@ import * as S from './styles';
 import React, { useEffect } from 'react';
 import AmbientCard from '@components/AmbientCard';
 import { View, TouchableOpacity, ScrollView } from 'react-native';
-import Bebe from '@assets/icons/Bebe.png';
 import Seringa from '@assets/icons/Seringa.png';
 import Graph from '@assets/icons/Graph.png';
 import Trophy from '@assets/icons/Trophy.png';
@@ -21,7 +20,7 @@ const HomeScreen = ({ navigation }) => {
     const { childList: children, setChildList, setActiveChild } = useChildContext();
 
     const formatNames = (children?: Child[]) => {
-        if (!children || children.length === 0) return 'Cadastre seus filhos em "Suas Crianças"!'
+        if (!children || children.length === 0) return 'Complete seus dados em Configurações!'
         const names = children?.map((c) => (c?.name?.split(' ')[0]));
         if (names.length === 1) return `${names[0]} precisa ter seus marcos atualizados!`;
         if (names.length === 2) return `${names[0]} e ${names[1]} precisam ter seus marcos atualizados!`
@@ -53,16 +52,15 @@ const HomeScreen = ({ navigation }) => {
         <S.Wrapper>
             <DefaultHeader />
             <S.Content>
-                {user && <S.Title>Bem vindo de volta {user?.name?.split(' ')[0]}!</S.Title>}
+                {user && <S.Title>Seja bem vindo(a) {user?.name?.split(' ')[0]}!</S.Title>}
                 <S.Description>{formatNames(children)} </S.Description>
                 {/* <TouchableOpacity style={{ width: '100%' }} onPress={() => navigation.navigate('Main', { screen: 'MyChildren' })}>
                     <S.BlueText>Conferir {'>'}</S.BlueText>
                 </TouchableOpacity> */}
                 <S.Line />
                 
-                <S.Title>Seus Ambientes</S.Title>
+                <S.Title>Ferramentas</S.Title>
                 <ScrollView horizontal contentContainerStyle={{ alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }} style={{ maxHeight:100 }}>
-                    <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => navigation.navigate('MyChildren')}/>
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
                     <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => navigation.navigate('Vacinas')} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
@@ -92,10 +90,10 @@ const HomeScreen = ({ navigation }) => {
                 {/* <ReminderCard /> */}
                 
                 <S.Line />
-                <View style={{ flexDirection: 'row' }}>
-                    <S.Description width={1} size={12} >Dúvidas, críticas ou sugestões? </S.Description>
+                <View style={{ alignItems: 'center', width: '100%' }}>
+                    <S.Description width={1} size={13}>Dúvidas, críticas ou sugestões?</S.Description>
                     <TouchableOpacity onPress={() => navigation.navigate('Main', { screen: 'Feedback' })}>
-                        <S.BlueText size={12}>Nos ajude também!</S.BlueText>
+                        <S.BlueText size={13}>Nos ajude a melhorar!</S.BlueText>
                     </TouchableOpacity>
                 </View>
             </S.Content>

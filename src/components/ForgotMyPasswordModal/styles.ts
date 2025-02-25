@@ -1,7 +1,7 @@
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import styled from 'styled-components/native';
 
-export const Container = styled(TouchableOpacity)`
+export const Container = styled(Pressable)`
     flex: 1;
     flex-direction: column;
     justify-content: top;

@@ -25,7 +25,7 @@ const LoginScreen = ({ navigation }) => {
               setEmail('');
               setPassword('');
             } else {
-              setError("Usuário não encontrado!");
+              setError("Email ou senha inválidos!");
             }
         } catch (error) {
             alert("Email ou senha inválidos.");
@@ -38,7 +38,7 @@ const LoginScreen = ({ navigation }) => {
 
             <S.Logo source={require('@assets/images/LogoAzul.png')}/>
             
-            <Input title={'Login'} value={email} onChangeText={(email) => setEmail(email)} />
+            <Input title={'Login (Email)'} value={email} onChangeText={(email) => setEmail(email)} />
             <S.Password>
                 <Input title={'Senha'} value={password} onChangeText={(password) => setPassword(password)} hideOption={true} />
                 <TouchableOpacity onPress={() => setModal(true)} >
