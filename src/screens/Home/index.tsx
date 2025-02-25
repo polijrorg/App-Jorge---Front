@@ -8,7 +8,6 @@ import Seringa from '@assets/icons/Seringa.png';
 import Graph from '@assets/icons/Graph.png';
 import Trophy from '@assets/icons/Trophy.png';
 import Mamadeira from '@assets/icons/Mamadeira.png';
-import ReminderCard from '@components/ReminderCard';
 import { useAuthContext } from '@hooks/useAuth';
 import { useChildContext } from '@hooks/useChild';
 import Child from '@interfaces/Child';
@@ -22,7 +21,7 @@ const HomeScreen = ({ navigation }) => {
     const { childList: children, setChildList, setActiveChild } = useChildContext();
 
     const formatNames = (children?: Child[]) => {
-        if (!children || children.length === 0) return 'Cadastre seus filhos em "Meus Filhos"!'
+        if (!children || children.length === 0) return 'Cadastre seus filhos em "Suas Crianças"!'
         const names = children?.map((c) => (c?.name?.split(' ')[0]));
         if (names.length === 1) return `${names[0]} precisa ter seus marcos atualizados!`;
         if (names.length === 2) return `${names[0]} e ${names[1]} precisam ter seus marcos atualizados!`
@@ -83,7 +82,6 @@ const HomeScreen = ({ navigation }) => {
                         weight={`${c.peso}kg`}
                         height={`${c.altura}cm`}
                         id={`${c.idchildren}`}
-                        vaccinePercentage={50}
                         gender={c.gender}
                     />
                 ))}

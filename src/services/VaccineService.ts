@@ -22,6 +22,9 @@ interface IUpsertResponse {
 
 interface IDevelopmentResponse {
   developmentPercentage: string;
+  fraction: string;
+  totalCompleted: number;
+  totalExpected: number;
 }
 
 export default class VaccineService {

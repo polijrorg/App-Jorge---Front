@@ -4,12 +4,12 @@
     "slug": "puerino",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "public/assets/logos/icon.png",
     "assetBundlePatterns": [
       "**/*"
     ],
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "public/assets/logos/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#F8F9FA"
     },
@@ -18,7 +18,7 @@
         "expo-font",
         {
           "fonts": [
-            "@assets/fonts/Poppins-Regular.ttf"
+            "public/assets/fonts/Poppins-Regular.ttf"
           ]
         }
       ]
@@ -27,12 +27,12 @@
       "package": "com.anonymous.myapp5",
       "newArchEnabled": true,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "public/assets/logos/adaptive-icon.png",
         "backgroundColor": "#F8F9FA"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "public/assets/logos/favicon.png"
     },
     "extra": {
       "eas": {

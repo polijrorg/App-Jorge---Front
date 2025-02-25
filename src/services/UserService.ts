@@ -55,14 +55,7 @@ export default class UserService {
                 '/users/login',
                 data
             );
-
-            if (response.status >= 200 && response.status < 300) {
-                await AsyncStorage.setItem('@jorge:token', response.data.token);
-                await AsyncStorage.setItem('@jorge:userId', response.data.user.id);
-                return response.data;
-            } else {
-                throw new Error('There was a problem with the login');
-            }
+            return response.data;
         } catch (error) {
             console.error('Erro ao fazer login', error.response.data.message);
             throw new Error(error);

@@ -13,6 +13,7 @@ export const Content = styled(ScrollView).attrs(() => ({
         alignItems: 'center',
         justifyContent: 'flex-start',
         padding: 16,
+        gap: 8
     },
 }))`
     flex: 1;

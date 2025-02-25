@@ -21,9 +21,7 @@ const PasswordRecover = ({ navigation }) => {
     const [password2, setPassword2] = useState('');
     const [isChecked1, setIsChecked1] = useState<boolean>(false);
     const [isChecked2, setIsChecked2] = useState<boolean>(false);
-    const [privacyPolicy, setPrivacyPolicy] = useState<boolean>(false);
     const [error, setError] = useState<string>(null);
-    const [TOS, setTOS] = useState<boolean>(false);
 
     const isValidEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,8 +80,8 @@ const PasswordRecover = ({ navigation }) => {
             </View>
 
             <View style={{ gap: 8, width: '100%', alignItems: 'flex-start' }}>
-                <ReadAndAgree isChecked={isChecked1} blueText='termos de uso' blackText='Li e concordo com os' onPress={() => setIsChecked1(!isChecked1)} onTextPress={() => setTOS(true)}/>
-                <ReadAndAgree isChecked={isChecked2} blueText='política de privacidade' blackText='Li e concordo com os' onPress={() => setIsChecked2(!isChecked2)} onTextPress={() => setPrivacyPolicy(true)}/>
+                <ReadAndAgree isChecked={isChecked1} blueText='termos de uso' blackText='Li e concordo com os' onPress={() => setIsChecked1(!isChecked1)} onTextPress={() => 1}/>
+                <ReadAndAgree isChecked={isChecked2} blueText='política de privacidade' blackText='Li e concordo com os' onPress={() => setIsChecked2(!isChecked2)} onTextPress={() => 1}/>
             </View>
 
             <Button title={'Cadastrar'} onPress={handleRegister} />
@@ -96,9 +94,6 @@ const PasswordRecover = ({ navigation }) => {
                     <S.BlueText>Faça Login</S.BlueText>
                 </TouchableOpacity>
             </View>
-
-            <PrivacyPolicyModal visible={privacyPolicy} onClose={() => setPrivacyPolicy(false)} />
-            <TermsAndConditionsModal visible={TOS} onClose={() => setTOS(false)} />
 
         </S.Wrapper>
     )

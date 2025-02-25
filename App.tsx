@@ -1,7 +1,7 @@
 import AppProvider from '@hooks/index';
 import { AuthProvider } from '@hooks/useAuth';
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { View } from "react-native";
 import { Routes } from '@routes/index';
 import React from 'react';
 import {
@@ -43,14 +43,14 @@ export default function App() {
         return <View></View>;
     } else {
         return (
-            <NavigationContainer>   
+            <NavigationContainer>
                 <AuthProvider>
                     <ChildProvider>
                         <AppProvider>
                             <Routes />
                         </AppProvider>
                     </ChildProvider>
-                </AuthProvider>   
+                </AuthProvider>
             </NavigationContainer>
         );
     }

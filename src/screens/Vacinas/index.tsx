@@ -77,7 +77,7 @@ function Vacinas({ navigation }) {
   const [rows, setRows] = useState<Row[]>([]);
   const [modal, setModal] = useState<boolean>(false);
   const [vaccine, setVaccine] = useState<Vaccine>(null);
-  const [development, setDevelopment] = useState<number>(0);
+  const [development, setDevelopment] = useState(null);
   const { activeChild } = useChildContext();
 
   useEffect(() => {
@@ -91,7 +91,7 @@ function Vacinas({ navigation }) {
         <S.ProgressBarBackground>
           <S.ProgressBarFill style={{ width: `${percentage}%`, backgroundColor: color }} />
         </S.ProgressBarBackground>
-        <S.LegendText>{development.toFixed()}%</S.LegendText>
+        <S.LegendText>{development.fraction}</S.LegendText>
       </S.LegendRow>
     );
   };
@@ -118,7 +118,7 @@ function Vacinas({ navigation }) {
 
   async function fetchVaccines() {
     const response = await VaccineService.development(activeChild.idchildren);
-    setDevelopment(Number(response.developmentPercentage));
+    setDevelopment(response);
     const vaccineList = (filter === 'Próximas')
       ? await VaccineService.getNext(activeChild.idchildren)
       : await VaccineService.getPast(activeChild.idchildren);
@@ -142,6 +142,12 @@ function Vacinas({ navigation }) {
   }
 
   async function handleStatusUpdate(status: string) {
+    console.log({
+      childrenId: vaccine.childrenId,
+      vaccineId: vaccine.vaccineId,
+      scheduleId: vaccine.scheduleId,
+      status: status
+    });
     await VaccineService.upsert({
       childrenId: vaccine.childrenId,
       vaccineId: vaccine.vaccineId,

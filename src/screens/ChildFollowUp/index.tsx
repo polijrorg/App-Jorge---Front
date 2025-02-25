@@ -1,11 +1,13 @@
 import * as S from './styles';
 import React from 'react';
 import AmbientCard from '@components/AmbientCard';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Seringa from '@assets/icons/Seringa.png';
 import Graph from '@assets/icons/Graph.png';
 import Trophy from '@assets/icons/Trophy.png';
+import Bebe from '@assets/icons/Bebe.png';
+import Mamadeira from '@assets/icons/Mamadeira.png';
 import { useChildContext } from '@hooks/useChild';
 import ChildrenHeader from '@components/ChildrenHeader';
 import ChildCard from '@components/ChildCard';
@@ -32,7 +34,6 @@ const FollowUpScreen = ({ navigation }) => {
                     weight={child.peso || 'weight'}
                     height={child.altura || 'height'}
                     id={child.idchildren}
-                    vaccinePercentage={80}
                     gender={child.gender}
                 />
 
@@ -48,16 +49,13 @@ const FollowUpScreen = ({ navigation }) => {
                 <S.Line />
                 
                 <S.Title>Seus Ambientes</S.Title>
-                <View style={{ flexDirection: 'row', alignItems: 'flex-start', width: '100%' }}>
-                    <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => 1} />
-                    <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => 1} />
+                <ScrollView horizontal contentContainerStyle={{ alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }} style={{ maxHeight:100 }}>
+                    <AmbientCard image={Bebe} title={'Meus Filhos'} onPress={() => navigation.navigate('MyChildren')}/>
+                    <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
+                    <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => navigation.navigate('Vacinas')} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
-                </View>
-                <S.Line />
-
-                <S.Title>Lembretes</S.Title>
-                <FollowUpCard />
-
+                    <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => navigation.navigate('MedMama')} />
+                </ScrollView>
             </S.Content>
         </S.Wrapper>
     )
