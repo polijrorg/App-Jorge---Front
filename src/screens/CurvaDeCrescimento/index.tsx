@@ -159,8 +159,13 @@ const ChildGrowthScreen = ({ navigation }) => {
 
   const xDomain: [number, number] = useMemo(() => {
     let age = findFloatAge(child?.nascimento);
-  if (age < 2) return [0, 2]; 
-    return [0, 5];
+    if (age < 1) {
+      return [0, 1];
+    } else if (age < 2) {
+      return [0, 2];
+    } else {
+      return [0, 5];
+    }
   }, [selectedCurveType]);
 
   function determineGrowthData(item: GrowthData) {
@@ -178,7 +183,7 @@ const ChildGrowthScreen = ({ navigation }) => {
 
   function findFloatAge(birthDate: string): number {
     if (birthDate == null) return 0;
-    const [day, month, year] = birthDate.split('-').map(Number);
+    const [day, month, year] = birthDate.split('/').map(Number);
     const today = new Date();
     let years = today.getFullYear() - year;
     let months = today.getMonth() - month + 1;
@@ -260,7 +265,19 @@ const ChildGrowthScreen = ({ navigation }) => {
                       font: font,
                       lineColor: "hsla(0, 0%, 0%, 0.25)",
                       lineWidth: 1,
-                      formatXLabel: (label) => `${label}a`,
+                      formatXLabel: (label) => {
+                        if (findFloatAge(child?.nascimento) < 1) {
+                          // Exibir em meses quando a criança tem menos de 1 ano
+                          const months = Math.floor(label * 12);
+                          return `${months}m`;
+                        } else {
+                          // Exibir em anos quando a criança tem mais de 1 ano
+                          return `${label}a`;
+                        }
+                      },
+                      tickValues: findFloatAge(child?.nascimento) < 1 ? 
+                        Array.from({ length: 12 }, (_, i) => (i + 1) / 12) :
+                        undefined,
                       linePathEffect: <DashPathEffect intervals={[4, 4]} />,
                     }}
                     yAxis={[

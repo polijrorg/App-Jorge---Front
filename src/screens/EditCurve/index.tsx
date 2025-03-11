@@ -118,7 +118,6 @@ const EditCurveScreen = ({ navigation }) => {
                   weight={`${activeChild?.peso}kg` || 'weight'}
                   height={`${activeChild?.altura}cm` || 'height'}
                   id={`${activeChild?.idchildren}` || '0'}
-                  vaccinePercentage={80}
                   gender={activeChild.gender}
                 />
                 <S.Line />
