@@ -101,7 +101,7 @@ const BottomTabNav = () => {
                       ),
                 }}
             />
-            {/* <Tab.Screen
+            <Tab.Screen
                 name="Feedback"
                 component={FeedbackScreen}
                 options={{
@@ -112,7 +112,7 @@ const BottomTabNav = () => {
                         focused
                       ),
                 }}
-            /> */}
+            />
             <Tab.Screen
                 name="Settings"
                 component={SettingsScreen}

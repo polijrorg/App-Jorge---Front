@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Linking } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as S from './styles'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import UserService from '@services/UserService';
 
-const ReadAndAgree = ({ isChecked, onPress, onTextPress }) => {
+const ReadAndAgree = ({ isChecked, onPress }) => {
     return (
         <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center' }}>
             <S.Checkbox onPress={onPress} style={{ backgroundColor: isChecked ? '#006ADC' : 'white' }} />
             <View style={{ flexDirection: 'row', gap: 4 }}>
                 <S.BlackText>Li e concordo com os
-                  <TouchableOpacity style={{ height:13 }} onPress={onTextPress} >
+                  <TouchableOpacity style={{ height:13 }} onPress={() => Linking.openURL("https://jorge-back.puerino.com/termos/")} >
                       <S.BlueText> termos de uso </S.BlueText>
                   </TouchableOpacity>
                   e com a
-                  <TouchableOpacity onPress={onTextPress} >
+                  <TouchableOpacity onPress={() => Linking.openURL("https://jorge-back.puerino.com/politicas/")} >
                       <S.BlueText>política de privacidade</S.BlueText>
                   </TouchableOpacity>
                 </S.BlackText>
@@ -91,7 +91,7 @@ const Register = ({ navigation }) => {
             </View>
 
             <View style={{ gap: 8, width: '100%', alignItems: 'flex-start' }}>
-                <ReadAndAgree isChecked={isChecked1} onPress={() => setIsChecked1(!isChecked1)} onTextPress={() => 1}/>
+                <ReadAndAgree isChecked={isChecked1} onPress={() => setIsChecked1(!isChecked1)} />
             </View>
 
             <Button title={'Cadastrar'} onPress={handleRegister} />

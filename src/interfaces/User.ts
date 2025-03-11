@@ -5,4 +5,8 @@ export default interface User {
     id: string;
 	  created_at: Date;
     updated_at: Date;
+    gender: string;
+    state: string;
+    nascimento: string;
+    telefone: string;
 }

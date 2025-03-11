@@ -14,12 +14,14 @@ interface Props {
   options?: string[];
   isNumber?: boolean;
   unit?: string;
+  isPassword?: boolean;
 }
 
-export function ChildInput({ isEditable = false, title, value, onChange, isDate = false, isSelection = false, options, isNumber = false, unit }: Props) {
+export function ChildInput({ isEditable = false, title, value, onChange, isDate = false, isSelection = false, options, isNumber = false, unit, isPassword = false }: Props) {
   const [showPicker, setShowPicker] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSecure, setIsSecure] = useState(isPassword);
 
   const handleSelectOption = (option: string) => {
     setSelectedOption(option);
@@ -31,7 +33,7 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
+    return `${day}/${month}/${year}`;
   };
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
@@ -51,6 +53,7 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
           value={value}
           keyboardType={isNumber ? 'numeric' : 'default'}
           onChangeText={(text) => onChange(text)}
+          secureTextEntry={isSecure}
         />
       ) : !isSelection ? (
         <TouchableOpacity onPress={() => setShowPicker(true)}>
@@ -75,8 +78,8 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
       )}
 
       {isEditable && (
-        <S.ToggleButton>
-          <Ionicons name="pencil-outline" size={20} color="dark" />
+        <S.ToggleButton onPress={() => setIsSecure(isPassword && !isSecure)}>
+          <Ionicons name={isPassword ? isSecure ? "eye-off-outline" : "eye-outline" : "pencil-outline"} size={20} color="dark" />
         </S.ToggleButton>
       )}
 

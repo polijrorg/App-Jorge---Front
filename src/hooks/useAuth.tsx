@@ -57,6 +57,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
             api.defaults.headers.common = { Authorization: `Bearer ${response.token}` };
             await AsyncStorage.setItem('@jorge:token', response.token);
             await AsyncStorage.setItem('@jorge:userId', response.user.id);
+            console.log('userId é ', response.user.id);
 
             setUser(response.user);
             return response.user;
@@ -69,7 +70,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
     const logout = (): void => {
         AsyncStorage.removeItem('@jorge:token');
         AsyncStorage.removeItem('@jorge:userId');
-        setUser(undefined);
+        // setUser(undefined);
     };
 
     if (isLoading) {

@@ -93,9 +93,8 @@ export default class UserService {
         }
     }
 
-    static async update(data: ICreateRequest): Promise<IUpdateResponse | string> {
+    static async update(data: ICreateRequest, id: string): Promise<IUpdateResponse | string> {
         try {
-            const id = await AsyncStorage.getItem('@jorge:userId');
             const response: AxiosResponse<ICreateResponse> = await api.patch(
                 `/users/update/${id}`,
                 data
@@ -136,8 +135,6 @@ export default class UserService {
         return error?.response?.data?.message || 'Erro desconhecido';
       }
     }
-  
-    
 
     static async redefinePassword(data: IRedefinePasswordRequest): Promise<string | string> {
         try {
