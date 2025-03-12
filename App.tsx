@@ -44,7 +44,7 @@ export default function App() {
     } else {
         return (
             <NavigationContainer>
-                <AuthProvider>
+                <AuthProvider >
                     <ChildProvider>
                         <AppProvider>
                             <Routes />

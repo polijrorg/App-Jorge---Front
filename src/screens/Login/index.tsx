@@ -1,24 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import * as S from './styles'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import ForgotMyPasswordModal from '@components/ForgotMyPasswordModal';
 import { useAuthContext } from '@hooks/useAuth';
+import { ReadAndAgree } from '@components/ReadAndAgree';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [modal, setModal] = useState(false);
+    const [keepLoggedIn, setKeepLoggedIn] = useState(false);
     const [error, setError] = useState<string>(null);
-    const { login } = useAuthContext();
+    const { login, user, isLoading } = useAuthContext();
+
+    const toggleKeepLoggedIn = async () => {
+      const newValue = !keepLoggedIn;
+      setKeepLoggedIn(newValue);
+      await AsyncStorage.setItem("@jorge:keepLoggedIn", newValue ? "true" : "false");
+    };
 
     const loginUser = async () => {    
         try {
             const isLoginDone = await login({
                 email: email,
                 password: password,
+                keepLoggedIn
             });
             if (isLoginDone) {
               navigation.navigate('Main', { screen: 'Home' });
@@ -45,6 +55,13 @@ const LoginScreen = ({ navigation }) => {
                     <S.BlueText>Esqueci minha senha</S.BlueText>
                 </TouchableOpacity>
             </S.Password>
+            <ReadAndAgree
+              isChecked={keepLoggedIn}
+              blueText=''
+              blackText='Mantenha-me conectado'
+              onPress={toggleKeepLoggedIn}
+              onTextPress={undefined}
+            />
             {error && (
                     <S.BlueText style={{ color: 'red', width: '100%' }}>{error}</S.BlueText>
             )}

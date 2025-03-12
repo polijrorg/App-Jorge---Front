@@ -42,11 +42,11 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
       async function fetchChildren() {
-        const response = await ChildrenService.readByParent(user.id);
+        const response = await ChildrenService.readByParent(user?.id);
         setChildList(response);
       }
       fetchChildren()
-    }, [user.id])
+    }, [user?.id])
 
     return (
         <S.Wrapper>

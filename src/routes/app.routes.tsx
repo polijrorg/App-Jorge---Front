@@ -11,26 +11,33 @@ import FollowUpScreen from '@screens/ChildFollowUp';
 import GrowthCurveScreen from '@screens/CurvaDeCrescimento';
 import EditCurveScreen from '@screens/EditCurve';
 import VacinasScreen from '@screens/Vacinas';
+import { useAuthContext } from '@hooks/useAuth';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
 export type RootStackParamList = {
-    Register: undefined;
-    Login: undefined;
-    PasswordRecover: { code?: string, email?: string };
-    Main: undefined;
-    RegisterChildren: undefined;
-    EditChildren: undefined;
-    FollowUp: undefined;
-    Marcos: undefined;
-    Curva: undefined;
-    EditCurve: undefined;
+  Register: undefined;
+  Login: undefined;
+  PasswordRecover: { code?: string, email?: string };
+  Main: undefined;
+  RegisterChildren: undefined;
+  EditChildren: undefined;
+  FollowUp: undefined;
+  Marcos: undefined;
+  Curva: undefined;
+  EditCurve: undefined;
 };
 
 
 const AppRoutes = () => {
+  const { user } = useAuthContext();
   return (
-    <Navigator screenOptions={{ headerShown: false }} >
+    <Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName={
+        user ? 'Main' : 'Login'
+      }
+    >
         <Screen name="Login" component={LoginScreen} />
         <Screen name="Register" component={RegisterScreen} />
         <Screen name="PasswordRecover" component={PasswordRecover} />

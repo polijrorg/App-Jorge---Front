@@ -13,18 +13,18 @@ const SettingsScreen = ({ navigation }) => {
   const { user, setUser, logout } = useAuthContext();
     
   useEffect(() => {
-    setName(user.name);
-    setEmail(user.email);
+    setName(user?.name);
+    setEmail(user?.email);
     setPassword('');
-    setGender(user.gender || '');
-    setCity(user.state || '');
-    setBirthDate(user.nascimento || '');
-    setPhone(user.telefone || '');
+    setGender(user?.gender || '');
+    setCity(user?.state || '');
+    setBirthDate(user?.nascimento || '');
+    setPhone(user?.telefone || '');
   }, [user]);
 
   const handleLogout = async () => {
-    navigation.navigate('Login');
     logout();
+    navigation.navigate('Login');
   }
 
   const [modalVisible, setModalVisible] = useState(false);
