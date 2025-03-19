@@ -53,26 +53,45 @@ const EditCurveScreen = ({ navigation }) => {
       console.log(activeChild.name)
       const data = await GrowthDataService.getByChild(activeChild.idchildren);
       const sortedData = data.sort((a, b) => {
-        const ageA = a.age.years + a.age.months / 12;
-        const ageB = b.age.years + b.age.months / 12;
+        const ageA = findAge(a.growthDate).totalAge;
+        const ageB = findAge(b.growthDate).totalAge;
         return ageA - ageB;
       });
       setGrowthData(sortedData);
     }
 
-    async function onInsertClose(data: RowData) {
-      (async () => {
-          await GrowthDataService.create({
-              childrenId: activeChild.idchildren,
-              weight: Number(data.weight),
-              height: Number(data.height),
-              growthDate: data.growthDate
-          });
-          await fetchData();
-          setInsertModal(false);
-      })();
+  function findAge(comparisonDate: string): { years: number, months: number, totalAge?: number } {
+    if (!activeChild?.nascimento) return { years: 0, months: 0 };
+    
+    const [birthDay, birthMonth, birthYear] = activeChild.nascimento.split('/').map(Number);
+    const [compDay, compMonth, compYear] = comparisonDate.split('/').map(Number);
+    
+    let years = compYear - birthYear;
+    let months = compMonth - birthMonth;
+    
+    if (months < 0) {
+      years--;
+      months += 12;
     }
+    
+    if (compDay < birthDay) {
+      months--;
+    }
+    
+    return { years, months, totalAge: years * 12 + months };
+  }
 
+    async function onInsertClose(data: RowData) {
+      await GrowthDataService.create({
+          childrenId: activeChild.idchildren,
+          weight: Number(data.weight),
+          height: Number(data.height),
+          growthDate: data.growthDate
+      });
+      await fetchData();
+      setInsertModal(false);
+  }
+  
     async function onDelete() {
       GrowthDataService.deleteById(selectedRow.id);
       setEditModal(false);
@@ -121,7 +140,7 @@ const EditCurveScreen = ({ navigation }) => {
                   gender={activeChild.gender}
                 />
                 <S.Line />
-                {growthData.length > 0 && tableHeader()}
+                {growthData.length > 0 ? tableHeader() : <S.EmptyText>Insira os dados de crescimento de {activeChild.name} pelo botão abaixo</S.EmptyText>}
               </>
             )}
             ListFooterComponent={() => (
@@ -146,8 +165,8 @@ const EditCurveScreen = ({ navigation }) => {
                   borderBottomWidth: 1
                 }
               }>
-                <S.Description>{formatAge(item.age)}</S.Description>
-                <S.Description>{item.weight}</S.Description>
+                <S.Description>{formatAge(findAge(item.growthDate))}</S.Description>
+                <S.Description>{item.weight}</S.Description> 
                 <S.Description>{item.height}</S.Description>
                 <S.Description>{item.imc.toFixed(1)}</S.Description>
               </TouchableOpacity>

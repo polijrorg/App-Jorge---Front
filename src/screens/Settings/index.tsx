@@ -17,9 +17,10 @@ const SettingsScreen = ({ navigation }) => {
     setEmail(user?.email);
     setPassword('');
     setGender(user?.gender || '');
-    setCity(user?.state || '');
+    setState(user?.state || '');
     setBirthDate(user?.nascimento || '');
     setPhone(user?.telefone || '');
+    console.log(user);
   }, [user]);
 
   const handleLogout = async () => {
@@ -33,10 +34,10 @@ const SettingsScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [gender, setGender] = useState('');
   const [state, setState] = useState('');
-  const [city, setCity] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   async function handleConfirm() {
     if (!name) setError('Insira um nome válido!');
@@ -44,19 +45,21 @@ const SettingsScreen = ({ navigation }) => {
     else if (!birthDate) setError('Insira uma data de nascimento válida!');
     else if (!phone) setError('Insira um telefone válido!');
     else {
-      const data = {
-          name,
-          email,
-          password,
-          gender,
-          city,
-          birthDate,
-          phone,
+      let data = {
+        name,
+        email,
+        gender,
+        state,
+        birthDate,
+        phone,
+        password: password && password.length > 5 ? password : undefined
       };
-
+      if (password && password.length < 5) {
+        setError('Sua nova senha deve ter pelo menos 5 caracteres! Se quiser manter a senha atual, deixe o campo em branco.');
+      }
       await UserService.update(data, user.id);
       setUser({ ...user, ...data });
-      navigation.goBack();
+      setSuccess(true);
     }
   }
 
@@ -78,9 +81,10 @@ const SettingsScreen = ({ navigation }) => {
         <ChildInput title='Sexo' value={gender} onChange={setGender} isSelection options={['Masculino', 'Feminino']} isEditable />
         <ChildInput title='Cidade' value={state} onChange={setState} isEditable />
         <ChildInput title='Data de nascimento' value={birthDate} onChange={setBirthDate} isDate isEditable />
-        <ChildInput title='Telefone' value={phone} onChange={setPhone} isEditable />
+        <ChildInput isPhone title='Telefone' value={phone} onChange={setPhone} isEditable />
 
         {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
+        {success && <S.SuccessMessage>Suas credenciais foram atualizadas com sucesso!</S.SuccessMessage>}
 
         <View style={{ gap: 8 }}>
           <AddChildButton title='Salvar e Voltar' onPress={handleConfirm} />

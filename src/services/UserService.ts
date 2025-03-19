@@ -20,12 +20,22 @@ interface ICreateRequest {
     password: string;
 }
 
+interface IUpdateRequest {
+  name?: string;
+  email?: string;
+  gender?: string;
+  state?: string;
+  birthDate?: string;
+  phone?: string;
+  password?: string;
+}
+
 interface ICreateResponse {
     id: string;
     password: string;
     name: string;
     email: string;
-	created_at: Date;
+	  created_at: Date;
     updated_at: Date;
 }
 
@@ -93,7 +103,7 @@ export default class UserService {
         }
     }
 
-    static async update(data: ICreateRequest, id: string): Promise<IUpdateResponse | string> {
+    static async update(data: IUpdateRequest, id: string): Promise<IUpdateResponse | string> {
         try {
             const response: AxiosResponse<ICreateResponse> = await api.patch(
                 `/users/update/${id}`,

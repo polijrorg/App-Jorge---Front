@@ -49,6 +49,15 @@ export const ErrorMessage = styled(Text)`
     font-family: 'Poppins_600SemiBold';
     font-size: 14px;
     line-height: 20px;
+    text-align: center;
+`
+
+export const SuccessMessage = styled(Text)`
+    color: forestgreen;
+    font-family: 'Poppins_600SemiBold';
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
 `
 
 export const BlueText = styled(Text)<{ size?: number }>`

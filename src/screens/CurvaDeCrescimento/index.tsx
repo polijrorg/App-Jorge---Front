@@ -50,20 +50,39 @@ const ChildGrowthScreen = ({ navigation }) => {
   
   useEffect(() => {
     convertData();
-  }, [growthData, selectedCurveType]);  
+  }, [growthData, selectedCurveType]);
 
-  async function fetchData() {
-    let data = await GrowthDataService.getByChild(child.idchildren);
-    if (data.length > 0) {
-      data = data.sort((a, b) => {
-        const ageA = a.age.years + a.age.months / 12;
-        const ageB = b.age.years + b.age.months / 12;
-        return ageA - ageB;
-      });
+  function findAge(comparisonDate: string): { years: number, months: number, totalAge?: number } {
+    if (!child?.nascimento) return { years: 0, months: 0 };
+    
+    const [birthDay, birthMonth, birthYear] = child.nascimento.split('/').map(Number);
+    const [compDay, compMonth, compYear] = comparisonDate.split('/').map(Number);
+    
+    let years = compYear - birthYear;
+    let months = compMonth - birthMonth;
+    
+    if (months < 0) {
+      years--;
+      months += 12;
     }
-    setGrowthData(data);
+    
+    if (compDay < birthDay) {
+      months--;
+    }
+    
+    return { years, months, totalAge: years * 12 + months };
   }
 
+  async function fetchData() {
+    const data = await GrowthDataService.getByChild(child.idchildren);
+    const sortedData = data.sort((a, b) => {
+      const ageA = findAge(a.growthDate).totalAge;
+      const ageB = findAge(b.growthDate).totalAge;
+      return ageA - ageB;
+    });
+    setGrowthData(sortedData);
+  }
+    
   async function convertData() {
     if (!child || !selectedCurveType) return;
     try {
@@ -72,10 +91,11 @@ const ChildGrowthScreen = ({ navigation }) => {
           return;
         }
         const data = growthData.map(item => ({
-            x: item.age.years + item.age.months / 12,
+            x: findAge(item.growthDate).totalAge,
             y: determineGrowthData(item),
         }));
         setChildData(data);
+        console.log(data);
     } catch (error) {
         console.error("Error fetching growth data:", error);
     }

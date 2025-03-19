@@ -37,6 +37,15 @@ export const Description = styled(Text)<{ color?: string }>`
   text-align: center;
 `
 
+export const EmptyText = styled(Text)<{ color?: string }>`
+  color: ${({color}) => color || '#000'};
+  font-family: 'PoppinsRegular';
+  font-size: 12px;
+  flex: 1;
+  width: 100%;
+  text-align: center;
+`
+
 export const Line = styled(View)`
   height: 0px;
   width: 100%;

@@ -8,6 +8,7 @@ import AddChildButton from '@components/AddChildButton';
 import ChildrenService from '@services/ChildrenService';
 import { useChildContext } from '@hooks/useChild';
 import { useAuthContext } from '@hooks/useAuth';
+import GrowthDataService from '@services/GrowthDataService';
 
 const RegisterChildrenScreen = ({ navigation }) => {
 
@@ -42,9 +43,18 @@ const RegisterChildrenScreen = ({ navigation }) => {
                 planosaude: '1111111111111111111111'
             }
 
-            await ChildrenService.create(
+            const child = await ChildrenService.create(
                 data
             );
+
+            const response = await GrowthDataService.create({
+              childrenId: child.idchildren,
+              weight: Number(weight),
+              height: Number(height),
+              growthDate: birthDate
+            });
+
+            console.log(response);
 
             const temp = await ChildrenService.readByParent(user.id);
             setChildList(temp);

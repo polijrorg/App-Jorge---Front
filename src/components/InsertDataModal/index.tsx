@@ -1,10 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import * as S from './styles'
 import { Modal, TouchableWithoutFeedback } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native';
-import ChildrenService from '@services/ChildrenService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useChildContext } from '@hooks/useChild';
 import { ChildInput } from '@components/ChildInput';
 import AddChildButton from '@components/AddChildButton';
 
@@ -23,25 +19,21 @@ interface Props {
 export default function InsertDataModal(p: Props) {
   
   function handlePress(data: NewRowData) {
-    if (!data.weight || !data.height) {
+    if (!data.weight || !data.height || !data.growthDate) {
       setError(true);
     } else {
-      p.onClose(data);
       setError(false);
-      setData({
-        height: undefined,
-        weight: undefined,
-        growthDate: undefined
-      });
+      p.onClose(data);
+      setData({ height: '', weight: '', growthDate: '' });
     }
-  }
+  }  
 
   const [error, setError] = useState<boolean>(false);
   const [data, setData] = useState<NewRowData>({
-    height: undefined,
-    weight: undefined,
-    growthDate: undefined
-  });
+    height: '',
+    weight: '',
+    growthDate: ''
+  });  
 
   return (
     <Modal visible={p.visible} transparent animationType="fade">

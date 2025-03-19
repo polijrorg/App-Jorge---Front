@@ -15,9 +15,10 @@ interface Props {
   isNumber?: boolean;
   unit?: string;
   isPassword?: boolean;
+  isPhone?: boolean;
 }
 
-export function ChildInput({ isEditable = false, title, value, onChange, isDate = false, isSelection = false, options, isNumber = false, unit, isPassword = false }: Props) {
+export function ChildInput({ isPhone = false, isEditable = false, title, value, onChange, isDate = false, isSelection = false, options, isNumber = false, unit, isPassword = false }: Props) {
   const [showPicker, setShowPicker] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +37,20 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
     return `${day}/${month}/${year}`;
   };
 
+  const formatPhone = (text: string) => {
+    text = text.replace(/\D/g, ""); // Remove tudo que não for número
+  
+    if (text.length > 10) {
+      return `(${text.slice(0, 2)}) ${text.slice(2, 7)}-${text.slice(7, 11)}`;
+    } else if (text.length > 6) {
+      return `(${text.slice(0, 2)}) ${text.slice(2, 6)}-${text.slice(6, 10)}`;
+    } else if (text.length > 2) {
+      return `(${text.slice(0, 2)}) ${text.slice(2)}`;
+    } else {
+      return text;
+    }
+  };
+
   const handleDateChange = (event: any, selectedDate?: Date) => {
     setShowPicker(false);
     if (selectedDate) {
@@ -50,9 +65,9 @@ export function ChildInput({ isEditable = false, title, value, onChange, isDate 
         <S.Container
           placeholderTextColor="lightgray"
           placeholder={`digite um ${title.toLowerCase()}`}
-          value={value}
-          keyboardType={isNumber ? 'numeric' : 'default'}
-          onChangeText={(text) => onChange(text)}
+          value={isPhone ? formatPhone(value) : value}
+          keyboardType={isNumber || isPhone ? 'numeric' : 'default'}
+          onChangeText={(text) => onChange(isPhone ? formatPhone(text) : text)}
           secureTextEntry={isSecure}
         />
       ) : !isSelection ? (
