@@ -1,5 +1,5 @@
 import * as S from './styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AmbientCard from '@components/AmbientCard';
 import { View, ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -13,15 +13,28 @@ import ChildCard from '@components/ChildCard';
 import datasets from '@services/DefaultCurves/datasets';
 import GrowthDataService from '@services/GrowthDataService';
 import GrowthData from '@interfaces/GrowthData';
+import VaccineService from '@services/VaccineService';
+import MarcosService from '@services/MarcosService';
+import ChildrenService from '@services/ChildrenService';
 
 const percentiles = ["P3", "P15", "P50", "P85", "P97"];
 
 const FollowUpScreen = ({ navigation }) => {
     const { activeChild: child, growthData, setGrowthData } = useChildContext();
+    const [vaccineDev, setVaccineDev] = useState<number>(null);
+    const [marcosDev, setMarcosDev] = useState<number>(null);
     const estimular = child.gender === 'masculino' ? 'estimulá-lo' : 'estimulá-la';
+
+    async function fetchDevelopment() {
+      const vaccine = await VaccineService.development(child.idchildren);
+      setVaccineDev(Number(vaccine.developmentPercentage));
+      const marcos = await ChildrenService.development(child.idchildren);
+      setMarcosDev(Number(marcos.developmentPercentage));
+    }
 
     useEffect(() => {
       fetchData();
+      fetchDevelopment();
     }, [child]);
   
     async function fetchData() {
@@ -87,8 +100,8 @@ const FollowUpScreen = ({ navigation }) => {
                     isEditable={false}
                     name={child.name || 'name'}
                     birthDate={child.nascimento || ''}
-                    weight={child.peso || 'weight'}
-                    height={child.altura || 'height'}
+                    weight={`${child.peso}kg` || 'weight'}
+                    height={`${child.altura}cm` || 'height'}
                     id={child.idchildren}
                     gender={child.gender}
                 />
@@ -97,10 +110,13 @@ const FollowUpScreen = ({ navigation }) => {
                 
                 <S.Title>Resumo</S.Title>
                 <S.Description>
-                {child.name} se encontra no percentil {findClosestPercentile('peso')} de peso e {findClosestPercentile('altura')} de altura. Suas vacinas estão em dia. Atualize o calendário vacinal!
-                Os marcos de desenvolvimento estão adequados para sua idade.
-                Converse com seu pediatra a respeito de como {estimular}!
-
+                  {child.name} se encontra no percentil {findClosestPercentile('peso')} de peso e {findClosestPercentile('altura')} de altura.{'\n'}
+                </S.Description>
+                <S.Description>
+                  {vaccineDev >= 70 ? 'Suas vacinas estão em dia.' : 'Suas vacinas estão atrasadas. Atualize o calendário vacinal!'}{'\n'}
+                </S.Description>
+                <S.Description>
+                  {marcosDev >= 70 ? 'Os marcos de desenvolvimento estão adequados para sua idade.' : `Os marcos de desenvolvimento não estão adequados para sua idade. Converse com seu pediatra a respeito de como ${estimular}!`}
                 </S.Description>
                 <S.Line />
                 

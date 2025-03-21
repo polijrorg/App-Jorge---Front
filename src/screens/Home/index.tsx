@@ -40,6 +40,17 @@ const HomeScreen = ({ navigation }) => {
         navigation.navigate('FollowUp');
     }
 
+    function renderDescription() {
+      if (Object.entries(user)
+        .filter(([key]) => key !== "password")
+        .some(([, value]) => !value)
+      ) {
+        return 'Complete seus dados em Configurações!';
+      }
+      console.log(user);
+      return formatNames();
+    }
+
     useEffect(() => {
       async function fetchChildren() {
         const response = await ChildrenService.readByParent(user?.id);
@@ -53,7 +64,8 @@ const HomeScreen = ({ navigation }) => {
             <DefaultHeader />
             <S.Content>
                 {user && <S.Title>Seja bem vindo(a) {user?.name?.split(' ')[0]}!</S.Title>}
-                <S.Description>{formatNames(children)} </S.Description>
+                {/* <S.Description>{formatNames(children)} </S.Description> */}
+                <S.Description>{renderDescription()}</S.Description>
                 {/* <TouchableOpacity style={{ width: '100%' }} onPress={() => navigation.navigate('Main', { screen: 'MyChildren' })}>
                     <S.BlueText>Conferir {'>'}</S.BlueText>
                 </TouchableOpacity> */}

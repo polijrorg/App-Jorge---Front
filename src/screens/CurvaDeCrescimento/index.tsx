@@ -70,7 +70,7 @@ const ChildGrowthScreen = ({ navigation }) => {
       months--;
     }
     
-    return { years, months, totalAge: years * 12 + months };
+    return { years, months, totalAge: years + months / 12 };
   }
 
   async function fetchData() {
