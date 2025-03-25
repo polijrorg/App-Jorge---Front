@@ -20,8 +20,8 @@ const HomeScreen = ({ navigation }) => {
     const { childList: children, setChildList, setActiveChild } = useChildContext();
 
     const formatNames = (children?: Child[]) => {
-        if (!children || children.length === 0) return 'Complete seus dados em Configurações!'
         const names = children?.map((c) => (c?.name?.split(' ')[0]));
+        if (!names) return 'Nos ajude a melhorar! Sugira melhorias na tela Feedbacks!';
         if (names.length === 1) return `${names[0]} precisa ter seus marcos atualizados!`;
         if (names.length === 2) return `${names[0]} e ${names[1]} precisam ter seus marcos atualizados!`
         else {
@@ -41,7 +41,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     function renderDescription() {
-      if (Object.entries(user)
+      if (user && Object.entries(user)
         .filter(([key]) => key !== "password")
         .some(([, value]) => !value)
       ) {
@@ -63,15 +63,16 @@ const HomeScreen = ({ navigation }) => {
         <S.Wrapper>
             <DefaultHeader />
             <S.Content>
-                {user && <S.Title>Seja bem vindo(a) {user?.name?.split(' ')[0]}!</S.Title>}
+                {/* {user && <S.Title>Seja bem vindo(a) {user?.name?.split(' ')[0]}!</S.Title>} */}
+                <S.Title>Seja bem vindo!</S.Title>
                 {/* <S.Description>{formatNames(children)} </S.Description> */}
-                <S.Description>{renderDescription()}</S.Description>
+                {(children && children?.length > 0) && <S.Description>{renderDescription()}</S.Description>}
                 {/* <TouchableOpacity style={{ width: '100%' }} onPress={() => navigation.navigate('Main', { screen: 'MyChildren' })}>
                     <S.BlueText>Conferir {'>'}</S.BlueText>
                 </TouchableOpacity> */}
                 <S.Line />
                 
-                <S.Title>Ferramentas</S.Title>
+                <S.Title>Suas Ferramentas</S.Title>
                 <ScrollView horizontal contentContainerStyle={{ alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }} style={{ maxHeight:100 }}>
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
                     <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => navigation.navigate('Vacinas')} />

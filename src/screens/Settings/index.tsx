@@ -8,6 +8,7 @@ import UserService from '@services/UserService';
 import { useAuthContext } from '@hooks/useAuth';
 import DefaultHeader from '@components/DefaultHeader';
 import LogoutModal from '@components/LogoutModal';
+import CityDropdown from "@components/CityDropdown"
 
 const SettingsScreen = ({ navigation }) => {
   const { user, setUser, logout } = useAuthContext();
@@ -60,6 +61,7 @@ const SettingsScreen = ({ navigation }) => {
       await UserService.update(data, user.id);
       setUser({ ...user, ...data });
       setSuccess(true);
+      navigation.goBack();
     }
   }
 
@@ -79,7 +81,10 @@ const SettingsScreen = ({ navigation }) => {
         <ChildInput title='Email' value={email} onChange={setEmail} isEditable />
         <ChildInput title='Senha' value={password} onChange={setPassword} isEditable isPassword />
         <ChildInput title='Sexo' value={gender} onChange={setGender} isSelection options={['Masculino', 'Feminino']} isEditable />
-        <ChildInput title='Cidade' value={state} onChange={setState} isEditable />
+        <CityDropdown
+          onType={(a: string) => setState(a)}
+          onSelectItem={(a: string) => setState(a)}
+        />
         <ChildInput title='Data de nascimento' value={birthDate} onChange={setBirthDate} isDate isEditable />
         <ChildInput isPhone title='Telefone' value={phone} onChange={setPhone} isEditable />
 
@@ -91,7 +96,7 @@ const SettingsScreen = ({ navigation }) => {
           <AddChildButton hidePlus invertColors title='Sair do App' onPress={() => setModalVisible(true)} />
         </View>
       </S.Content>
-      <LogoutModal 
+      <LogoutModal
         visible={modalVisible} 
         onConfirm={handleLogout}
         onCancel={() => setModalVisible(false)} 

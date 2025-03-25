@@ -38,7 +38,7 @@ const LoginScreen = ({ navigation }) => {
               setError("Email ou senha inválidos!");
             }
         } catch (error) {
-            alert("Email ou senha inválidos.");
+            // alert("Email ou senha inválidos.");
             setError("Email ou senha inválidos!");
         }
     };

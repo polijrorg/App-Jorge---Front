@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Linking } from 'react-native';
+import { View, TouchableOpacity, Linking, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as S from './styles'
 import { Input } from '@components/Input';
@@ -8,25 +8,29 @@ import UserService from '@services/UserService';
 
 const ReadAndAgree = ({ isChecked, onPress }) => {
     return (
-        <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center' }}>
-            <S.Checkbox onPress={onPress} style={{ backgroundColor: isChecked ? '#006ADC' : 'white' }} />
-            <View style={{ flexDirection: 'row', gap: 4 }}>
-                <S.BlackText>Li e concordo com os
-                  <TouchableOpacity style={{ height:13 }} onPress={() => Linking.openURL("https://jorge-back.puerino.com/termos/")} >
-                      <S.BlueText> termos de uso </S.BlueText>
-                  </TouchableOpacity>
-                  e com a
-                  <TouchableOpacity onPress={() => Linking.openURL("https://jorge-back.puerino.com/politicas/")} >
-                      <S.BlueText>política de privacidade</S.BlueText>
-                  </TouchableOpacity>
-                </S.BlackText>
-            </View>
-        </View>
+      <View style={{ flexDirection: 'row', gap: 5, justifyContent: 'center', alignItems: 'center' }}>
+        <S.Checkbox onPress={onPress} style={{ backgroundColor: isChecked ? '#006ADC' : 'white' }} />
+        <S.BlackText>
+          Li e concordo com os{' '}
+          <Text 
+            style={{ color: '#4E92B7' }} 
+            onPress={() => Linking.openURL("https://jorge-back.puerino.com/termos/")}
+          >
+            termos de uso{' '}
+          </Text>
+          e com a{' '}
+          <Text 
+            style={{ color: '#4E92B7' }} 
+            onPress={() => Linking.openURL("https://jorge-back.puerino.com/politicas/")}
+          >
+            política de privacidade.
+          </Text>
+        </S.BlackText>
+      </View>
     );
 }
 
 const Register = ({ navigation }) => {
-
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -62,7 +66,7 @@ const Register = ({ navigation }) => {
         else {
             UserService.create({ email, name, password });
             navigation.navigate('Login')
-            alert("Cadastro Realizado");
+            // alert("Cadastro Realizado");
         }
     }
 

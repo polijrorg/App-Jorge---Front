@@ -121,7 +121,7 @@ const BottomTabNav = () => {
                     tabBarIcon: ({ focused }) =>
                       renderIcon(
                         require('@assets/icons/Config.png'),
-                        'Editar',
+                        'Configurar',
                         focused
                       ),
                 }}

@@ -18,14 +18,7 @@ export const Wrapper = styled(ScrollView).attrs({
 export const Logo = styled.Image`
     width: 50px;
     height: 50px;
-`
-
-export const BlueText = styled(Text)`
-    color: #4E92B7;
-    font-size: 12px;
-    letter-spacing: 0.5px;
-    font-family: "Poppins_600SemiBold";
-`
+`;
 
 export const BlackText = styled(Text)`
     font-size: 12px;
@@ -34,6 +27,10 @@ export const BlackText = styled(Text)`
     letter-spacing: 0.5px;
     font-family: "Poppins_600SemiBold";
 `
+
+export const BlueText = styled(BlackText)`
+    color: #4E92B7;
+`;
 
 export const TitleText = styled(Text)`
     color: #000;

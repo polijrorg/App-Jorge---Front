@@ -359,7 +359,8 @@ const ChildGrowthScreen = ({ navigation }) => {
 
               <Legend data={legendData} />
             </View>
-
+            
+            <AddChildButton title="Adicionar Dados" onPress={() => navigation.navigate("EditCurve")} />
 
             {growthData.length > 0 ?
               <S.Description>
@@ -371,7 +372,6 @@ const ChildGrowthScreen = ({ navigation }) => {
               </S.Description>
             }
 
-            <AddChildButton title="Adicionar Dados" onPress={() => navigation.navigate("EditCurve")} />
           </S.Content>
         </>
       )}

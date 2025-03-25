@@ -6,7 +6,6 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Seringa from '@assets/icons/Seringa.png';
 import Graph from '@assets/icons/Graph.png';
 import Trophy from '@assets/icons/Trophy.png';
-import Mamadeira from '@assets/icons/Mamadeira.png';
 import { useChildContext } from '@hooks/useChild';
 import ChildrenHeader from '@components/ChildrenHeader';
 import ChildCard from '@components/ChildCard';
@@ -14,7 +13,6 @@ import datasets from '@services/DefaultCurves/datasets';
 import GrowthDataService from '@services/GrowthDataService';
 import GrowthData from '@interfaces/GrowthData';
 import VaccineService from '@services/VaccineService';
-import MarcosService from '@services/MarcosService';
 import ChildrenService from '@services/ChildrenService';
 
 const percentiles = ["P3", "P15", "P50", "P85", "P97"];
@@ -116,16 +114,15 @@ const FollowUpScreen = ({ navigation }) => {
                   {vaccineDev >= 70 ? 'Suas vacinas estão em dia.' : 'Suas vacinas estão atrasadas. Atualize o calendário vacinal!'}{'\n'}
                 </S.Description>
                 <S.Description>
-                  {marcosDev >= 70 ? 'Os marcos de desenvolvimento estão adequados para sua idade.' : `Os marcos de desenvolvimento não estão adequados para sua idade. Converse com seu pediatra a respeito de como ${estimular}!`}
+                  {marcosDev >= 70 ? 'Os marcos de desenvolvimento estão adequados para sua idade.' : `Os marcos de desenvolvimento não vêm sendo atualizados. Converse com seu pediatra a respeito de como ${estimular}!`}
                 </S.Description>
                 <S.Line />
                 
-                <S.Title>Seus Ambientes</S.Title>
+                <S.Title>Suas Ferramentas</S.Title>
                 <ScrollView horizontal contentContainerStyle={{ alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }} style={{ maxHeight:100 }}>
                     <AmbientCard image={Graph} title={'Curvas de\nCrescimento'} onPress={() => navigation.navigate('Curva')} />
                     <AmbientCard image={Seringa} title={'Carteira de\nVacinas'} onPress={() => navigation.navigate('Vacinas')} />
                     <AmbientCard image={Trophy} title={'Marcos de\nDesenv.'} onPress={() => navigation.navigate('Marcos')} />
-                    <AmbientCard image={Mamadeira} title={'MedMama'} onPress={() => navigation.navigate('MedMama')} />
                 </ScrollView>
             </S.Content>
         </S.Wrapper>

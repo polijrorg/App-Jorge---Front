@@ -34,7 +34,7 @@ const PasswordRecoverScreen = ({ navigation }) => {
       } else {
         setError(null);
         navigation.navigate("Login");
-        alert("Atualização de Senha Realizada");
+        // alert("Atualização de Senha Realizada");
       }
     }
   };
