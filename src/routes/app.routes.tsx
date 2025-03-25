@@ -12,6 +12,8 @@ import GrowthCurveScreen from '@screens/CurvaDeCrescimento';
 import EditCurveScreen from '@screens/EditCurve';
 import VacinasScreen from '@screens/Vacinas';
 import { useAuthContext } from '@hooks/useAuth';
+import EditProfileScreen from '@screens/EditProfile';
+import SourcesScreen from '@screens/Sources';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -48,6 +50,8 @@ const AppRoutes = () => {
         <Screen name="Curva" component={GrowthCurveScreen} />
         <Screen name="EditCurve" component={EditCurveScreen} />
         <Screen name="Vacinas" component={VacinasScreen} />
+        <Screen name="EditProfile" component={EditProfileScreen} />
+        <Screen name="Sources" component={SourcesScreen} />
 
         <Screen
             name="Main"

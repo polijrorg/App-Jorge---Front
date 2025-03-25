@@ -2,7 +2,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FeedbackScreen from '@screens/Feedback';
 import HomeScreen from '@screens/Home';
 import MedMamaScreen from '@screens/MedMama';
-import MyChildrenScreen from '@screens/MyChildren';
 import SettingsScreen from '@screens/Settings';
 import React from 'react';
 import { View, Image, Text } from 'react-native';
