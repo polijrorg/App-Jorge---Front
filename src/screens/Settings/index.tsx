@@ -1,10 +1,20 @@
 import * as S from "./styles"
-import React from 'react';
+import React, { useState } from 'react';
 import { Linking, View } from "react-native"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import DefaultHeader from "@components/DefaultHeader"
+import AddChildButton from "@components/AddChildButton";
+import LogoutModal from "@components/LogoutModal";
+import { useAuthContext } from "@hooks/useAuth";
 
 const ConfiguracoesScreen = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const { logout } = useAuthContext();
+
+  const handleLogout = async () => {
+    logout();
+    navigation.navigate('Login');
+  }
 
   const handleNavigateBack = () => {
     navigation.goBack();
@@ -68,30 +78,13 @@ const ConfiguracoesScreen = ({ navigation }) => {
           </S.IconContainer>
           <S.MenuText>Conheça nossas fontes</S.MenuText>
         </S.MenuCard>
+        <LogoutModal
+          visible={modalVisible} 
+          onConfirm={handleLogout}
+          onCancel={() => setModalVisible(false)} 
+        />
+        <AddChildButton hidePlus title='Sair do App' onPress={() => setModalVisible(true)} />
       </S.Content>
-
-      <S.BottomNavigation>
-        <S.NavItem>
-          <Ionicons name="settings-outline" size={22} color="#666" />
-          <S.NavText>Editar</S.NavText>
-        </S.NavItem>
-        <S.NavItem>
-          <Ionicons name="people-outline" size={22} color="#666" />
-          <S.NavText>Meus Filhos</S.NavText>
-        </S.NavItem>
-        <S.NavItem>
-          <Ionicons name="home-outline" size={22} color="#666" />
-          <S.NavText>Home</S.NavText>
-        </S.NavItem>
-        <S.NavItem>
-          <Ionicons name="medkit-outline" size={22} color="#666" />
-          <S.NavText>MeuMama</S.NavText>
-        </S.NavItem>
-        <S.NavItem>
-          <Ionicons name="chatbox-outline" size={22} color="#666" />
-          <S.NavText>Feedback</S.NavText>
-        </S.NavItem>
-      </S.BottomNavigation>
     </S.Wrapper>
   )
 }

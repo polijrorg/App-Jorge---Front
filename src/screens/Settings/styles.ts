@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View, ScrollView } from "react-native"
 import styled from "styled-components/native"
 
 export const Wrapper = styled(View)`
-  flex: 1;
+  height: 100%;
   align-items: center;
   justify-content: space-between;
   background: ${({ theme }) => theme.colors.background || "#fff"};

@@ -24,12 +24,12 @@ const EditProfileScreen = ({ navigation }) => {
     console.log(user);
   }, [user]);
 
-  const handleLogout = async () => {
-    logout();
-    navigation.navigate('Login');
-  }
+  // const handleLogout = async () => {
+  //   logout();
+  //   navigation.navigate('Login');
+  // }
 
-  const [modalVisible, setModalVisible] = useState(false);
+  // const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -93,14 +93,14 @@ const EditProfileScreen = ({ navigation }) => {
 
         <View style={{ gap: 8 }}>
           <AddChildButton title='Salvar e Voltar' onPress={handleConfirm} />
-          <AddChildButton hidePlus invertColors title='Sair do App' onPress={() => setModalVisible(true)} />
+          {/* <AddChildButton hidePlus invertColors title='Sair do App' onPress={() => setModalVisible(true)} /> */}
         </View>
       </S.Content>
-      <LogoutModal
+      {/* <LogoutModal
         visible={modalVisible} 
         onConfirm={handleLogout}
         onCancel={() => setModalVisible(false)} 
-      />
+      /> */}
     </S.Wrapper>
   );
 };
