@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons"
 import { debounce } from "lodash"
 import styled from "styled-components/native"
 
-// Styled Components
 const SearchBarWrapper = styled.View`
   width: 100%;
   margin-bottom: 10px;
@@ -117,6 +116,7 @@ interface Props {
   onSelectItem: (item: string) => void
   onType?: (a: string) => void
   placeholder?: string
+  initialValue?: string
 }
 
 interface City {
@@ -131,48 +131,48 @@ interface City {
   }
 }
 
-const CityDropdown: React.FC<Props> = ({ onSelectItem, onType, placeholder = "Digite sua cidade" }) => {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [filteredData, setFilteredData] = useState<City[]>([])
-  const [data, setData] = useState<City[]>([])
-  const [modalVisible, setModalVisible] = useState(false)
-  const [searchTextInModal, setSearchTextInModal] = useState("")
+const CityDropdown: React.FC<Props> = ({ onSelectItem, onType, initialValue, placeholder = "Digite sua cidade" }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState<City[]>([]);
+  const [data, setData] = useState<City[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [searchTextInModal, setSearchTextInModal] = useState("");
 
   useEffect(() => {
     fetch("https://servicodados.ibge.gov.br/api/v1/localidades/municipios")
       .then((response) => response.json())
       .then((data) => setData(data))
-      .catch((error) => console.error("Erro ao buscar cidades:", error))
+      .catch((error) => console.error("Erro ao buscar cidades:", error));
   }, [])
 
   const debouncedSearch = useCallback(
     debounce((text: string) => {
       if (text.length > 0) {
-        const filtered = data.filter((city) => city.nome.toLowerCase().includes(text.toLowerCase())).slice(0, 20)
-        setFilteredData(filtered)
+        const filtered = data.filter((city) => city.nome.toLowerCase().includes(text.toLowerCase())).slice(0, 20);
+        setFilteredData(filtered);
       } else {
-        setFilteredData([])
+        setFilteredData([]);
       }
     }, 300),
     [data],
   )
 
   const handleSearch = (text: string) => {
-    setSearchTextInModal(text)
-    debouncedSearch(text)
+    setSearchTextInModal(text);
+    debouncedSearch(text);
   }
 
   const handleSelectItem = (item: string) => {
-    onSelectItem(item)
-    setSearchQuery(item)
-    setModalVisible(false)
-    if (onType) onType(item)
+    onSelectItem(item);
+    setSearchQuery(item);
+    setModalVisible(false);
+    if (onType) onType(item);
   }
 
   const openModal = () => {
-    setSearchTextInModal("")
-    setFilteredData([])
-    setModalVisible(true)
+    setSearchTextInModal("");
+    setFilteredData([]);
+    setModalVisible(true);
   }
 
   return (
@@ -183,7 +183,7 @@ const CityDropdown: React.FC<Props> = ({ onSelectItem, onType, placeholder = "Di
           <Container
             placeholderTextColor="lightgray"
             placeholder={placeholder}
-            value={searchQuery}
+            value={searchQuery || initialValue}
             editable={false}
             multiline={false}
             onTouchStart={openModal}

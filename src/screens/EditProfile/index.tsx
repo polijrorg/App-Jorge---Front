@@ -7,11 +7,20 @@ import AddChildButton from '@components/AddChildButton';
 import UserService from '@services/UserService';
 import { useAuthContext } from '@hooks/useAuth';
 import DefaultHeader from '@components/DefaultHeader';
-import LogoutModal from '@components/LogoutModal';
 import CityDropdown from "@components/CityDropdown"
 
+interface Data {
+  name: string;
+    email: string;
+    gender: string;
+    state: string;
+    nascimento: string;
+    telefone: string;
+    password?: string;
+}
+
 const EditProfileScreen = ({ navigation }) => {
-  const { user, setUser, logout } = useAuthContext();
+  const { user, setUser } = useAuthContext();
     
   useEffect(() => {
     setName(user?.name);
@@ -21,7 +30,7 @@ const EditProfileScreen = ({ navigation }) => {
     setState(user?.state || '');
     setBirthDate(user?.nascimento || '');
     setPhone(user?.telefone || '');
-    console.log(user);
+    console.log("UseEffect foi rodado novamente!");
   }, [user]);
 
   // const handleLogout = async () => {
@@ -38,7 +47,7 @@ const EditProfileScreen = ({ navigation }) => {
   const [birthDate, setBirthDate] = useState('');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  // const [success, setSuccess] = useState(false);
 
   async function handleConfirm() {
     if (!name) setError('Insira um nome válido!');
@@ -46,22 +55,28 @@ const EditProfileScreen = ({ navigation }) => {
     else if (!birthDate) setError('Insira uma data de nascimento válida!');
     else if (!phone) setError('Insira um telefone válido!');
     else {
-      let data = {
+      let data: Data = {
         name,
         email,
         gender,
         state,
-        birthDate,
-        phone,
-        password: password && password.length > 5 ? password : undefined
+        nascimento: birthDate,
+        telefone: phone,
       };
+      if (password && password.length >= 5) {
+        data.password = password;
+      } else if (password && password.length < 5) {
+        return setError('Sua nova senha deve ter pelo menos 5 caracteres! Se quiser manter a senha atual, deixe o campo em branco.');
+      }
+      console.log("os seguintes dados foram usados no update: ", data);
       if (password && password.length < 5) {
         setError('Sua nova senha deve ter pelo menos 5 caracteres! Se quiser manter a senha atual, deixe o campo em branco.');
+      } else {
+        await UserService.update(data, user.id);
+        setUser({ ...user, ...data });
+        // setSuccess(true);
+        navigation.goBack();
       }
-      await UserService.update(data, user.id);
-      setUser({ ...user, ...data });
-      setSuccess(true);
-      navigation.goBack();
     }
   }
 
@@ -82,6 +97,7 @@ const EditProfileScreen = ({ navigation }) => {
         <ChildInput title='Senha' value={password} onChange={setPassword} isEditable isPassword />
         <ChildInput title='Sexo' value={gender} onChange={setGender} isSelection options={['Masculino', 'Feminino']} isEditable />
         <CityDropdown
+          initialValue={state}
           onType={(a: string) => setState(a)}
           onSelectItem={(a: string) => setState(a)}
         />
@@ -89,11 +105,10 @@ const EditProfileScreen = ({ navigation }) => {
         <ChildInput isPhone title='Telefone' value={phone} onChange={setPhone} isEditable />
 
         {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
-        {success && <S.SuccessMessage>Suas credenciais foram atualizadas com sucesso!</S.SuccessMessage>}
+        {/* {success && <S.SuccessMessage>Suas credenciais foram atualizadas com sucesso!</S.SuccessMessage>} */}
 
         <View style={{ gap: 8 }}>
           <AddChildButton title='Salvar e Voltar' onPress={handleConfirm} />
-          {/* <AddChildButton hidePlus invertColors title='Sair do App' onPress={() => setModalVisible(true)} /> */}
         </View>
       </S.Content>
       {/* <LogoutModal
