@@ -14,6 +14,8 @@ import { DashPathEffect, useFont } from "@shopify/react-native-skia"
 import React from "react";
 import GrowthDataService from "@services/GrowthDataService";
 import GrowthData from "@interfaces/GrowthData";
+import findAge from "@utils/findAge";
+import findClosestPercentile from "@utils/findClosestPercentile";
 
 const curveTypeMapping: Record<string, string> = {
   "Estatura (cm)": "altura",
@@ -52,32 +54,11 @@ const ChildGrowthScreen = ({ navigation }) => {
     convertData();
   }, [growthData, selectedCurveType]);
 
-  function findAge(comparisonDate: string): { years: number, months: number, totalAge?: number } {
-    if (!child?.nascimento) return { years: 0, months: 0 };
-    
-    const [birthDay, birthMonth, birthYear] = child.nascimento.split('/').map(Number);
-    const [compDay, compMonth, compYear] = comparisonDate.split('/').map(Number);
-    
-    let years = compYear - birthYear;
-    let months = compMonth - birthMonth;
-    
-    if (months < 0) {
-      years--;
-      months += 12;
-    }
-    
-    if (compDay < birthDay) {
-      months--;
-    }
-    
-    return { years, months, totalAge: years + months / 12 };
-  }
-
   async function fetchData() {
     const data = await GrowthDataService.getByChild(child.idchildren);
     const sortedData = data.sort((a, b) => {
-      const ageA = findAge(a.growthDate).totalAge;
-      const ageB = findAge(b.growthDate).totalAge;
+      const ageA = findAge(a.growthDate, child).totalAge;
+      const ageB = findAge(b.growthDate, child).totalAge;
       return ageA - ageB;
     });
     setGrowthData(sortedData);
@@ -91,7 +72,7 @@ const ChildGrowthScreen = ({ navigation }) => {
           return;
         }
         const data = growthData.map(item => ({
-            x: findAge(item.growthDate).totalAge,
+            x: findAge(item.growthDate, child).totalAge,
             y: determineGrowthData(item),
         }));
         setChildData(data);
@@ -100,33 +81,6 @@ const ChildGrowthScreen = ({ navigation }) => {
         console.error("Error fetching growth data:", error);
     }
   }
-
-  const findClosestPercentile = () => {
-    const genderData = datasets[child.gender][selectedCurveType];
-    if (!genderData) return "N/A";
-
-    const latestData = growthData[growthData.length - 1];
-
-    const measure = determineGrowthData(latestData);
-
-    const dataAge = latestData.age.months + latestData.age.years * 12;
-  
-    let closestPercentile = "N/A";
-    let minDifference = Infinity;
-  
-    for (const percentile of percentiles) {
-      const percentileData = genderData[percentile];
-      const percentileValue = Number(percentileData[dataAge][percentile.toLowerCase()].replace(',', '.'));
-      const difference = Math.abs(measure - percentileValue);
-  
-      if (difference < minDifference) {
-        minDifference = difference;
-        closestPercentile = percentile;
-      }
-    }
-  
-    return closestPercentile;
-  };
 
   const chartData = useMemo(() => {
     if (!child || !selectedCurveType) return [];
@@ -364,7 +318,7 @@ const ChildGrowthScreen = ({ navigation }) => {
 
             {growthData.length > 0 ?
               <S.Description>
-                Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil {findClosestPercentile()}</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
+                Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil {findClosestPercentile(curveType, child, growthData)}</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
               </S.Description>
               :
               <S.Description>

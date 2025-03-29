@@ -20,6 +20,18 @@ interface Props {
   originalData: GrowthData;
 }
 
+function formatDecimal(input: string) {
+  let formatted = input.replace(',', '.');
+  formatted = formatted.replace(/[^0-9.]/g, '');
+
+  if (formatted.includes('.')) {
+    const [intPart, decimalPart] = formatted.split('.');
+    formatted = `${intPart}.${decimalPart.slice(0, 2)}`;
+  }
+
+  return formatted;
+}
+
 const EditCurveModal = (p: Props) => {
 
     const [error, setError] = useState<boolean>(false);
@@ -63,14 +75,14 @@ const EditCurveModal = (p: Props) => {
               <ChildInput
                 title='Altura (em cm)'
                 value={data.height}
-                onChange={(a) => setData(prevData => ({...prevData, height: a}))}
+                onChange={(a) => setData(prevData => ({...prevData, height: formatDecimal(a)}))}
                 isNumber
                 isEditable
               />
               <ChildInput
                 title='Peso (em kg)'
                 value={data.weight}
-                onChange={(a) => setData(prevData => ({...prevData, weight: a}))}
+                onChange={(a) => setData(prevData => ({...prevData, weight: formatDecimal(a)}))}
                 isNumber
                 unit='kg'
                 isEditable

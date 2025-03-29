@@ -14,6 +14,7 @@ import GrowthDataService from '@services/GrowthDataService';
 import GrowthData from '@interfaces/GrowthData';
 import VaccineService from '@services/VaccineService';
 import ChildrenService from '@services/ChildrenService';
+import findClosestPercentile from '@utils/findClosestPercentile';
 
 const percentiles = ["P3", "P15", "P50", "P85", "P97"];
 
@@ -55,34 +56,6 @@ const FollowUpScreen = ({ navigation }) => {
       }
     }
 
-    const findClosestPercentile = (curve: string) => {
-      const genderData = datasets[child.gender][curve];
-      if (!genderData) return "N/A";
-    
-      const latestData = growthData[growthData.length - 1];
-      if (!latestData) return 'P1';
-    
-      const measure = determineGrowthData(latestData, curve);
-    
-      const dataAge = latestData.age.months + latestData.age.years * 12;
-    
-      let closestPercentile = "N/A";
-      let minDifference = Infinity;
-    
-      for (const percentile of percentiles) {
-        const percentileData = genderData[percentile];
-        const percentileValue = Number(percentileData[dataAge][percentile.toLowerCase()].replace(',', '.'));
-        const difference = Math.abs(measure - percentileValue);
-    
-        if (difference < minDifference) {
-          minDifference = difference;
-          closestPercentile = percentile;
-        }
-      }
-    
-      return closestPercentile;
-    };
-
     return (
         <S.Wrapper>
             <ChildrenHeader />
@@ -108,7 +81,7 @@ const FollowUpScreen = ({ navigation }) => {
                 
                 <S.Title>Resumo</S.Title>
                 <S.Description>
-                  {child.name} se encontra no percentil {findClosestPercentile('peso')} de peso e {findClosestPercentile('altura')} de altura.{'\n'}
+                  {child.name} se encontra no percentil {findClosestPercentile('peso', child, growthData)} de peso e {findClosestPercentile('altura', child, growthData)} de altura.{'\n'}
                 </S.Description>
                 <S.Description>
                   {vaccineDev >= 70 ? 'Suas vacinas estão em dia.' : 'Suas vacinas estão atrasadas. Atualize o calendário vacinal!'}{'\n'}

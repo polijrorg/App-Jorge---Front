@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import * as S from './styles'
-import { Modal, TouchableWithoutFeedback } from 'react-native'
+import React, { useState } from 'react';
+import * as S from './styles';
+import { Modal, TouchableWithoutFeedback } from 'react-native';
 import { ChildInput } from '@components/ChildInput';
 import AddChildButton from '@components/AddChildButton';
 
 interface NewRowData {
-  weight: string,
-  height: string,
-  growthDate: string
+  weight: string;
+  height: string;
+  growthDate: string;
 }
 
 interface Props {
@@ -17,7 +17,25 @@ interface Props {
 }
 
 export default function InsertDataModal(p: Props) {
-  
+  const [error, setError] = useState<boolean>(false);
+  const [data, setData] = useState<NewRowData>({
+    height: '',
+    weight: '',
+    growthDate: '',
+  });
+
+  function formatDecimal(input: string) {
+    let formatted = input.replace(',', '.');
+    formatted = formatted.replace(/[^0-9.]/g, '');
+
+    if (formatted.includes('.')) {
+      const [intPart, decimalPart] = formatted.split('.');
+      formatted = `${intPart}.${decimalPart.slice(0, 2)}`;
+    }
+
+    return formatted;
+  }
+
   function handlePress(data: NewRowData) {
     if (!data.weight || !data.height || !data.growthDate) {
       setError(true);
@@ -26,14 +44,7 @@ export default function InsertDataModal(p: Props) {
       p.onClose(data);
       setData({ height: '', weight: '', growthDate: '' });
     }
-  }  
-
-  const [error, setError] = useState<boolean>(false);
-  const [data, setData] = useState<NewRowData>({
-    height: '',
-    weight: '',
-    growthDate: ''
-  });  
+  }
 
   return (
     <Modal visible={p.visible} transparent animationType="fade">
@@ -43,32 +54,34 @@ export default function InsertDataModal(p: Props) {
             <S.Title>Adicionar estatura e peso:</S.Title>
             <S.Line />
             <ChildInput
-              title='Data'
+              title="Data"
               value={data.growthDate}
-              onChange={(a) => setData(prevData => ({...prevData, growthDate: a}))}
+              onChange={(a) => setData((prevData) => ({ ...prevData, growthDate: a }))}
               isDate={true}
             />
             <ChildInput
-              title='Altura (em cm)'
+              title="Altura (em cm)"
               value={data.height}
-              onChange={(a) => setData(prevData => ({...prevData, height: a}))}
+              onChange={(a) =>
+                setData((prevData) => ({ ...prevData, height: formatDecimal(a) }))
+              }
               isNumber={true}
             />
             <ChildInput
-              title='Peso (em kg)'
+              title="Peso (em kg)"
               value={data.weight}
-              onChange={(a) => setData(prevData => ({...prevData, weight: a}))}
+              onChange={(a) =>
+                setData((prevData) => ({ ...prevData, weight: formatDecimal(a) }))
+              }
               isNumber={true}
-              unit='kg'
+              unit="kg"
             />
             <S.Line />
-            {error && 
-              <S.Title color='red'>Por favor, preencha todos os campos.</S.Title>
-            }
-            <AddChildButton title='Adicionar Dados' onPress={() => handlePress(data)}/>
+            {error && <S.Title color="red">Por favor, preencha todos os campos.</S.Title>}
+            <AddChildButton title="Adicionar Dados" onPress={() => handlePress(data)} />
           </S.Container>
         </TouchableWithoutFeedback>
       </S.Fundo>
     </Modal>
-  )
+  );
 }
