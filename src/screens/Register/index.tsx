@@ -65,7 +65,7 @@ const Register = ({ navigation }) => {
         }
         else {
             UserService.create({ email, name, password });
-            navigation.navigate('Login')
+            navigation.navigate('Login', { registerEmail: email });
             // alert("Cadastro Realizado");
         }
     }

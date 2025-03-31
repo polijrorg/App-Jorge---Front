@@ -8,9 +8,10 @@ import { useAuthContext } from '@hooks/useAuth';
 import { ReadAndAgree } from '@components/ReadAndAgree';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, route }) => {
 
-    const [email, setEmail] = useState('');
+  const { registerEmail } = route.params || {};
+    const [email, setEmail] = useState(registerEmail);
     const [password, setPassword] = useState('');
     const [modal, setModal] = useState(false);
     const [keepLoggedIn, setKeepLoggedIn] = useState(false);

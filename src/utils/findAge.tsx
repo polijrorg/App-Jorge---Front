@@ -1,11 +1,11 @@
 import Child from "@interfaces/Child";
 
 export default function findAge(comparisonDate: string, activeChild: Child): { years: number, months: number, totalAge?: number } {
-  if (!activeChild?.nascimento) return { years: 0, months: 0 };
+  if (!activeChild?.nascimento || !comparisonDate) return { years: 0, months: 0 };
   
   const [birthDay, birthMonth, birthYear] = activeChild.nascimento.split('/').map(Number);
   const [compDay, compMonth, compYear] = comparisonDate.split('/').map(Number);
-  console.log("Datas usadas na conversão: ", birthYear, compYear)
+  console.log("Datas usadas na conversão: ", activeChild.nascimento, comparisonDate)
   
   let years = compYear - birthYear;
   let months = compMonth - birthMonth;

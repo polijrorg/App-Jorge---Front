@@ -49,7 +49,7 @@ const ChildCard: React.FC<ChildCardProps> = ({
 
     function findAge(birthDate: string): { years: number, months: number } {
         if (birthDate == null) return {years: 0, months: 0};
-        const [day, month, year] = birthDate.split('/').map(Number);
+        const [day, month, year] = birthDate?.split('/').map(Number);
         const today = new Date();
         let years = today.getFullYear() - year;
         let months = today.getMonth() - month + 1;

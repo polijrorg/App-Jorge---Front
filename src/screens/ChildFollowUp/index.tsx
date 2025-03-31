@@ -9,14 +9,10 @@ import Trophy from '@assets/icons/Trophy.png';
 import { useChildContext } from '@hooks/useChild';
 import ChildrenHeader from '@components/ChildrenHeader';
 import ChildCard from '@components/ChildCard';
-import datasets from '@services/DefaultCurves/datasets';
 import GrowthDataService from '@services/GrowthDataService';
-import GrowthData from '@interfaces/GrowthData';
 import VaccineService from '@services/VaccineService';
 import ChildrenService from '@services/ChildrenService';
 import findClosestPercentile from '@utils/findClosestPercentile';
-
-const percentiles = ["P3", "P15", "P50", "P85", "P97"];
 
 const FollowUpScreen = ({ navigation }) => {
     const { activeChild: child, growthData, setGrowthData } = useChildContext();
@@ -48,14 +44,6 @@ const FollowUpScreen = ({ navigation }) => {
       setGrowthData(data);
     }
 
-    function determineGrowthData(item: GrowthData, curve: string) {
-      switch (curve) {
-        case 'altura': return item.height;
-        case 'peso': return item.weight;
-        case 'imc': return item.imc;
-      }
-    }
-
     return (
         <S.Wrapper>
             <ChildrenHeader />
@@ -79,17 +67,20 @@ const FollowUpScreen = ({ navigation }) => {
 
                 <S.Line />
                 
-                <S.Title>Resumo</S.Title>
-                <S.Description>
-                  {child.name} se encontra no percentil {findClosestPercentile('peso', child, growthData)} de peso e {findClosestPercentile('altura', child, growthData)} de altura.{'\n'}
-                </S.Description>
-                <S.Description>
-                  {vaccineDev >= 70 ? 'Suas vacinas estão em dia.' : 'Suas vacinas estão atrasadas. Atualize o calendário vacinal!'}{'\n'}
-                </S.Description>
-                <S.Description>
-                  {marcosDev >= 70 ? 'Os marcos de desenvolvimento estão adequados para sua idade.' : `Os marcos de desenvolvimento não vêm sendo atualizados. Converse com seu pediatra a respeito de como ${estimular}!`}
-                </S.Description>
-                <S.Line />
+                {growthData?.length > 0 &&
+                  <>
+                    <S.Title>Resumo</S.Title>
+                    <S.Description>
+                      {child.name} se encontra no percentil {findClosestPercentile('Peso (kg)', child, growthData)} de peso e {findClosestPercentile('Estatura (cm)', child, growthData)} de altura.{'\n'}
+                    </S.Description>
+                    <S.Description>
+                      {vaccineDev >= 70 ? 'Suas vacinas estão em dia.' : 'Suas vacinas estão atrasadas. Atualize o calendário vacinal!'}{'\n'}
+                    </S.Description><S.Description>
+                      {marcosDev >= 70 ? 'Os marcos de desenvolvimento estão adequados para sua idade.' : `Os marcos de desenvolvimento não vêm sendo atualizados. Converse com seu pediatra a respeito de como ${estimular}!`}
+                    </S.Description>
+                    <S.Line />
+                  </>
+                }
                 
                 <S.Title>Suas Ferramentas</S.Title>
                 <ScrollView horizontal contentContainerStyle={{ alignItems: 'flex-start', justifyContent: 'space-evenly', width:'100%' }} style={{ maxHeight:100 }}>

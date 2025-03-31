@@ -99,7 +99,7 @@ const EditChildrenScreen = ({ navigation }) => {
 
                 <S.Description>Dados Básicos</S.Description>
                 <ChildInput title='Nome' value={name || ''} onChange={(a) => setName(a)} isEditable={true}/>
-                <ChildInput title='Data de nascimento' isDate={true} value={birthDate || ''} onChange={(a) => setBirthDate(a)} isEditable={true}/>
+                <ChildInput title='Data de nascimento' isDate={true} nascimento={child.nascimento} value={birthDate || ''} onChange={(a) => setBirthDate(a)} isEditable={true}/>
                 <ChildInput title='Sexo biológico' isSelection={true} options={['Feminino', 'Masculino']} value={gender || ''} onChange={(a) => setGender(a)} isEditable={true}/>
 
                 <S.Description>Marcos Iniciais - Nascimento</S.Description>

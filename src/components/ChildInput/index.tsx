@@ -16,9 +16,10 @@ interface Props {
   unit?: string;
   isPassword?: boolean;
   isPhone?: boolean;
+  nascimento?: string;
 }
 
-export function ChildInput({ isPhone = false, isEditable = false, title, value, onChange, isDate = false, isSelection = false, options, isNumber = false, unit, isPassword = false }: Props) {
+export function ChildInput({ nascimento, isPhone = false, isEditable = false, title, value, onChange, isDate = false, isSelection = false, options, isNumber = false, unit, isPassword = false }: Props) {
   const [showPicker, setShowPicker] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);

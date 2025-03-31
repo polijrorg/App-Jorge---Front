@@ -156,7 +156,7 @@ const ChildGrowthScreen = ({ navigation }) => {
   }));
 
   function findFloatAge(birthDate: string): number {
-    if (birthDate == null) return 0;
+    if (!birthDate) return 0;
     const [day, month, year] = birthDate.split('/').map(Number);
     const today = new Date();
     let years = today.getFullYear() - year;
@@ -314,6 +314,7 @@ const ChildGrowthScreen = ({ navigation }) => {
               <Legend data={legendData} />
             </View>
             
+            <S.Line/>
             <AddChildButton title="Adicionar Dados" onPress={() => navigation.navigate("EditCurve")} />
 
             {growthData.length > 0 ?

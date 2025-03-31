@@ -18,6 +18,7 @@ interface Props {
   onCancel: () => void;
   onDelete: () => void;
   originalData: GrowthData;
+  nascimento: string;
 }
 
 function formatDecimal(input: string) {
@@ -68,6 +69,7 @@ const EditCurveModal = (p: Props) => {
               <ChildInput
                 title='Data'
                 value={data.growthDate}
+                nascimento={p.nascimento}
                 onChange={(a) => setData(prevData => ({...prevData, growthDate: a}))}
                 isDate
                 isEditable

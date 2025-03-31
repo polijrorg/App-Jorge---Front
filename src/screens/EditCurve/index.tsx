@@ -179,12 +179,14 @@ const EditCurveScreen = ({ navigation }) => {
           />
 
           <InsertDataModal
+            nascimento={activeChild.nascimento}
             onClose={(a: RowData) => onInsertClose(a)}
             onCancel={() => setInsertModal(false)}
             visible={insertModal}
           />
 
           <EditCurveModal
+            nascimento={activeChild.nascimento}
             onClose={(a: RowData) => onEditClose(a)}
             onCancel={() => setEditModal(false)}
             onDelete={() => onDelete()}

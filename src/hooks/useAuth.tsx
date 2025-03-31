@@ -75,8 +75,8 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
   }
 
   const logout = async (): Promise<void> => {
-    await AsyncStorage.removeItem("@jorge:token")
-    await AsyncStorage.removeItem("@jorge:userId")
+    await AsyncStorage.removeItem("@jorge:token");
+    await AsyncStorage.removeItem("@jorge:userId");
     await AsyncStorage.removeItem('@jorge:keepLoggedIn');
     setUser(undefined);
   }

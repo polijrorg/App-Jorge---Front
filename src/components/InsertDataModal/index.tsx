@@ -14,6 +14,7 @@ interface Props {
   onClose: (a: NewRowData) => void;
   visible: boolean;
   onCancel: () => void;
+  nascimento: string;
 }
 
 export default function InsertDataModal(p: Props) {
@@ -54,6 +55,7 @@ export default function InsertDataModal(p: Props) {
             <S.Title>Adicionar estatura e peso:</S.Title>
             <S.Line />
             <ChildInput
+              nascimento={p.nascimento}
               title="Data"
               value={data.growthDate}
               onChange={(a) => setData((prevData) => ({ ...prevData, growthDate: a }))}

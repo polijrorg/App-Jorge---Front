@@ -31,6 +31,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     async function handlePress(data: Child) {
+      console.log('aqui ta a criança!!!!', data)
         setActiveChild(data);
         navigation.navigate('EditChildren');
     }

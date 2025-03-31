@@ -12,7 +12,7 @@ const ConfiguracoesScreen = ({ navigation }) => {
   const { logout } = useAuthContext();
 
   const handleLogout = async () => {
-    logout();
+    await logout();
     navigation.navigate('Login');
   }
 
