@@ -97,7 +97,7 @@ const ChildCard: React.FC<ChildCardProps> = ({
             <S.InfoContainer>
                 <S.Name>{name}</S.Name>
                 <S.Details>
-                  {formatAge(age)} - <S.HighlightGreen>{weight}</S.HighlightGreen> - <S.HighlightYellow>{height}</S.HighlightYellow>
+                  {formatAge(age)} - {weight} - {height}
                 </S.Details>
                 <S.ProgressContainer>
                     <S.ProgressLabel>Desenvolvimento</S.ProgressLabel>

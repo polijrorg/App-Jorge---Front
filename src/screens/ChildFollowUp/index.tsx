@@ -76,7 +76,7 @@ const FollowUpScreen = ({ navigation }) => {
                     <S.Description>
                       {vaccineDev >= 70 ? 'Suas vacinas estão em dia.' : 'Suas vacinas estão atrasadas. Atualize o calendário vacinal!'}{'\n'}
                     </S.Description><S.Description>
-                      {marcosDev >= 70 ? 'Os marcos de desenvolvimento estão adequados para sua idade.' : `Os marcos de desenvolvimento não vêm sendo atualizados. Converse com seu pediatra a respeito de como ${estimular}!`}
+                      {marcosDev >= 70 ? 'Os marcos de desenvolvimento estão adequados para sua idade.' : `Os marcos de desenvolvimento não vêm sendo atualizados ou não estão adequados para idade. Converse com seu pediatra a respeito de como estimular sua criança!`}
                     </S.Description>
                     <S.Line />
                   </>

@@ -100,11 +100,20 @@ function Vacinas({ navigation }) {
     const parseAge = (age: string) => {
       const match = age.match(/(\d+)\s*(meses|anos)/);
       if (!match) return { value: Infinity, unit: 'anos' };
-      
+    
       const value = Number(match[1]);
       const unit = match[2];
+      
+      if (age.includes('-')) {
+        const rangeMatch = age.match(/(\d+)-(\d+)\s*(meses|anos)/);
+        if (rangeMatch) {
+          return { value: Number(rangeMatch[1]), unit: rangeMatch[3] };
+        }
+      }
+      
       return { value, unit };
     };
+    
   
     const ageA = parseAge(a[0]);
     const ageB = parseAge(b[0]);
