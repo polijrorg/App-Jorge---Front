@@ -52,7 +52,7 @@ const ChildGrowthScreen = ({ navigation }) => {
   
   useEffect(() => {
     convertData();
-  }, [growthData, selectedCurveType]);
+  }, [child, growthData, selectedCurveType]);
 
   async function fetchData() {
     const data = await GrowthDataService.getByChild(child.idchildren);
@@ -76,7 +76,6 @@ const ChildGrowthScreen = ({ navigation }) => {
             y: determineGrowthData(item),
         }));
         setChildData(data);
-        console.log(data);
     } catch (error) {
         console.error("Error fetching growth data:", error);
     }
@@ -89,15 +88,16 @@ const ChildGrowthScreen = ({ navigation }) => {
     if (!genderData) return [];
 
     const dataPoints = [];
-    const months = genderData.P50.map((item) => Number.parseFloat(item.month) / 12);
+    const months = genderData.P97.map((item) => Number.parseFloat(item.month) / 12);
 
     months.forEach((month, index) => {
       const point = { x: month };
       percentiles.forEach((percentile) => {
-        point[percentile] = Number.parseFloat(genderData[percentile][index][percentile.toLowerCase()].replace(',', '.'));
+        const raw = genderData?.[percentile]?.[index]?.[percentile.toLowerCase()];
+        point[percentile] = raw ? Number.parseFloat(raw.replace(',', '.')) : 0;
       });
       dataPoints.push(point);
-    });
+    });    
 
     return dataPoints;
   }, [child, selectedCurveType]);
@@ -106,7 +106,29 @@ const ChildGrowthScreen = ({ navigation }) => {
     if (!chartData.length) return [0, 100];
 
     const age = findFloatAge(child?.nascimento);
-    const rightLimit = age < 2 ? 2 : 5;
+    const rightLimit = (() => {
+      if (selectedCurveType === "peso") {
+        if (age < 1) {
+          return 1;
+        } else if (age < 2) {
+          return 2;
+        } else if (age < 9) {
+          return age + 1;
+        } else {
+          return 9.85;
+        }
+      }
+    
+      if (age < 1) {
+        return 1;
+      } else if (age < 2) {
+        return 2;
+      } else if (age < 18) {
+        return age + 1;
+      } else {
+        return 19;
+      }
+    })();
 
     const closestPoints = chartData.reduce((acc, point) => {
       const diffAgeMinus1 = Math.abs(point.x - 0);
@@ -133,12 +155,27 @@ const ChildGrowthScreen = ({ navigation }) => {
 
   const xDomain: [number, number] = useMemo(() => {
     let age = findFloatAge(child?.nascimento);
+
+    if (selectedCurveType === "peso") {
+      if (age < 1) {
+        return [0, 1];
+      } else if (age < 2) {
+        return [0, 2];
+      } else if (age < 9) {
+        return [0, age + 1];
+      } else {
+        return [0, 9.85];
+      }
+    }
+
     if (age < 1) {
       return [0, 1];
     } else if (age < 2) {
       return [0, 2];
+    } else if (age < 18) {
+      return [0, age + 1];
     } else {
-      return [0, 5];
+      return [0, 19];
     }
   }, [selectedCurveType]);
 
@@ -241,11 +278,9 @@ const ChildGrowthScreen = ({ navigation }) => {
                       lineWidth: 1,
                       formatXLabel: (label) => {
                         if (findFloatAge(child?.nascimento) < 1) {
-                          // Exibir em meses quando a criança tem menos de 1 ano
                           const months = Math.floor(label * 12);
                           return `${months}m`;
                         } else {
-                          // Exibir em anos quando a criança tem mais de 1 ano
                           return `${label}a`;
                         }
                       },
@@ -271,7 +306,7 @@ const ChildGrowthScreen = ({ navigation }) => {
                         <Line
                           key={percentile}
                           points={points[percentile]}
-                          color={`hsla(${index * 30}, 70%, 50%, 20%)`}
+                          color={`hsla(${index * 30}, 70%, 50%, 30%)`}
                           strokeWidth={2}
                           curveType="natural"
                         />

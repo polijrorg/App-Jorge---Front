@@ -120,6 +120,10 @@ const dataP3_meninos_peso = [
   { month: '118', p3: '23,234' },
   { month: '119', p3: '23,406' },
   { month: '120', p3: '23,581' },
+  ...Array.from({ length: 108 }, (_, i) => ({
+    month: String(i + 121),
+    p3: '0'
+  }))
 ]
   
 export default dataP3_meninos_peso
