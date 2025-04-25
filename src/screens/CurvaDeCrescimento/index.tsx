@@ -25,6 +25,7 @@ const curveTypeMapping: Record<string, string> = {
 
 const percentiles = ["P3", "P15", "P50", "P85", "P97"];
 
+
 const Legend = ({ data }) => {
   return (
     <View style={{ position: "absolute", top: 10, right: 10, backgroundColor: "rgba(255,255,255,0.8)", padding: 5, borderRadius: 5 }}>
@@ -42,10 +43,10 @@ const ChildGrowthScreen = ({ navigation }) => {
   const { activeChild: child, setGrowthData, growthData } = useChildContext();
   const [curveType, setCurveType] = useState<string>("Estatura (cm)");
   const [childData, setChildData] = useState<any[]>([]);
-  const selectedCurveType = curveTypeMapping[curveType];
+  const selectedCurveType = useMemo(() => curveTypeMapping[curveType], [curveType]);
   const Buttons = Object.keys(curveTypeMapping);
   const font = useFont(require("@assets/fonts/Poppins-Regular.ttf"), 12);
-
+  
   useEffect(() => {
     fetchData();
   }, [child, selectedCurveType]);
@@ -53,7 +54,7 @@ const ChildGrowthScreen = ({ navigation }) => {
   useEffect(() => {
     convertData();
   }, [child, growthData, selectedCurveType]);
-
+  
   async function fetchData() {
     const data = await GrowthDataService.getByChild(child.idchildren);
     const sortedData = data.sort((a, b) => {
@@ -63,33 +64,33 @@ const ChildGrowthScreen = ({ navigation }) => {
     });
     setGrowthData(sortedData);
   }
-    
+  
   async function convertData() {
     if (!child || !selectedCurveType) return;
     try {
-        if (!growthData || growthData.length === 0) {
-          console.log("growthData está vazio");
-          return;
-        }
-        const data = growthData.map(item => ({
-            x: findAge(item.growthDate, child).totalAge,
-            y: determineGrowthData(item),
-        }));
-        setChildData(data);
+      if (!growthData || growthData.length === 0) {
+        console.log("growthData está vazio");
+        return;
+      }
+      const data = growthData.map(item => ({
+        x: findAge(item.growthDate, child).totalAge,
+        y: determineGrowthData(item),
+      }));
+      setChildData(data);
     } catch (error) {
-        console.error("Error fetching growth data:", error);
+      console.error("Error fetching growth data:", error);
     }
   }
-
+  
   const chartData = useMemo(() => {
     if (!child || !selectedCurveType) return [];
-
+    
     const genderData = datasets[child.gender]?.[selectedCurveType];
     if (!genderData) return [];
-
+    
     const dataPoints = [];
     const months = genderData.P97.map((item) => Number.parseFloat(item.month) / 12);
-
+    
     months.forEach((month, index) => {
       const point = { x: month };
       percentiles.forEach((percentile) => {
@@ -98,10 +99,10 @@ const ChildGrowthScreen = ({ navigation }) => {
       });
       dataPoints.push(point);
     });    
-
+    
     return dataPoints;
   }, [child, selectedCurveType]);
-
+  
   const yDomain: [number, number] = useMemo(() => {
     if (!chartData.length) return [0, 100];
 
@@ -177,7 +178,7 @@ const ChildGrowthScreen = ({ navigation }) => {
     } else {
       return [0, 19];
     }
-  }, [selectedCurveType]);
+  }, [selectedCurveType, child]);
 
   function determineGrowthData(item: GrowthData) {
     switch (curveType) {
@@ -213,6 +214,23 @@ const ChildGrowthScreen = ({ navigation }) => {
     const ageInYears = years + months / 12 + days / 365;
     return parseFloat(ageInYears.toFixed(2));
   }
+
+  function determineColor() {
+    const percentile = findClosestPercentile(curveType, child, growthData);
+    switch (percentile) {
+      case "P50":
+        return "#339248";
+      case "P15":
+      case "P85":
+        return "#FFD700";
+      case "P3":
+      case "P97":
+        return "#D32F2F";
+      default:
+        return "#000000";
+    }
+  }
+  
 
   return (
     <S.Wrapper>
@@ -354,7 +372,11 @@ const ChildGrowthScreen = ({ navigation }) => {
 
             {growthData.length > 0 ?
               <S.Description>
-                Desenvolvimento está dentro dos padrões esperados para a idade. {child.name.split(' ')[0]} está no <S.GreenText>percentil {findClosestPercentile(curveType, child, growthData)}</S.GreenText> para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
+                Desenvolvimento está dentro dos padrões esperados para a idade.{child.name.split(' ')[0]} está no
+                <S.ColoredText color={determineColor()}>
+                  percentil {findClosestPercentile(curveType, child, growthData)}
+                </S.ColoredText>
+                para {selectedCurveType}, o que indica que está crescendo de forma saudável e proporcional.
               </S.Description>
               :
               <S.Description>

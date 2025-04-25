@@ -42,8 +42,8 @@ export const Description = styled(Text)<{ width?: number, size?: number }>`
     width: ${({width}) => (width) ? '' : '100%'};
 `
 
-export const GreenText = styled(Text)<{ width?: number, size?: number }>`
-    color: #339248;
+export const ColoredText = styled(Text)<{ color: string }>`
+    color: ${({ color }) => color};
 `
 
 export const BlueText = styled(Text)<{ size?: number }>`
