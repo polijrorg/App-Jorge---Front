@@ -151,12 +151,12 @@ function Vacinas({ navigation }) {
   }
 
   async function handleStatusUpdate(status: string) {
-    console.log({
-      childrenId: vaccine.childrenId,
-      vaccineId: vaccine.vaccineId,
-      scheduleId: vaccine.scheduleId,
-      status: status
-    });
+    // console.log({
+    //   childrenId: vaccine.childrenId,
+    //   vaccineId: vaccine.vaccineId,
+    //   scheduleId: vaccine.scheduleId,
+    //   status: status
+    // });
     await VaccineService.upsert({
       childrenId: vaccine.childrenId,
       vaccineId: vaccine.vaccineId,
@@ -221,7 +221,7 @@ function Vacinas({ navigation }) {
               <S.TableContainer>
                 {rows.map((row) => (
                   <S.TableRow key={row.age}>
-                    <MonthButton text={row.age} color='none' onPress={() => console.log("ta apertando nos meses pq????")} />
+                    <MonthButton text={row.age} color='none' onPress={() => {}} />
                     <S.Column>
                       {row.vaccines.map((vaccine: Vaccine) => (
                         <Button

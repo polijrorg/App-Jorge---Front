@@ -18,7 +18,7 @@ export default class GrowthDataService {
       )
       return response.data;
     } catch(error) {
-      console.log('Erro ao buscar dados de crescimento por id: ', error);
+      // console.log('Erro ao buscar dados de crescimento por id: ', error);
       throw new Error(error);
     }
   }
@@ -30,7 +30,7 @@ export default class GrowthDataService {
       )
       return response.data;
     } catch(error) {
-      console.log('Erro ao buscar dados de crescimento por criança: ', error);
+      // console.log('Erro ao buscar dados de crescimento por criança: ', error);
       return [] as GrowthData[];
     }
   }
@@ -43,7 +43,7 @@ export default class GrowthDataService {
       )
       return response.data;
     } catch(error) {
-      console.log('Erro ao criar dados de crescimento: ', error);
+      // console.log('Erro ao criar dados de crescimento: ', error);
       throw new Error(error);
     }
   }
@@ -56,7 +56,7 @@ export default class GrowthDataService {
       )
       return response.data;
     } catch(error) {
-      console.log('Erro ao atualizar dados de crescimento: ', error);
+      // console.log('Erro ao atualizar dados de crescimento: ', error);
       throw new Error(error);
     }
   }
@@ -68,7 +68,7 @@ export default class GrowthDataService {
       )
       return response.data;
     } catch(error) {
-      console.log('Erro ao deletar dados de crescimento: ', error);
+      // console.log('Erro ao deletar dados de crescimento: ', error);
       throw new Error(error);
     }
   }

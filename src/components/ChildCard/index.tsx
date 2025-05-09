@@ -76,10 +76,10 @@ const ChildCard: React.FC<ChildCardProps> = ({
       async function calculateDevelopment() {
         const marcosResponse = await ChildrenService.development(id);
         setMarcosDevelopment(Number(marcosResponse.developmentPercentage));
-        console.log('Desenvolvimento dos marcos calculado:', marcosResponse.developmentPercentage);
+        // console.log('Desenvolvimento dos marcos calculado:', marcosResponse.developmentPercentage);
         const vaccinesResponse = await VaccineService.development(id);
         setVaccineDevelopment(Number(vaccinesResponse.developmentPercentage));
-        console.log('Desenvolvimento dos marcos calculado:', vaccinesResponse.developmentPercentage);
+        // console.log('Desenvolvimento dos marcos calculado:', vaccinesResponse.developmentPercentage);
       }
       calculateDevelopment();
     }, [activeChild])

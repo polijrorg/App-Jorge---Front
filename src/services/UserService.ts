@@ -67,7 +67,7 @@ export default class UserService {
             );
             return response.data;
         } catch (error) {
-            console.error('Erro ao fazer login', error.response.data.message);
+            // console.error('Erro ao fazer login', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -81,7 +81,7 @@ export default class UserService {
                 throw new Error('There was a problem with deleting the user');
             }
         } catch (error) {
-            console.error('Erro ao fazer deletar o usuário', error.response.data.message);
+            // console.error('Erro ao fazer deletar o usuário', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -98,7 +98,7 @@ export default class UserService {
                 throw new Error('There was a problem with the registration');
             }
         } catch (error) {
-            console.error('Erro ao registrar o usuário', error.response.data.message);
+            // console.error('Erro ao registrar o usuário', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -115,7 +115,7 @@ export default class UserService {
                 throw new Error('There was a problem with the editing user info');
             }
         } catch (error) {
-            console.error('Erro ao editar dados do usuário', error.response.data.message);
+            // console.error('Erro ao editar dados do usuário', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -132,7 +132,7 @@ export default class UserService {
                 throw new Error('There was a problem with parsing child data');
             }
         } catch (error) {
-            console.error('Erro ao buscar dados da criança', error.response.data.message);
+            // console.error('Erro ao buscar dados da criança', error.response.data.message);
             throw new Error(error);
         }
     }

@@ -29,7 +29,7 @@ const PasswordRecoverScreen = ({ navigation }) => {
         email: email
       });
       if (errorMessage) {
-        console.log(errorMessage);
+        // console.log(errorMessage);
         setError(errorMessage);
       } else {
         setError(null);

@@ -54,7 +54,7 @@ const RegisterChildrenScreen = ({ navigation }) => {
               growthDate: birthDate
             });
 
-            console.log(response);
+            // console.log(response);
 
             const temp = await ChildrenService.readByParent(user.id);
             setChildList(temp);

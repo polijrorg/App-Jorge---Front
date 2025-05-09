@@ -69,7 +69,7 @@ const ChildGrowthScreen = ({ navigation }) => {
     if (!child || !selectedCurveType) return;
     try {
       if (!growthData || growthData.length === 0) {
-        console.log("growthData está vazio");
+        // console.log("growthData está vazio");
         return;
       }
       const data = growthData.map(item => ({
@@ -78,7 +78,7 @@ const ChildGrowthScreen = ({ navigation }) => {
       }));
       setChildData(data);
     } catch (error) {
-      console.error("Error fetching growth data:", error);
+      // console.error("Error fetching growth data:", error);
     }
   }
   

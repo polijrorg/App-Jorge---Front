@@ -50,7 +50,7 @@ const EditCurveScreen = ({ navigation }) => {
     const [selectedRow, setSelectedRow] = useState<GrowthData>({} as GrowthData);
 
     async function fetchData() {
-      console.log(activeChild.name)
+      // console.log(activeChild.name)
       const data = await GrowthDataService.getByChild(activeChild.idchildren);
       const sortedData = data.sort((a, b) => {
         const ageA = findAge(a.growthDate).totalAge;

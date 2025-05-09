@@ -44,7 +44,7 @@ export default class MarcosService {
                 throw new Error('There was a problem with creating marco');
             }
         } catch (error) {
-            console.error('Erro ao criar marco', error.response.data.message);
+            // console.error('Erro ao criar marco', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -62,7 +62,7 @@ export default class MarcosService {
                 throw new Error('There was a problem with updating marco');
             }
         } catch (error) {
-            console.error('Erro ao atualizar marco', error.response.data.message);
+            // console.error('Erro ao atualizar marco', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -75,7 +75,7 @@ export default class MarcosService {
         );
         return response.data; 
       } catch (error) {
-        console.log('Erro no upsert dos marcos: ', error);
+        // console.log('Erro no upsert dos marcos: ', error);
         throw new Error(error);
       }
     }
@@ -92,7 +92,7 @@ export default class MarcosService {
                 throw new Error('There was a problem with parsing children data');
             }
         } catch (error) {
-            console.error('Erro ao recuperar todas as crianças', error.response.data.message);
+            // console.error('Erro ao recuperar todas as crianças', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -109,7 +109,7 @@ export default class MarcosService {
                 throw new Error('There was a problem with parsing child data');
             }
         } catch (error) {
-            console.error('Erro ao buscar dados da criança', error.response.data.message);
+            // console.error('Erro ao buscar dados da criança', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -126,7 +126,7 @@ export default class MarcosService {
                 throw new Error('There was a problem with deleting the child');
             }
         } catch (error) {
-            console.error('Erro ao deletar criança', error.response.data.message);
+            // console.error('Erro ao deletar criança', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -136,7 +136,7 @@ export default class MarcosService {
         const response: AxiosResponse<MarcoDefault[]> = await api.get('/marcosdefault/readAll');
         return response.data;
       } catch (error) {
-        console.log(`Erro ao buscar marcos default: ${error}`);
+        // console.log(`Erro ao buscar marcos default: ${error}`);
         throw new Error(error);
       }
     }
@@ -146,7 +146,7 @@ export default class MarcosService {
         const response: AxiosResponse<Marco[]> = await api.get(`/marcos/children/${childrenId}`);
         return response.data;
       } catch (error) {
-        console.log(`Erro ao buscar marcos default: ${error}`);
+        // console.log(`Erro ao buscar marcos default: ${error}`);
         throw new Error(error);
       }
     }

@@ -26,14 +26,14 @@ const findClosestPercentile = (curveType: string, child: Child, growthData: Grow
   if (!genderData) return "N/A";
 
   const latestData = growthData[growthData.length - 1];
-  console.log("Data usado: ", latestData);
-  console.log("lista de datas: ", growthData);
+  // console.log("Data usado: ", latestData);
+  // console.log("lista de datas: ", growthData);
 
   const measure = determineGrowthData(latestData, curveType);
-  console.log("Measure: ", measure);
+  // console.log("Measure: ", measure);
 
   const dataAge = 12 * findAge(latestData?.growthDate, child).totalAge;
-  console.log("Idade em meses: ", dataAge);
+  // console.log("Idade em meses: ", dataAge);
   if (dataAge < 0) return 'idade negativa :('
 
   let closestPercentile = "N/A";
@@ -50,7 +50,7 @@ const findClosestPercentile = (curveType: string, child: Child, growthData: Grow
     }
   }
 
-  console.log(closestPercentile);
+  // console.log(closestPercentile);
   return closestPercentile;
 };
 

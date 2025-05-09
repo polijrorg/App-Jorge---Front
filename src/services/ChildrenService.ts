@@ -41,7 +41,7 @@ export default class ChildrenService {
                 throw new Error('There was a problem with creating the child');
             }
         } catch (error) {
-            console.error('Erro ao criar criança', error.response.data.message);
+            // console.error('Erro ao criar criança', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -59,7 +59,7 @@ export default class ChildrenService {
                 throw new Error('There was a problem with updating child');
             }
         } catch (error) {
-            console.error('Erro ao atualizar criança', error.response.data.message);
+            // console.error('Erro ao atualizar criança', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -76,7 +76,7 @@ export default class ChildrenService {
                 throw new Error('There was a problem with parsing children data');
             }
         } catch (error) {
-            console.error('Erro ao recuperar todas as crianças', error.response.data.message);
+            // console.error('Erro ao recuperar todas as crianças', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -93,7 +93,7 @@ export default class ChildrenService {
                 throw new Error('There was a problem with parsing child data');
             }
         } catch (error) {
-            console.error('Erro ao buscar dados da criança', error.response.data.message);
+            // console.error('Erro ao buscar dados da criança', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -105,7 +105,7 @@ export default class ChildrenService {
         )
         return response.data;
       } catch (error) {
-        console.log('Erro ao buscar crianças por pai: ', error);
+        // console.log('Erro ao buscar crianças por pai: ', error);
         throw new Error(error);
       }
     }
@@ -122,7 +122,7 @@ export default class ChildrenService {
                 throw new Error('There was a problem with deleting the child');
             }
         } catch (error) {
-            console.error('Erro ao deletar criança', error.response.data.message);
+            // console.error('Erro ao deletar criança', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -134,7 +134,7 @@ export default class ChildrenService {
         );
         return response.data;
       } catch (error) {
-        console.log('Erro ao calcular desenvolvimento: ', error);
+        // console.log('Erro ao calcular desenvolvimento: ', error);
         throw new Error(error);
       }
     }

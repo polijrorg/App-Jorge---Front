@@ -27,7 +27,7 @@ export default class FeedbackService {
         );
         return response.data;
       } catch(error) {
-        console.log(error);
+        // console.log(error);
         throw new Error;
       }
     }

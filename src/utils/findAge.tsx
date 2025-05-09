@@ -5,7 +5,7 @@ export default function findAge(comparisonDate: string, activeChild: Child): { y
   
   const [birthDay, birthMonth, birthYear] = activeChild.nascimento.split('/').map(Number);
   const [compDay, compMonth, compYear] = comparisonDate.split('/').map(Number);
-  console.log("Datas usadas na conversão: ", activeChild.nascimento, comparisonDate)
+  // console.log("Datas usadas na conversão: ", activeChild.nascimento, comparisonDate)
   
   let years = compYear - birthYear;
   let months = compMonth - birthMonth;

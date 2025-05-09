@@ -36,7 +36,7 @@ export default class VaccineService {
       );
       return response.data;
     } catch(error) {
-      console.log('Erro ao dar upsert nas vacinas: ', error);
+      // console.log('Erro ao dar upsert nas vacinas: ', error);
       throw new Error;
     }
   }
@@ -48,7 +48,7 @@ export default class VaccineService {
       );
       return response.data;
     } catch(error) {
-      console.log('Erro ao buscar próximas vacinas: ', error);
+      // console.log('Erro ao buscar próximas vacinas: ', error);
       throw new Error;
     }
   }
@@ -60,7 +60,7 @@ export default class VaccineService {
       );
       return response.data;
     } catch(error) {
-      console.log('Erro ao buscar histórico de vacinas: ', error);
+      // console.log('Erro ao buscar histórico de vacinas: ', error);
       throw new Error;
     }
   }
@@ -72,7 +72,7 @@ export default class VaccineService {
       );
       return response.data;
     } catch(error) {
-      console.log('Erro ao buscar histórico de vacinas tomadas: ', error);
+      // console.log('Erro ao buscar histórico de vacinas tomadas: ', error);
       throw new Error;
     }
   }
@@ -84,7 +84,7 @@ export default class VaccineService {
       );
       return response.data;
     } catch(error) {
-      console.log('Erro ao buscar histórico de vacinas não tomadas: ', error);
+      // console.log('Erro ao buscar histórico de vacinas não tomadas: ', error);
       throw new Error;
     }
   }
@@ -96,7 +96,7 @@ export default class VaccineService {
       );
       return response.data;
     } catch(error) {
-      console.log('Erro ao buscar desenvolvimento sobre vacinas: ', error);
+      // console.log('Erro ao buscar desenvolvimento sobre vacinas: ', error);
       throw new Error;
     }
   }

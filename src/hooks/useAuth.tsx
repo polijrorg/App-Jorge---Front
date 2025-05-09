@@ -39,9 +39,9 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
             const user = await UserService.readFromId(userId)
             if (user) {
               setUser(user)
-              console.log("temos um usuário setado: ", user);
+              // console.log("temos um usuário setado: ", user);
             } else {
-              console.warn("Usuário não encontrado.")
+              // console.warn("Usuário não encontrado.")
               await AsyncStorage.clear()
             }
           } else {
@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
           }
         }        
       } catch (error) {
-        console.error("Erro ao carregar usuário:", error)
+        // console.error("Erro ao carregar usuário:", error)
       } finally {
         setIsLoading(false)
       }
@@ -69,7 +69,7 @@ export const AuthProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
       setUser(response.user)
       return response.user
     } catch (error) {
-      console.error(error)
+      // console.error(error)
       return undefined
     }
   }

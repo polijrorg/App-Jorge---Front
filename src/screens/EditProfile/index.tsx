@@ -30,7 +30,7 @@ const EditProfileScreen = ({ navigation }) => {
     setState(user?.state || '');
     setBirthDate(user?.nascimento || '');
     setPhone(user?.telefone || '');
-    console.log("UseEffect foi rodado novamente!");
+    // console.log("UseEffect foi rodado novamente!");
   }, [user]);
 
   // const handleLogout = async () => {
@@ -68,7 +68,7 @@ const EditProfileScreen = ({ navigation }) => {
       } else if (password && password.length < 5) {
         return setError('Sua nova senha deve ter pelo menos 5 caracteres! Se quiser manter a senha atual, deixe o campo em branco.');
       }
-      console.log("os seguintes dados foram usados no update: ", data);
+      // console.log("os seguintes dados foram usados no update: ", data);
       if (password && password.length < 5) {
         setError('Sua nova senha deve ter pelo menos 5 caracteres! Se quiser manter a senha atual, deixe o campo em branco.');
       } else {

@@ -31,7 +31,7 @@ const HomeScreen = ({ navigation }) => {
     }
 
     async function handlePress(data: Child) {
-      console.log('aqui ta a criança!!!!', data)
+      // console.log('aqui ta a criança!!!!', data)
         setActiveChild(data);
         navigation.navigate('EditChildren');
     }
@@ -48,7 +48,7 @@ const HomeScreen = ({ navigation }) => {
       ) {
         return 'Complete seus dados em Configurações!';
       }
-      console.log(user);
+      // console.log(user);
       return formatNames();
     }
 

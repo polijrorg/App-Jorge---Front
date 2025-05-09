@@ -18,7 +18,7 @@ export default class MedicinesService {
                 throw new Error('There was a problem with reading all medicines');
             }
         } catch (error) {
-            console.error('Erro ao ler medicamentos', error.response.data.message);
+            // console.error('Erro ao ler medicamentos', error.response.data.message);
             throw new Error(error);
         }
     }
@@ -36,7 +36,7 @@ export default class MedicinesService {
             throw new Error('There was a problem with searching for medicines');
         }
     } catch (error) {
-        console.error('Erro ao pesquisar medicamentos', error.response.data.message);
+        // console.error('Erro ao pesquisar medicamentos', error.response.data.message);
         throw new Error(error);
     }
     }
