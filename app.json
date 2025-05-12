@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Puerino",
-    "slug": "puerino",
+    "slug": "Puerino",
     "version": "1.1.0",
     "orientation": "portrait",
     "icon": "public/assets/logos/icon.png",
@@ -24,7 +24,7 @@
       ]
     ],
     "android": {
-      "package": "com.anonymous.puerino",
+      "package": "com.anonymous.myapp5",
       "versionCode": 2,
       "newArchEnabled": true,
       "adaptiveIcon": {
@@ -33,11 +33,14 @@
       }
     },
     "ios": {
-      "bundleIdentifier": "com.anonymous.puerino",
+      "bundleIdentifier": "com.anonymous.myapp5",
       "buildNumber": "1.1.0",
       "adaptiveIcon": {
         "foregroundImage": "public/assets/logos/adaptive-icon.png",
         "backgroundColor": "#F8F9FA"
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "web": {
