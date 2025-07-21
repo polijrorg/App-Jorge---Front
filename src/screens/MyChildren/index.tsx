@@ -44,7 +44,6 @@ const MyChildrenScreen = ({ navigation }) => {
                         weight={`${c.peso}kg`}
                         height={`${c.altura}cm`}
                         id={`${c.idchildren}`}
-                        vaccinePercentage={50}
                         gender={c.gender}
                     />
                 ))}

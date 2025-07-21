@@ -1,7 +1,8 @@
 import { TouchableOpacity, View, Text, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components";
 
-export const Wrapper = styled(View)`
+export const Wrapper = styled(SafeAreaView)`
   flex: 1;
   align-items: center;
   justify-content: top;

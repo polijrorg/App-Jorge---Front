@@ -5,6 +5,7 @@ import * as S from './styles'
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import UserService from '@services/UserService';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ReadAndAgree = ({ isChecked, onPress }) => {
     return (
@@ -71,45 +72,47 @@ const Register = ({ navigation }) => {
     }
 
     return (
-        <S.Wrapper>
-            <StatusBar style="dark" />
-            <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-                <S.Logo source={require('@assets/images/LogoAzul.png')}/>
-                <S.TitleText>Bem Vindo!</S.TitleText>
-            </View>
+      <SafeAreaView style={{ flex: 1 }} >
+          <S.Wrapper>
+              <StatusBar style="dark" />
+              <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                  <S.Logo source={require('@assets/images/LogoAzul.png')}/>
+                  <S.TitleText>Bem Vindo!</S.TitleText>
+              </View>
 
-            <View style={{ width: '100%' }} >
-                <S.TitleText>Cadastre-se </S.TitleText>
-            </View>
-            
-            <View style={{ gap: 16, width: '100%' }}>
-                <Input title={'Nome'} value={name} onChangeText={(name) => setName(name)} />
-                <Input title={'Email'} value={email} onChangeText={(email) => setEmail(email)} />
-                <Input title={'Senha'} value={password} onChangeText={(password) => setPassword(password)} hideOption={true} />
-                <Input title={'Confirme sua Senha'} value={password2} onChangeText={(password2) => setPassword2(password2)} hideOption={true} />
+              <View style={{ width: '100%' }} >
+                  <S.TitleText>Cadastre-se </S.TitleText>
+              </View>
+              
+              <View style={{ gap: 16, width: '100%' }}>
+                  <Input title={'Nome'} value={name} onChangeText={(name) => setName(name)} />
+                  <Input title={'Email'} value={email} onChangeText={(email) => setEmail(email)} />
+                  <Input title={'Senha'} value={password} onChangeText={(password) => setPassword(password)} hideOption={true} />
+                  <Input title={'Confirme sua Senha'} value={password2} onChangeText={(password2) => setPassword2(password2)} hideOption={true} />
 
-                {error && (
-                    <S.BlueText style={{ color: 'red' }}>{error}</S.BlueText>
-                )}
+                  {error && (
+                      <S.BlueText style={{ color: 'red' }}>{error}</S.BlueText>
+                  )}
 
-            </View>
+              </View>
 
-            <View style={{ gap: 8, width: '100%', alignItems: 'flex-start' }}>
-                <ReadAndAgree isChecked={isChecked1} onPress={() => setIsChecked1(!isChecked1)} />
-            </View>
+              <View style={{ gap: 8, width: '100%', alignItems: 'flex-start' }}>
+                  <ReadAndAgree isChecked={isChecked1} onPress={() => setIsChecked1(!isChecked1)} />
+              </View>
 
-            <Button title={'Cadastrar'} onPress={handleRegister} />
+              <Button title={'Cadastrar'} onPress={handleRegister} />
 
-            <S.Line />
+              <S.Line />
 
-            <View style={{ flexDirection: 'row' }}>
-                <S.BlackText>Já tem uma conta? </S.BlackText>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')} >
-                    <S.BlueText>Faça Login</S.BlueText>
-                </TouchableOpacity>
-            </View>
+              <View style={{ flexDirection: 'row' }}>
+                  <S.BlackText>Já tem uma conta? </S.BlackText>
+                  <TouchableOpacity onPress={() => navigation.navigate('Login')} >
+                      <S.BlueText>Faça Login</S.BlueText>
+                  </TouchableOpacity>
+              </View>
 
-        </S.Wrapper>
+          </S.Wrapper>
+      </SafeAreaView>
     )
 }
 
