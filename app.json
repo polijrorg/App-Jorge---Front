@@ -35,10 +35,6 @@
     "ios": {
       "bundleIdentifier": "com.anonymous.myapp5",
       "buildNumber": "1.1.0",
-      "adaptiveIcon": {
-        "foregroundImage": "public/assets/logos/adaptive-icon.png",
-        "backgroundColor": "#F8F9FA"
-      },
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
