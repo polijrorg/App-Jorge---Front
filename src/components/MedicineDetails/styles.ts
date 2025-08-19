@@ -1,5 +1,5 @@
 import { ScrollView, Text, View } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 export const Wrapper = styled(ScrollView).attrs({
   contentContainerStyle: {

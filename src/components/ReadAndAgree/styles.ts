@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import styled from "styled-components/native";
+import { Text, TouchableOpacity } from 'react-native';
 
 export const Checkbox = styled(TouchableOpacity)`
     display: flex;

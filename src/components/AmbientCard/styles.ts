@@ -1,5 +1,5 @@
 import { View, Image, Text, TouchableOpacity } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 export const Wrapper = styled(View)`
     justify-content: center;
@@ -19,7 +19,6 @@ export const Card = styled(TouchableOpacity)`
 export const Logo = styled(Image)`
     height: 24px;
     width: 24px;
-    tintColor: black;
     background-color: ${({ theme }) => theme.colors.ambientCard };
     background-blend-mode: color-burn;
 `

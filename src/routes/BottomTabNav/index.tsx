@@ -5,6 +5,7 @@ import MedMamaScreen from '@screens/MedMama';
 import SettingsScreen from '@screens/Settings';
 import React from 'react';
 import { View, Image, Text } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -46,6 +47,7 @@ const renderIcon = (source: any, label: string, focused: boolean) => {
 
 
 const BottomTabNav = () => {
+    const insets = useSafeAreaInsets();
     return (
         <Tab.Navigator
             id={undefined}
@@ -63,6 +65,7 @@ const BottomTabNav = () => {
                     paddingHorizontal: 8,
                     position: 'absolute',
                     paddingTop: 10,
+                    marginBottom: insets.bottom
                 },
         }}>
             {/* <Tab.Screen

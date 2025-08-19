@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Pressable } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 export const Container = styled(View)`
     padding: 16px;

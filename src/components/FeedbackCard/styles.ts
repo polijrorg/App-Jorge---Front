@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, Text, TextInput } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 export const Wrapper = styled(View)`
     width: 100%;

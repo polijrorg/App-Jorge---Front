@@ -17,7 +17,7 @@ export default function DefaultHeader() {
     return (
         <S.Wrapper>
             <StatusBar style="light" />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', width: '100%' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'flex-end', width: '100%', margin: 16 }}>
                 <S.Logo source={require('@assets/images/WhiteLogo.png')}/>
                 <TouchableOpacity onPress={() => setModal(true)}  style={{ flexDirection: 'row', gap: 8 }}>
                     <S.Title>{child?.name || '――'}</S.Title>

@@ -1,5 +1,5 @@
 import { TouchableOpacity, Text } from "react-native";
-import styled from "styled-components";
+import styled from "styled-components/native";
 
 
 export const Button = styled(TouchableOpacity)<{ selected: boolean }>`
