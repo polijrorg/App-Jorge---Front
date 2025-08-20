@@ -20,18 +20,18 @@ export const Button = styled(TouchableOpacity)`
 `
 
 export const Label = styled(Text)`
-    color: white;
+    color: #FFF;
     font-size: 14px;
-    font-family: 'PoppinsRegular'
+    font-family: 'PoppinsRegular';
 `
 
 export const Container = styled(TextInput)`
     min-height: 80px;
     max-height: 80px;
-    background-color: white;
+    background-color: #FFF;
     padding: 10px 10px 10px 16px;
     border-radius: 8px;
     width: 100%;
     border: solid 1px lightgray;
-    elevation: 1;
+    /* elevation: 1; */
 `;

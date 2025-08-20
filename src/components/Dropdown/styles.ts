@@ -13,7 +13,6 @@ export const Container = styled(View)`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.colors.background };
   border: 1px lightblue;
-  elevation: 2;
   justify-content: center;
 `;
 
@@ -27,7 +26,7 @@ export const SelectedOptionButton = styled(TouchableOpacity)`
 export const ChevronDown = styled(Image)<Props>`
   width: 16px;
   height: 16px;
-  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')}; //rotate(180deg)
+  transform: ${({ isOpen }) => (isOpen ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 
 export const SelectedOption = styled(Text)`

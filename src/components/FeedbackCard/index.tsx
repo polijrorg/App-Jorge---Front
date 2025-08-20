@@ -40,7 +40,6 @@ export default function FeedbackCard(data: Props) {
             </View>
 
             <View style={{ position: 'relative' }}>
-                
                 <S.Container
                     placeholder='Deixe sua crítica, dúvida ou sugestão!'
                     placeholderTextColor='gray'

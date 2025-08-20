@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import * as S from './styles';
 import { TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 interface DropdownProps {
   options: string[];

@@ -8,7 +8,6 @@ import FeedbackService from '@services/FeedbackService';
 import { useAuthContext } from '@hooks/useAuth';
 
 const FeedbackScreen = ({ navigation }) => {
-
     const values = Array.from({ length: 10 }, (a, i) => i + 1);
     const [rating, setRating] = useState<number>(10);
     const [feedbackSent, setFeedbackSent] = useState<boolean>(false);
@@ -38,7 +37,7 @@ const FeedbackScreen = ({ navigation }) => {
         <S.Wrapper>
             <DefaultHeader />
             <S.Content>
-                <View style={{ gap: 10, flexDirection: 'row', width: '100%' }}>
+                <View style={{ flexDirection: 'row', width: '100%', gap: 10 }}>
                     <S.Button onPress={() => navigation.goBack()} >
                         <Ionicons name="arrow-back-outline" size={20} color="white" />
                     </S.Button >
@@ -48,23 +47,24 @@ const FeedbackScreen = ({ navigation }) => {
                 <S.Line />
                 
                 <S.Title>Avalie nossos serviços</S.Title>
-                <View style={{ gap: 10, flexDirection: 'row', width: '100%', justifyContent: 'center' }}>
-                    {values.map((value) => (
-                        <TouchableOpacity
-                            key={value}
-                            style={{
-                                backgroundColor: value === rating ? '#71AAC9' : '#E6E6E6',
-                                minWidth: 22,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: 100
-                            }}
-                            onPress={() => setRating(value)}
-                        >
-                            <S.Number>{value}</S.Number>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center' }}>
+                  {values.map((value, index) => (
+                      <TouchableOpacity
+                          key={value}
+                          style={{
+                              backgroundColor: value === rating ? '#71AAC9' : '#E6E6E6',
+                              minWidth: 22,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              borderRadius: 100,
+                              marginRight: index !== values.length - 1 ? 10 : 0 // substitui gap
+                          }}
+                          onPress={() => setRating(value)}
+                      >
+                          <S.Number>{value}</S.Number>
+                      </TouchableOpacity>
+                  ))}
+              </View>
                 {feedbackSent && <S.Description>Feedback enviado com sucesso!</S.Description>}
                 {error && <S.Error>{error}</S.Error>}
             </S.Content>
