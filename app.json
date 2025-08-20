@@ -33,7 +33,7 @@
       }
     },
     "ios": {
-      "bundleIdentifier": "com.anonymous.myapp5",
+      "bundleIdentifier": "com.polijunior.puerino",
       "buildNumber": "1.1.0",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
